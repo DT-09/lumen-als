@@ -1,0 +1,352 @@
+{
+  "evaluation_design": {
+    "source_documents": 5,
+    "domains": [
+      "physics",
+      "biology",
+      "history"
+    ],
+    "known_source_queries": 20,
+    "off_material_queries": 11,
+    "retrieval_cutoff_k": 3,
+    "retrieval_method": "BM25 + informative-query-term coverage"
+  },
+  "retrieval_refusal_test_count": 31,
+  "retrieval_refusal_passed": 31,
+  "retrieval_refusal_pass_rate": 1.0,
+  "known_source_recall_at_3": 1.0,
+  "known_source_mrr_at_3": 1.0,
+  "off_material_refusal_precision_on_fixture": 1.0,
+  "off_material_refusal_recall_on_fixture": 1.0,
+  "support_decision_confusion": {
+    "correct_refusals": 11,
+    "incorrect_refusals": 0,
+    "missed_refusals": 0
+  },
+  "citation_provenance_checks_passed": 31,
+  "cases": [
+    {
+      "query": "Newton second law net force mass acceleration",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "object at rest constant velocity net external force",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 3",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "balanced forces vector sum zero",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 4",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "action reaction equal opposite different objects",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Timestamp 00:00:08.000",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is inertia?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 3",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What equation relates force mass and acceleration?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "If mass increases and net force stays constant what happens to acceleration?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "How does force affect acceleration if mass stays the same?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Which structure contains chlorophyll and absorbs light energy?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What products are made during photosynthesis?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What energy change occurs during photosynthesis?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Where does cellular respiration release usable energy?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What contains genetic instructions and includes genes?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Which molecule contains genetic instructions?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Page 1",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Who developed the European printing press around 1450?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What did the printing press lower?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Where did the Industrial Revolution begin?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What production shift did mechanization cause?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "How did the printing press change reproduction of texts?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "In which century did the Industrial Revolution begin?",
+      "expected_supported": true,
+      "actual_supported": true,
+      "expected_locator": "Slide 2",
+      "rank_of_expected_locator_at_3": 1,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the capital of Mars and its population?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Give the current price of a private company share",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Who invented calculus?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What are the three laws of thermodynamics?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the current exchange rate between the dollar and yen?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "Who won the 2026 World Cup?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What medication cures every viral infection?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the population of Atlantis today?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the population of Newton\u2019s second law?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the capital of inertia?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    },
+    {
+      "query": "What is the price of photosynthesis?",
+      "expected_supported": false,
+      "actual_supported": false,
+      "expected_locator": null,
+      "rank_of_expected_locator_at_3": null,
+      "source_found_at_3": true,
+      "citation_provenance_check": true,
+      "pass": true
+    }
+  ],
+  "simulated_learners": {
+    "profile": "four correct answers vs four incorrect answers, Beta(2,2) prior",
+    "strong_profile_mastery": 0.75,
+    "support_profile_mastery": 0.25,
+    "directionality_pass": true
+  },
+  "question_repetition_check": {
+    "first_set_size": 3,
+    "second_set_size": 3,
+    "overlapping_question_ids": 0,
+    "no_repeats_pass": true
+  },
+  "interpretation": "Hand-authored, small fixture with 20 in-scope and 11 out-of-scope queries across physics, biology, and history. Metrics describe this fixture only. Simulated profiles are not real learners; this is not a general benchmark, calibrated model score, or evidence of educational efficacy."
+}

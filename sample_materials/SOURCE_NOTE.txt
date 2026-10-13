@@ -1,0 +1,1 @@
+These are original demonstration learning materials created for the LUMEN hackathon submission. They are not claimed to be an external textbook, lecture, or public dataset. The PDF, slide deck, and transcript are designed to exercise page, slide, and timestamp citation paths.
