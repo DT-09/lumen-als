@@ -67,12 +67,21 @@ async def upload(files: list[UploadFile] = File(...)):
     for f in files:
         name=Path(f.filename or 'upload').name
         suffix=Path(name).suffix.lower()
+        try:
+            f.file.seek(0, os.SEEK_END)
+            file_size=f.file.tell()
+            f.file.seek(0)
+        except (OSError, ValueError):
+            result.append({'name':name,'ok':False,'message':'Could not inspect the uploaded file.'})
+            continue
+        total_bytes += file_size
+        if file_size > 25 * 1024 * 1024:
+            result.append({'name':name,'ok':False,'message':'File exceeds the 25 MB per-file limit.'})
+            continue
+        if total_bytes > 50 * 1024 * 1024:
+            result.append({'name':name,'ok':False,'message':'Request exceeds the 50 MB total upload limit.'})
+            break
         raw=await f.read()
-        total_bytes += len(raw)
-        if len(raw)>25*1024*1024:
-            result.append({'name':name,'ok':False,'message':'File exceeds the 25 MB per-file limit.'}); continue
-        if total_bytes>50*1024*1024:
-            result.append({'name':name,'ok':False,'message':'Request exceeds the 50 MB total upload limit.'}); break
         pages=[]; kind='document'
         try:
             if suffix=='.pdf':

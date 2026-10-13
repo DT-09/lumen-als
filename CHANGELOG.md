@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1 — maintenance pass
+
+- Added upload-size preflight checks before reading file contents into application memory.
+- Applied frontend error, upload-validation, accessibility, mobile-layout and math-expression safeguards to both shipped HTML entry points.
+- Verified Python tests, static JavaScript syntax, and the included retrieval/refusal evaluation fixture.
+
 ## 1.2.0 — release candidate
 
 - Replaced the conventional single-page layout with a cinematic dark application shell and a projected spatial concept universe.
