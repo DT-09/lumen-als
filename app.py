@@ -1,4 +1,5 @@
 from __future__ import annotations
+import logging
 import os, re, tempfile, subprocess, json, secrets, hashlib
 from pathlib import Path
 from datetime import timedelta
@@ -13,6 +14,25 @@ from engine import add_document, ask, make_quiz, record_answer, record_stored_an
 
 ROOT=Path(__file__).parent
 app=FastAPI(title='LUMEN ALS — Adaptive Learning System', version='1.1.0')
+
+# LUMEN_ERROR_LOGGING_HANDLER
+logger = logging.getLogger("lumen")
+
+@app.exception_handler(Exception)
+async def handle_unexpected_error(request: Request, exc: Exception):
+    logger.exception(
+        "Unhandled server error: %s %s",
+        request.method,
+        request.url.path,
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "An unexpected server error occurred. "
+                      "Check the backend terminal for the traceback."
+        },
+    )
+
 
 SESSION_COOKIE = 'lumen_session'
 

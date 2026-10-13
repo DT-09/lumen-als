@@ -25,6 +25,135 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .upload-drop:focus-within{outline:2px solid var(--focus-ring);outline-offset:3px}
 @media(max-width:420px){.brandname{letter-spacing:.14em}.top-actions{gap:5px}.iconbtn{width:35px;height:35px}.stats-row{gap:7px}.stat-label{font-size:9px}.stat-note{line-height:1.5}.graph-controls{grid-template-columns:1fr}.mobile-nav button{min-width:0;flex:1;padding-inline:3px}.mobile-nav{overflow-x:auto}.quiz-top{align-items:flex-start}.quiz-top span:last-child{text-align:right;max-width:48%}}
 @media(hover:none){.panel:hover{border-color:var(--line)}}
+
+/* LUMEN interface refinements */
+button, a, input, textarea, select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button, .btn, .iconbtn, .nav-item {
+    transition:
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .18s ease;
+}
+
+.panel, .stat-card, .card, .stat, .metric-box {
+    transition: border-color .18s ease, transform .18s ease;
+}
+
+.panel:hover, .stat-card:hover, .card:hover, .stat:hover {
+    border-color: #40536a;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--cyan, #55d9e8);
+    outline-offset: 3px;
+}
+
+input, textarea, select {
+    max-width: 100%;
+}
+
+img, canvas, video {
+    max-width: 100%;
+}
+
+.toast {
+    max-width: min(440px, calc(100vw - 28px));
+    overflow-wrap: anywhere;
+    line-height: 1.55;
+    z-index: 1000;
+}
+
+@media (max-width: 760px) {
+    .topbar {
+        gap: 12px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .brand {
+        min-width: 0;
+    }
+
+    .content {
+        padding: 20px 14px 34px;
+    }
+
+    .pagehead, .hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .stats-row, .stats, .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .below-grid, .two-col, .split, .grid.two-col {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel, .card {
+        padding: 16px;
+    }
+
+    .universe-stage {
+        min-height: 320px;
+    }
+
+    .stage-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .source-row {
+        min-width: 0;
+        flex-wrap: wrap;
+    }
+
+    .source-row .tag {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-row, .stats, .metric-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pagehead h1, .headline {
+        font-size: 28px;
+    }
+
+    .top-status {
+        font-size: 9px;
+    }
+
+    .head-actions, .hero-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .head-actions .btn, .hero-actions .btn {
+        flex: 1 1 auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -70,7 +199,29 @@ $('fileInput').addEventListener('change',e=>uploadFiles(e.target.files));$('libr
 function renderSources(){const sources=state.sources||[];const html=sources.length?sources.map(s=>`<div class="source-row"><span class="fileicon">DOC</span><div><strong>${esc(s)}</strong><small>Indexed in the current workspace</small></div><span class="tag">Indexed</span></div>`).join(''):'<div class="empty-state">No source material indexed.</div>';$('recentSources').innerHTML=sources.slice(0,3).map(s=>`<div class="source-row"><span class="fileicon">DOC</span><div><strong>${esc(s)}</strong><small>Available in current workspace</small></div><span class="tag">Ready</span></div>`).join('')||'<div class="empty-state">Indexed source files will appear here.</div>';$('allSources').innerHTML=html;$('tutorSources').innerHTML=sources.slice(0,5).map(s=>`<div class="source-row"><span class="fileicon">DOC</span><div><strong>${esc(s)}</strong><small>Indexed source</small></div></div>`).join('')||'<div class="empty-state">No indexed material yet.</div>';$('sourceCountTag').textContent=`${sources.length} source${sources.length===1?'':'s'}`}
 function renderMetrics(){const ev=state.evaluation||{};const chunks=ev.indexed_chunks??state.chunks??0,topics=ev.topic_count??(state.topics||[]).length,attempts=ev.quiz_attempts??0,accuracy=ev.observed_accuracy;$('statChunks').textContent=chunks;$('statConcepts').textContent=concepts().length;$('statAttempts').textContent=attempts;$('statAccuracy').textContent=accuracy==null?'—':pct(accuracy);$('pChunks').textContent=chunks;$('pTopics').textContent=topics;$('pAttempts').textContent=attempts;$('pAccuracy').textContent=accuracy==null?'—':pct(accuracy);$('eChunks').textContent=chunks;$('eTopics').textContent=topics;$('eAttempts').textContent=attempts;$('evalNote').textContent=ev.evaluation_note||'Live counters are not benchmark scores.';$('universeMeta').textContent=chunks?`${chunks} indexed passages · ${concepts().length} extracted concepts`:'Awaiting course material';$('universeSubject').textContent=chunks?'YOUR LEARNING UNIVERSE':'LEARNING UNIVERSE'}
 function renderProgress(){const topics=state.topics||[];const el=$('topicProgress');el.innerHTML=topics.length?topics.map(t=>{const m=Number(t.mastery??t.mean??.5);return `<div class="topic-item"><div><strong>${esc(t.topic||t.name||'Topic')}</strong><br><small>${t.attempts??0} attempt(s)</small></div><div class="bar" aria-label="Estimated mastery ${pct(m)}"><i style="width:${Math.max(0,Math.min(100,m*100))}%"></i></div><div class="topic-value">${pct(m)}</div></div>`}).join(''):'<div class="empty-state">No topic estimates yet. Index course material and answer practice questions to start recording evidence.</div>'}
-async function refreshState(){try{const d=await api('/api/state');state.sources=d.sources||[];state.chunks=d.chunks||0;state.topics=d.topics||[];state.conceptMap=d.concept_map||{concepts:[],prerequisites:[]};state.evaluation=d.evaluation||{};setApiStatus(true,'Learning engine connected');renderSources();renderMetrics();renderProgress();buildNodes();return d}catch(e){setApiStatus(false,'Engine unavailable');$('conceptList').innerHTML=`<div class="empty-state"><strong>Cannot connect to the learning engine.</strong>${esc(e.message)}<br>Start the backend and refresh this page.</div>`;toast(e.message,true);return null}}
+async function refreshState(){
+    try {
+        const d = await api('/api/state');
+        state.sources = d.sources || [];
+        state.chunks = d.chunks || 0;
+        state.topics = d.topics || [];
+        state.conceptMap = d.concept_map || {concepts: [], prerequisites: []};
+        state.evaluation = d.evaluation || {};
+        setApiStatus(true, 'Learning engine connected');
+        renderSources();
+        renderMetrics();
+        renderProgress();
+        buildNodes();
+        return d;
+    } catch (e) {
+        setApiStatus(false, 'Engine unavailable');
+        $('conceptList').innerHTML =
+            '<div class="empty-state"><strong>Learning engine unavailable.</strong>' +
+            esc(e.message) +
+            '<br>Check the backend terminal, then refresh this page.</div>';
+        return null;
+    }
+}
 $('refreshBtn').addEventListener('click',refreshState);$('libraryRefresh').addEventListener('click',refreshState);$('progressRefresh').addEventListener('click',refreshState);$('evaluationRefresh').addEventListener('click',refreshState);$('toLibrary').addEventListener('click',()=>navigate('library'));
 function addMessage(role,body,sources=[]){const box=$('chatMessages');const d=document.createElement('div');d.className=`message ${role}`;const label=document.createElement('span');label.className='message-label';label.textContent=role==='user'?'YOU':'LUMEN / TUTOR';d.append(label,document.createTextNode(body));if(sources?.length){const cite=document.createElement('div');cite.className='source-cite';cite.innerHTML='<b>SUPPORTING SOURCE(S)</b><br>'+sources.map(s=>`${esc(s.source||'Source')} · ${esc(s.locator||'Location unavailable')}<br><span style="color:#829bb0">“${esc(s.excerpt||'')}”</span>`).join('<br><br>');d.append(cite)}box.append(d);box.scrollTop=box.scrollHeight}
 async function askQuestion(q){if(!q?.trim())return;navigate('learn');addMessage('user',q);$('questionInput').value='';const waiting=document.createElement('div');waiting.className='message assistant';waiting.innerHTML='<span class="message-label">LUMEN / TUTOR</span><span class="spinner"></span> Retrieving evidence…';$('chatMessages').append(waiting);$('chatMessages').scrollTop=$('chatMessages').scrollHeight;try{const d=await api('/api/ask',{method:'POST',body:JSON.stringify({question:q})});waiting.remove();addMessage('assistant',`${d.answer||'No answer returned.'}${d.confidence?'\n\nEvidence status: '+d.confidence:''}`,d.sources||[])}catch(e){waiting.remove();addMessage('assistant',`The request could not be completed. ${e.message}`);toast(e.message,true)}}$('askForm').addEventListener('submit',e=>{e.preventDefault();askQuestion($('questionInput').value)});document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>askQuestion(b.dataset.prompt)));$('generateQuizTop').addEventListener('click',startQuiz);$('startQuiz').addEventListener('click',startQuiz);
