@@ -3,3 +3,7 @@ __pycache__/
 .pytest_cache/
 lumen.sqlite3
 *.pyc
+.env
+.env.*
+!.env.example
+.DS_Store

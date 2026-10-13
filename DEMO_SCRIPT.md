@@ -1,57 +1,55 @@
-# LUMEN ALS — 5-minute product demo script
+# LUMEN ALS — 3-minute demo script
 
-**Format:** real screen recording of the running app, with concise narration or on-screen captions. No face camera or self-recorded lecture is required. Use the included original sample course pack. Keep the full video within the track's stated 3–10 minute range.
+## Before recording
 
-## 0:00–0:25 — The problem and the claim
+- Run the test suite and evaluation script on the exact release candidate.
+- Start the backend and open the app in a fresh browser workspace.
+- Use the included Newton's laws sample PDF or another source you have permission to use.
+- Confirm that upload, source citations, practice submission, graph plotting and progress refresh work in the browser.
+- Do not show fabricated counters. If no material is indexed, show the honest empty state or upload the sample during the recording.
+- Record the deployed Pages build if the backend and Pages proxy are both live. Otherwise clearly label the recording as local.
 
-**Show:** Course workspace landing page.
+## 0:00–0:25 — Knowledge universe
 
-**Say / caption:** “LUMEN ALS is a source-grounded adaptive learning studio. It turns course material into cited explanations and practice, then updates a transparent topic-level mastery estimate. The central design choice is evidence before answer: if the indexed material does not support a response, the tutor should say so.”
+Open LUMEN on the concept universe. Orbit the graph, zoom and select an actual concept extracted from the indexed source. Show that the concept list provides an accessible alternative. Click **Learn this**.
 
-## 0:25–1:10 — Ingest more than one source type
+Narration: “LUMEN starts with a connected view of the learner's course material. The graph is populated from indexed concepts, not a prerecorded marketing animation.”
 
-**Show:** Upload `newtons_laws_sample.pdf`, `newtons_laws_sample.pptx`, and `newtons_laws_sample.vtt` from `sample_materials/`.
+## 0:25–0:55 — Source ingestion
 
-**Say / caption:** “The course index preserves page, slide, and transcript timestamps. This demo uses an original sample pack, slide deck, and timestamped transcript so the source trail is inspectable. PDF figure text and slide-image OCR are attempted when local OCR support is available; this is OCR, not full visual diagram reasoning.”
+Open Library and upload the sample PDF. Show the real processing result and the page-level source locator. If extraction fails, do not conceal it; explain the limitation and retry with a readable source.
 
-## 1:10–2:05 — Ask a grounded question
+Narration: “The system preserves source locations so the learner can inspect the evidence behind an answer.”
 
-**Show:** Open Grounded Tutor and ask: `What does Newton second law say about force mass and acceleration?`
+## 0:55–1:25 — Grounded tutor
 
-**Say / caption:** “The tutor uses BM25 ranking plus query-term coverage to retrieve relevant source sentences and attaches the exact source filename and location. This implementation uses local lexical retrieval and extractive evidence composition rather than a remote generative model. That makes the output inspectable and avoids API keys, but it can miss paraphrases and does not provide free-form LLM reasoning.”
+Ask a specific question answerable from the uploaded source. Show the quoted source excerpt and locator. Then ask an unrelated question and show the backend's insufficient-evidence response if the fixture is appropriate.
 
-## 2:05–2:30 — Test the boundary
+Narration: “The tutor retrieves source passages and abstains when its evidence threshold is not met. Retrieval thresholds are heuristic, so citations still need human verification.”
 
-**Show:** Ask: `What is the capital of Mars and its population?`
+## 1:25–2:05 — Practice and learner model
 
-**Say / caption:** “This question is outside the course evidence. LUMEN ALS flags insufficient evidence instead of pretending the answer came from the course.”
+Generate a practice set. Submit an answer, inspect the expected answer, grading note and source location. Show the mastery estimate and uncertainty interval. Complete a follow-up only if the time permits.
 
-## 2:30–3:45 — Assessment and adaptation
+Narration: “Each response updates a transparent topic estimate. This baseline is not a validated psychometric model, and one wrong answer is not treated as proof of a misconception.”
 
-**Show:** Open Adaptive Practice and generate a set. Demonstrate one numerical item, one short-answer item, and one multiple-choice item when available. Submit an answer and show the cited feedback.
+## 2:05–2:30 — Interactive math lab
 
-**Say / caption:** “Question formats are generated only when the indexed text provides enough structure. Numerical items are created from explicit numeric results in the source. Short answers use a simple source-derived keyword coverage check, so the score is heuristic rather than a human-quality semantic grade. Answer keys stay server-side until submission. The interface explains why a topic was prioritized, attempts update the estimate with an approximate uncertainty interval, and served questions are not repeated.”
+Plot `x^2`, then `2*x+1`. Change the inspection coordinate and range. Explain that this is a lightweight graphing tool rather than a symbolic algebra engine.
 
-## 3:45–4:25 — Concept and learner evidence
+## 2:30–2:50 — Evaluation lab
 
-**Show:** Return to Course Workspace, then Learning Evidence. Point out concepts, any explicitly detected prerequisite relationship, topic estimates, attempt counts, and observed accuracy.
+Show the live counters and explain the test dimensions: retrieval, grounding, assessment, adaptation and regression. Only show benchmark values produced by the current `python evaluate.py` run, with the test-set size and limitations.
 
-**Say / caption:** “Concept labels and prerequisite relationships are extracted heuristically. Mastery uses a transparent Beta(2,2) prior updated by correct and incorrect answers; it is not claimed to be validated BKT or IRT. With no attempts, 50% is a prior estimate—not measured learning.”
+## 2:50–3:00 — Close
 
-## 4:25–5:00 — Reproducible evaluation and close
-
-**Show:** In a terminal run `python evaluate.py`, then `python -m pytest -q`. Briefly show `evaluation_results.json`.
-
-**Say / caption:** “The small hand-authored fixture currently passes 31 of 31 retrieval/refusal cases across physics, biology, and history (20 in-scope and eleven off-material), with Recall@3 and MRR@3 of 1.0 on that curated set. In a separate synthetic profile check, four correct answers produce a 0.75 estimate and four incorrect answers produce 0.25, and two generated sets have no repeated question IDs. The regression suite passes 24 tests. These are software checks on small fixtures, not a general benchmark or evidence of educational efficacy.”
-
-**Close:** “LUMEN ALS’s goal is to make study assistance traceable and adaptive: course evidence in, assessed practice out, and learner estimates that remain explicit about their limits.”
+“LUMEN connects course evidence, interactive exploration, practice and transparent learning-state updates. The next research step is independent evaluation of answer quality, grading agreement and transfer—not a claim that those outcomes are already proven.”
 
 ## Recording checklist
 
-- Start with the app already running; do not spend video time on package installation.
-- Upload all three sample files before recording or keep them ready in a single folder.
-- Verify the exact question results and citation locations before recording.
-- Show at least one unsupported question, one answer submission, and the changed mastery estimate.
-- Show `evaluation_results.json` only after rerunning the tests.
-- Keep browser zoom at a readable level; hide notifications and unrelated tabs.
-- Publish to YouTube with public/unlisted visibility that judges can access; copy the URL into Devpost.
+- [ ] UI is legible at the recording resolution.
+- [ ] No secrets, personal files, browser notifications or private workspace data are visible.
+- [ ] Every shown interaction was performed live on this build.
+- [ ] Source citations and quiz results are real responses.
+- [ ] Deployment status is described accurately.
+- [ ] Known limitations and AI-assisted development are disclosed.

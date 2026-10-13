@@ -4,7 +4,6 @@ from pathlib import Path
 from datetime import timedelta
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import fitz
 from pptx import Presentation
@@ -45,10 +44,9 @@ async def isolate_browser_workspaces(request: Request, call_next):
         return response
     finally:
         engine_module.reset_request_db_path(token)
-app.mount('/static', StaticFiles(directory=ROOT/'static'), name='static')
 
 @app.get('/', response_class=HTMLResponse)
-def home(): return (ROOT/'static'/'index.html').read_text(encoding='utf-8')
+def home(): return (ROOT/'web'/'index.html').read_text(encoding='utf-8')
 
 @app.get('/api/state')
 def state():

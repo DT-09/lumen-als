@@ -54,3 +54,25 @@ def test_upload_request_file_count_is_bounded():
     payload = [('files', (f'lesson-{i}.txt', b'This is enough source text to exercise the upload count limit.', 'text/plain')) for i in range(11)]
     response = client.post('/api/upload', files=payload)
     assert response.status_code == 413
+
+def test_home_serves_release_frontend_and_primary_views():
+    client = TestClient(app.app)
+    response = client.get('/')
+    assert response.status_code == 200
+    html = response.text
+    assert 'LUMEN ALS — Adaptive Learning System' in html
+    assert 'id="universeCanvas"' in html
+    assert 'id="practiceArea"' in html
+    assert 'id="mathGraph"' in html
+    assert 'id="decisionTrace"' in html
+
+
+def test_state_api_exposes_live_workspace_fields():
+    client = TestClient(app.app)
+    response = client.get('/api/state')
+    assert response.status_code == 200
+    data = response.json()
+    assert {'sources', 'chunks', 'topics', 'concept_map', 'evaluation'} <= set(data)
+    assert isinstance(data['sources'], list)
+    assert isinstance(data['topics'], list)
+    assert 'concepts' in data['concept_map']

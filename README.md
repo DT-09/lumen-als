@@ -1,67 +1,96 @@
 # LUMEN ALS — Adaptive Learning System
 
-A source-grounded adaptive learning engine for Track D: import course materials, retrieve cited evidence, practice source-derived questions, and track a transparent topic-level mastery estimate.
+LUMEN ALS is a source-grounded adaptive-learning prototype for the Multimodal AI Hackathon's Personalized Tutoring & Adaptive Learning track. It connects indexed course evidence, tutoring, source-derived practice, a transparent topic-level estimate, and an interactive concept universe.
 
-## Run on Windows
+## Release scope and limitations
+
+This release candidate includes a responsive cinematic knowledge universe, an accessible concept list, supported-material ingestion, source-grounded tutoring, server-held quiz answer keys, assessment feedback, a self-contained function plotter, progress estimates, and a system-evaluation view. The universe is rendered as an interactive projected spatial graph on Canvas rather than a WebGL scene; it supports rotation, zoom, concept selection, keyboard entry and a reduced-motion mode. The math lab plots a constrained set of expressions; it is not a computer algebra system and does not perform symbolic integration. The tutor retrieves and quotes indexed source passages; it is not a general-purpose generative LLM. Quiz generation and grading are heuristic, and mastery estimates are not validated educational measurements.
+
+The package cannot guarantee a hackathon win. All benchmark results must be generated from the exact release candidate and reported with their test-set size and limitations.
+
+## Run locally on Windows
 
 1. Install Python 3.12 or 3.13 (recommended for dependency compatibility).
-2. Open PowerShell in this folder.
-3. Create and activate a virtual environment:
+2. Open PowerShell in this project folder.
+3. Run `run_windows.bat`, or execute:
 
 ```powershell
 py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-python -m uvicorn app:app --host 127.0.0.1 --port 8000
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
 4. Open `http://127.0.0.1:8000`.
 
-If PowerShell blocks activation, run commands without activating the environment by using `.\.venv\Scripts\python.exe -m pip ...` and `.\.venv\Scripts\python.exe -m uvicorn ...`.
+If the frontend says the engine is unavailable, confirm the API server is running and inspect the terminal error. The UI uses the same-origin `/api/*` endpoints.
 
-## Hosted deployment and workspace isolation
+## Deploy the frontend to Cloudflare Pages
 
-For a hosted deployment, set `LUMEN_SESSION_ISOLATION=1`, `LUMEN_DATA_DIR` to a persistent writable volume, and `LUMEN_COOKIE_SECURE=1` behind HTTPS. Each browser receives a random, HttpOnly, SameSite=Lax workspace cookie; the cookie is hashed to derive a per-workspace SQLite file, so course documents and learner history are not shared across browsers. Do not use an ephemeral filesystem for production data: workspace files must be on persistent storage. Use HTTPS, configure platform-level request limits, and periodically remove expired session databases. This lightweight browser workspace is not an account system: clearing cookies loses access to that workspace, and there is no cross-device sync or account recovery.
+The frontend is in `web/`; it can be deployed independently of the Python service.
 
-For local use, session isolation remains off by default and the application uses a single local database. Do not expose that default configuration to the public internet.
+1. Push the project to GitHub.
+2. In Cloudflare Pages, connect the repository.
+3. Set **Root directory** to `web`.
+4. Use no build command and set the build output directory to `.` (the files are static and require no bundler).
+5. Under **Settings → Variables and Secrets**, set `LUMEN_API_ORIGIN` to the HTTPS origin of the separately deployed FastAPI backend, for example `https://your-backend.example.com` with no trailing slash. Do not put a private key in frontend JavaScript.
+6. Redeploy Pages and test `/api/state` on the Pages domain. If the variable is absent, the proxy returns an explicit 503 rather than pretending the backend is connected.
 
-## Supported inputs
+The Pages Function at `web/functions/api/[[path]].js` proxies same-origin `/api/*` requests to the configured backend. The backend origin must be reachable over HTTPS. Do not point it to the Pages domain itself, or a proxy loop will occur.
 
-- PDF: page-level text extraction; optional OCR of embedded figures if the Tesseract executable is installed and configured.
-- PPTX: slide text and tables, with slide citations.
+## Deploy the Python backend
+
+Cloudflare Pages serves the frontend and its JavaScript proxy; it does not automatically run this Python/FastAPI app with its native Python parsing dependencies. Deploy the included Dockerized FastAPI backend to a compatible container host with a persistent writable volume.
+
+Set these environment variables on the backend:
+
+```text
+LUMEN_SESSION_ISOLATION=1
+LUMEN_DATA_DIR=/var/data
+LUMEN_COOKIE_SECURE=1
+```
+
+Mount a persistent volume at `/var/data`. Use HTTPS, restrict access to the backend if the host permits it, and apply platform-level rate limits and request-size limits. Session isolation uses an opaque, HttpOnly, SameSite=Lax browser cookie to select a per-browser SQLite workspace; it is not a login system and has no account recovery or cross-device sync. Clearing the cookie disconnects the browser from its existing workspace. Do not expose a deployment with `LUMEN_SESSION_ISOLATION=0` to the public internet.
+
+After deploying the backend, verify its `/api/state` endpoint directly, then configure `LUMEN_API_ORIGIN` on Pages. Verify that cookies are scoped to the Pages domain through the proxy and that different browser profiles receive isolated workspaces. A persistent disk is mandatory for hosted SQLite data.
+
+## Supported source formats
+
+- PDF: page-level text extraction; optional image OCR if Tesseract and its Python wrapper are available.
+- PPTX: slide text and tables, with slide locators.
 - DOCX: paragraphs and tables.
 - TXT / MD: text lines.
-- SRT / VTT: transcript segments with timestamp citations.
-- MP4 / MOV / MKV / WEBM / MP3 / WAV / M4A: optional local transcription using `pip install faster-whisper`. This model package may download model weights on first use and can be slow on CPU. A supplied SRT/VTT transcript is the lower-friction alternative.
+- SRT / VTT: transcript segments with timestamp locators.
+- Audio/video transcription is optional and requires `faster-whisper` and its model weights. A supplied transcript is the lower-friction alternative.
 
-The application does not send course files to a remote API. The UI imports optional Google Fonts for typography when internet access is available; system-font fallbacks remain available offline. The local SQLite database is `lumen.sqlite3`; use the in-app reset action to clear indexed material and learner history.
+Only successfully extracted and indexed text can ground course answers. Image-only documents may require OCR; the application reports failures rather than silently treating files as usable.
 
 ## Architecture
 
-- `app.py`: FastAPI endpoints, source parsers, browser-workspace isolation for hosted deployments, and web application serving.
-- `engine.py`: local SQLite persistence, source-aware chunking, BM25 retrieval with query-term coverage, evidence-first answers, server-held quiz answer keys, quiz generation, and mastery updates.
-- `static/index.html`: responsive product interface.
-- `evaluate.py`: reproducible hand-authored retrieval/refusal smoke test, synthetic learner-profile check, and quiz repetition check in a temporary database. Writes `evaluation_results.json`.
-- `tests/`: core regression tests.
-- `DEMO_SCRIPT.md`: timed product-demo storyboard and recording checklist.
-- `DEVPOST_DRAFT.md`: submission description and limitations/disclosure copy.
+- `app.py`: FastAPI routes, source parsers, optional browser-workspace isolation and serving for local use.
+- `engine.py`: SQLite persistence, source-aware chunking, BM25 retrieval with query-term coverage, evidence-first answers, quiz generation, server-held answer keys, grading and mastery updates.
+- `web/index.html`: responsive application, interactive spatial concept graph, learning workspace, source library, function plotter, practice, progress and evaluation UI.
+- `web/functions/api/[[path]].js`: Cloudflare Pages API proxy. Configure `LUMEN_API_ORIGIN` in Pages.
+- `evaluate.py`: curated retrieval/refusal evaluation; run it to regenerate `evaluation_results.json` for the current code.
+- `tests/`: API and engine regression tests.
+- `DEMO_SCRIPT.md`: suggested timed demo and recording checklist.
+- `DEVPOST_DRAFT.md`: submission copy and limitations/disclosure language.
 
-Retrieval uses transparent BM25 ranking plus informative-query-term coverage. The evaluation records Recall@3 and MRR@3 on a hand-authored fixture. It is intentionally inspectable and does not require API keys or model downloads. It is not equivalent to a general-purpose generative LLM; answers are composed from retrieved course passages. The tutor is conservative but the refusal threshold is heuristic and can produce false accepts or false refusals. Always verify the cited passage.
+## Verify before submission
 
-Quiz items include source-derived multiple-choice completion questions, short-answer prompts, and numerical recall items when an explicit numeric result is present in the source. These are heuristic assessment formats, not validated psychometric instruments. Short-answer checking uses heuristic keyword coverage. Numerical grading checks the value and normalizes a small set of common unit spellings; it is not a full dimensional-analysis system. Topic names are heuristic labels. Topic mastery uses a Beta(2,2) prior updated by correct/incorrect answers and shows an approximate posterior uncertainty interval; it is a transparent baseline, not validated Bayesian Knowledge Tracing (BKT) or Item Response Theory (IRT). Quiz answer keys and grading metadata remain server-side until submission. Evaluation numbers are only those generated by running the tests; the included tiny smoke test is not a general benchmark and does not demonstrate learning efficacy.
-
-## Current smoke-test result
-
-Run `python evaluate.py` to regenerate `evaluation_results.json`. The current curated fixture checks 31 retrieval/refusal queries across physics, biology, and history (20 in-scope and 11 off-material), source retrieval at top 3, citation provenance, a synthetic learner-profile direction check, and question non-repetition. The latest run passed 31/31 fixture cases; all 24 regression tests passed. Recall@3 and MRR@3 are both 1.0 on this small curated fixture, and all 11 off-material prompts were refused, including three hard negatives with misleading lexical overlap. These results describe only the hand-authored cases; they are not a general benchmark, calibrated confidence, or evidence that learners improve. A separate, independently authored test set is still required.
-
-## Test
+Run from the project root:
 
 ```powershell
 python -m pytest -q
 python evaluate.py
 ```
 
-## Submission disclosure
+Then start the app and manually verify: source upload and page/slide citations; supported and unsupported tutor questions; practice generation and answer submission; progress updates; concept selection; math graph plotting; mobile layout; keyboard focus; and reset behavior. For hosted deployment, test the Pages domain and backend separately, including a second browser profile and a backend restart to confirm persistence. Do not report previous evaluation results as current until the commands have been rerun on this exact release candidate.
 
-Built with Python, FastAPI, SQLite, PyMuPDF, python-pptx, python-docx, and AI-assisted development. AI-assisted work should be disclosed in Devpost's Built With section and in this README, per the hackathon's general instructions. The entrant should review, understand, and be able to explain all submitted code.
+## Honest interpretation of the learner model
+
+Topic labels are heuristic. Mastery uses a simple Beta(2,2)-style prior updated by correct/incorrect answers and displays an approximate posterior interval. Short-answer grading uses keyword coverage; numerical grading checks a parsed value and a limited set of common unit spellings. These are transparent baselines, not validated BKT/IRT models, semantic grading or proof of retention/transfer. A single incorrect answer should not be described as a confirmed misconception.
+
+## AI and tool disclosure
+
+Built with Python, FastAPI, SQLite, PyMuPDF, python-pptx, python-docx and AI-assisted development. Disclose AI coding assistance in the hackathon submission as required by the event rules. The entrant should review, understand and be able to explain the submitted code.
