@@ -1,72 +1,63 @@
-# PaceLab — Learning in motion
+# STEMPROOF
 
-PaceLab is an interactive learning experience with two connected surfaces:
+**Independent verification for mathematics and physics assessment content.**
 
-- Public learning experience (web/index.html): an immersive product website with a live physics model, selectable concept network, and an interactive knowledge check.
-- Learning Studio (web/workspace.html): the full workspace for learner-owned sources, concept exploration, evidence-linked tutoring, retrieval practice, review scheduling, progress and a constrained math studio.
+STEMPROOF is an assessment-quality assurance application for test-preparation providers, assessment publishers and education teams. It independently checks supported question-bank items, records the calculation or rule used, and routes unsupported cases to human review.
 
-The public experience works as a static site. The Learning Studio uses the separate FastAPI backend for source processing and saved workspace data.
+## Product surfaces
+- `web/index.html` — product overview
+- `web/platform.html` — platform architecture
+- `web/verification.html` — verification methods and boundaries
+- `web/workflows.html` — editorial and dispute workflows
+- `web/benchmark.html` — benchmark methodology and results
+- `web/audit.html` — interactive audit workspace
+- `web/docs.html` — input schema and API documentation
+- `web/contact.html` — evaluation request
 
 ## Run locally
+Python 3.11+:
+```bash
+python -m venv .venv
+# Windows: .venv\\Scripts\\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --reload --host 127.0.0.1 --port 8000
+```
+Open `http://127.0.0.1:8000/api/health`. Serve `web/` as a static site. For local split-origin testing, configure the browser's API base in `web/assets/config.js`; for Cloudflare Pages, set `STEMPROOF_API_ORIGIN` to the HTTPS origin of the FastAPI service.
 
-1. Install Python 3.12 or 3.13.
-2. Create an environment and install dependencies:
-
-    python -m venv .venv
-    pip install -r requirements.txt
-    uvicorn app:app --reload --host 127.0.0.1 --port 8000
-
-3. Open http://127.0.0.1:8000 for the Learning Studio. The public website is served by Cloudflare Pages from web/index.html.
-
-On Windows, run_windows.bat performs setup and starts the local API and studio.
-
-## Cloudflare Pages
-
-Connect this repository to Cloudflare Pages:
-
-| Setting | Value |
+## Supported item types
+| Type | Check |
 |---|---|
-| Project name | pacelabs |
-| Production branch | main |
-| Root directory | web |
-| Build command | Leave blank |
-| Output directory | . |
+| `equation` | Solve a single-variable equation and compare the supplied answer with the solution set |
+| `expression` | Symbolic equivalence between a reference expression and supplied answer |
+| `newton2` | Recalculate acceleration from net force and mass |
+| `kinematics` | Recalculate final velocity or displacement for constant acceleration |
+| `mcq` | Check internal consistency of answer-key fields only; not an independent proof of the option |
 
-The public website is the root route /. The complete Learning Studio is /workspace.html.
+Unsupported or malformed items are marked `needs_review`, never silently passed.
 
-The Pages Function at web/functions/api/[[path]].js proxies same-origin /api/* requests to a separately hosted FastAPI service. Set Pages variable PACELAB_API_ORIGIN to the backend's HTTPS origin only (no path or trailing slash). The public landing experience does not depend on this variable; source ingestion, tutor, practice, review and workspace persistence do.
+## Example JSON
+```json
+[{"id":"ALG-001","subject":"mathematics","type":"equation","prompt":"Solve 2x + 3 = 11.","expression":"2*x+3=11","variable":"x","expected_answer":"4"},{"id":"PHY-001","subject":"physics","type":"newton2","prompt":"A 3 kg object experiences 12 N net force. Find acceleration.","values":{"force":12,"mass":3},"expected_answer":"4"}]
+```
 
-## Backend deployment
+## API
+- `GET /api/health`
+- `POST /api/audits` — CSV/JSON multipart upload
+- `POST /api/audits/preview` — JSON body `{"items":[...]}`
+- `GET /api/audits/{id}`
+- `POST /api/audits/{id}/reviews`
+- `GET /api/audits/{id}/report.json`, `report.csv`, `report.pdf`
 
-Deploy the included Dockerfile to a compatible container host with persistent writable storage. Configure:
+## Engineering boundaries
+Expressions are parsed using a restricted AST grammar; arbitrary calls, attributes, imports and code execution are rejected. SymPy receives only expressions produced by that parser. A verified answer means the supplied answer matched a specific implemented check. It does not prove clarity, uniqueness, pedagogy, syllabus alignment or correctness outside the encoded model. Human approval is required before publishing changes.
 
-    PACELAB_SESSION_ISOLATION=1
-    PACELAB_DATA_DIR=/var/data
-    PACELAB_COOKIE_SECURE=1
-    PORT=8000
+## Test
+```bash
+pip install pytest httpx
+pytest -q
+```
+Tests are software checks for implemented rules, not psychometric validation or evidence of learning efficacy.
 
-Mount a persistent volume at /var/data. The opaque HttpOnly cookie selects a per-browser SQLite workspace; it is not an account system and does not provide account recovery or cross-device sync. Keep HTTPS enabled, and apply host-level rate limits and request limits.
-
-## Learning Studio capabilities
-
-- PDF, PPTX, DOCX, TXT, MD, SRT and VTT ingestion
-- Optional audio/video transcription with the optional faster-whisper package
-- Source-grounded tutor with evidence locators and unsupported-question handling
-- Retrieval practice with answer keys retained on the server until submission
-- Spaced review queue
-- Topic-level progress estimates and evaluation view
-- Interactive constrained function plotter
-- Browser-side command navigation
-
-## Limits and responsible interpretation
-
-The retrieval engine is deterministic and source-aware; it is not a general-purpose generative model. Topic extraction, quiz generation, short-answer grading and mastery estimates are heuristic baselines, not validated educational measurements. A single incorrect answer does not prove a misconception. Review intervals are a simple schedule, not a validated forgetting-curve model. The math studio is not a computer algebra system.
-
-Uploaded files are sent to the configured API for processing. Upload only material you have permission to process. Hosted deployments need isolated sessions, persistent storage, HTTPS and appropriate access controls.
-
-## Verification
-
-    python -m pytest -q
-    python evaluate.py
-
-Run these checks against the exact release commit. Then manually verify the live Pages homepage, mobile navigation, interactive lab, concept selection, knowledge check, workspace API connection, uploads, citations, unsupported queries, answer submission, review scheduling and reset behavior.
+## Deployment
+Deploy `web/` as a static site and FastAPI as a separate HTTPS service. Configure the Pages Function variable `STEMPROOF_API_ORIGIN`. This repository does not yet provide authentication, tenant isolation, billing, or production retention controls. Add these before accepting confidential customer question banks. PDF/DOCX ingestion, diagram interpretation, general proof checking and psychometric analysis are not claimed as implemented.
