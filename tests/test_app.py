@@ -137,3 +137,20 @@ def test_spaced_review_schedule_and_answer_key_privacy():
         assert session['scheduled_count']==1
         assert session['due_count']==0
         assert session['due_questions']==[]
+        con=engine.connect()
+        con.execute("UPDATE review_queue SET due_at='2000-01-01T00:00:00+00:00' WHERE question_id=?",(question['id'],))
+        con.commit(); con.close()
+        due=engine.review_session()
+        assert due['due_count']==1
+        assert len(due['due_questions'])==1
+        assert 'answer' not in due['due_questions'][0]
+        assert 'explanation' not in due['due_questions'][0]
+
+
+def test_review_api_is_available_without_a_due_queue():
+    with tempfile.TemporaryDirectory() as td:
+        engine.DB_PATH=str(Path(td)/'review-api.sqlite3')
+        response=TestClient(app.app).get('/api/review')
+        assert response.status_code==200
+        assert response.json()['due_count']==0
+        assert response.json()['due_questions']==[]
