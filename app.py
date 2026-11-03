@@ -68,6 +68,12 @@ async def isolate_browser_workspaces(request: Request, call_next):
 @app.get('/', response_class=HTMLResponse)
 def home(): return (ROOT/'web'/'index.html').read_text(encoding='utf-8')
 
+@app.get('/api/health')
+def health():
+    """Small deployment probe used to verify the separately hosted learning API."""
+    return {'ok': True, 'service': 'lumen-als-api', 'version': app.version}
+
+
 @app.get('/api/state')
 def state():
     chunks=get_chunks()
