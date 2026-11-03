@@ -11,11 +11,27 @@ export async function onRequest(context) {
       detail: "Learning API is not configured. Set the Cloudflare Pages variable LUMEN_API_ORIGIN to the HTTPS origin of the deployed LUMEN FastAPI backend."
     }), { status: 503, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
   }
-  let upstream;
-  try { upstream = new URL(context.request.url); }
-  catch { return new Response("Invalid request URL", { status: 400 }); }
-  const base = origin.replace(/\/+$/, "");
-  const target = base + upstream.pathname + upstream.search;
+  let upstream, backend;
+  try {
+    upstream = new URL(context.request.url);
+    backend = new URL(origin);
+  } catch {
+    return new Response(JSON.stringify({ detail: "Invalid LUMEN_API_ORIGIN. Use the HTTPS origin of the FastAPI backend." }), {
+      status: 500, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
+    });
+  }
+  if (backend.protocol !== "https:" || backend.username || backend.password ||
+      backend.pathname !== "/" || backend.search || backend.hash) {
+    return new Response(JSON.stringify({ detail: "LUMEN_API_ORIGIN must be an HTTPS origin only, without a path, credentials, query, or trailing route." }), {
+      status: 500, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
+    });
+  }
+  if (backend.host === upstream.host) {
+    return new Response(JSON.stringify({ detail: "LUMEN_API_ORIGIN points back to the Pages frontend. Set it to the separate FastAPI backend host to avoid a proxy loop." }), {
+      status: 508, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
+    });
+  }
+  const target = backend.origin + upstream.pathname + upstream.search;
   const headers = new Headers(context.request.headers);
   headers.delete("host");
   headers.delete("cf-connecting-ip");
