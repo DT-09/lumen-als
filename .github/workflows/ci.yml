@@ -1,4 +1,4 @@
-name: Lumen CI
+name: PaceLab CI
 
 on:
   push:
@@ -33,9 +33,9 @@ jobs:
           from pathlib import Path
           html = Path("web/index.html").read_text(encoding="utf-8")
           script = html.split("<script>", 1)[1].split("</script>", 1)[0]
-          Path("/tmp/lumen-frontend.js").write_text(script, encoding="utf-8")
+          Path("/tmp/pacelab-frontend.js").write_text(script, encoding="utf-8")
           PY
-          node --check /tmp/lumen-frontend.js
+          node --check /tmp/pacelab-frontend.js
       - name: Run API and engine tests
         run: python -m pytest -q
       - name: Run retrieval evaluation
