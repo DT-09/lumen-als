@@ -30,7 +30,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          pages = ["index.html","platform.html","verification.html","workflows.html","benchmark.html","audit.html","docs.html","contact.html"]
+          pages = ["index.html","platform.html","verification.html","workflows.html","benchmark.html","audit.html","docs.html","pilot.html","contact.html"]
           for page in pages:
               p=Path("web")/page
               assert p.exists(), f"Missing page: {p}"
