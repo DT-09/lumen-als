@@ -1,12 +1,12 @@
-# LUMEN ALS — Adaptive Learning System
+# Lumen — Source-grounded adaptive learning
 
-LUMEN ALS is a source-grounded adaptive-learning prototype for the Multimodal AI Hackathon's Personalized Tutoring & Adaptive Learning track. It connects indexed course evidence, tutoring, source-derived practice, a transparent topic-level estimate, and an interactive concept universe.
+Lumen is a learning workspace that turns a learner's own course material into an evidence-linked study loop: map concepts, ask questions, practise retrieval, inspect feedback, and revisit earlier questions on a spaced schedule. The product is designed around a persistent learner workspace and explainable study decisions—not a generic chatbot or a collection of disconnected study tools.
 
-## Release scope and limitations
+## Current product scope and limitations
 
-This release candidate includes a responsive cinematic knowledge universe, an accessible concept list, supported-material ingestion, source-grounded tutoring, server-held quiz answer keys, assessment feedback, a self-contained function plotter, progress estimates, and a system-evaluation view. The universe is rendered as an interactive projected spatial graph on Canvas rather than a WebGL scene; it supports rotation, zoom, concept selection, keyboard entry and a reduced-motion mode. The math lab plots a constrained set of expressions; it is not a computer algebra system and does not perform symbolic integration. The tutor retrieves and quotes indexed source passages; it is not a general-purpose generative LLM. Quiz generation and grading are heuristic, and mastery estimates are not validated educational measurements.
+This release candidate includes a responsive cinematic knowledge universe, an accessible concept list, supported-material ingestion, source-grounded tutoring, server-held quiz answer keys, assessment feedback, a self-contained function plotter, progress estimates, and a system-evaluation view. The universe is rendered as an interactive projected spatial graph on Canvas rather than a WebGL scene; it supports rotation, zoom, concept selection, keyboard entry and a reduced-motion mode. The math lab plots a constrained set of expressions; it is not a computer algebra system and does not perform symbolic integration. The tutor currently retrieves and quotes indexed source passages; it is not a general-purpose generative LLM. Answered practice questions enter a simple spaced-review queue. Quiz generation and grading are heuristic, and mastery estimates are not validated educational measurements.
 
-The package cannot guarantee a hackathon win. All benchmark results must be generated from the exact release candidate and reported with their test-set size and limitations.
+Lumen is under active product development. Do not treat the current heuristic learner model, question generation, grading, or review intervals as validated measures of learning. Product claims must match tested behavior.
 
 ## Run locally on Windows
 
@@ -76,7 +76,7 @@ Only successfully extracted and indexed text can ground course answers. Image-on
 - `DEMO_SCRIPT.md`: suggested timed demo and recording checklist.
 - `DEVPOST_DRAFT.md`: submission copy and limitations/disclosure language.
 
-## Verify before submission
+## Verify a development build
 
 Run from the project root:
 
@@ -94,6 +94,19 @@ Topic labels are heuristic. Mastery uses a simple Beta(2,2)-style prior updated 
 ## AI and tool disclosure
 
 Built with Python, FastAPI, SQLite, PyMuPDF, python-pptx, python-docx and AI-assisted development. Disclose AI coding assistance in the hackathon submission as required by the event rules. The entrant should review, understand and be able to explain the submitted code.
+
+## Spaced retrieval
+
+After a learner answers a practice item, Lumen schedules it for another retrieval attempt. Correct responses advance through 1, 3, 7, 14 and 30-day intervals; an incorrect response returns after one day. The learner can open the Review Due action to answer items whose due time has arrived. This is a transparent baseline schedule, not a validated forgetting-curve model or proof of retention.
+
+## Product development priorities
+
+1. Replace heuristic topic extraction with source-grounded concept and prerequisite extraction that can be inspected and corrected.
+2. Improve diagnosis through multiple item types and explicit skill dimensions; do not infer misconceptions from one response.
+3. Replace keyword-only short-answer grading with rubric-based evidence matching and learner-visible criteria.
+4. Build teach–practise–review–transfer sequences with source citations at each step.
+5. Validate learning outcomes with consented learner studies and pre/post transfer tasks before making efficacy claims.
+6. Add accounts, recovery, export and cross-device sync before positioning hosted workspaces as durable personal records.
 
 ## Deployment health check
 
