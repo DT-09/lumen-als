@@ -36,6 +36,18 @@ jobs:
           Path("/tmp/pacelab-frontend.js").write_text(script, encoding="utf-8")
           PY
           node --check /tmp/pacelab-frontend.js
+      - name: Check repository identity and canonical frontend
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [p for p in Path(".").rglob("*") if p.is_file() and ".git" not in p.parts and p.suffix.lower() in {".html", ".py", ".js", ".md", ".txt", ".yml", ".yaml", ".json", ".webmanifest", ".svg"}]
+          forbidden = ("lu" + "men", "hack" + "athon")
+          matches = [(str(p), word) for p in files for word in forbidden if word in p.read_text(encoding="utf-8", errors="ignore").lower()]
+          if matches:
+              raise SystemExit(f"Forbidden legacy references: {matches}")
+          assert Path("web/index.html").is_file()
+          assert not Path("static/index.html").exists()
+          PY
       - name: Run API and engine tests
         run: python -m pytest -q
       - name: Run retrieval evaluation
