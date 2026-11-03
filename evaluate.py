@@ -7,9 +7,9 @@ from pathlib import Path
 
 def main():
     with tempfile.TemporaryDirectory() as td:
-        os.environ['LUMEN_DB']=str(Path(td)/'eval.sqlite3')
+        os.environ['PACELAB_DB']=str(Path(td)/'eval.sqlite3')
         import engine
-        engine.DB_PATH=os.environ['LUMEN_DB']
+        engine.DB_PATH=os.environ['PACELAB_DB']
         engine.add_document('sample_physics.pdf','pdf',[
             ('Page 2','Newton second law states that the net force on an object equals its mass multiplied by its acceleration. The relationship is written as F equals m times a. If net force increases while mass remains constant, acceleration increases. If mass increases while net force remains constant, acceleration decreases.'),
             ('Page 3','An object at rest remains at rest, and an object in motion continues at constant velocity unless a net external force acts on it. This is Newton first law. This tendency to resist a change in motion is called inertia. Mass is a measure of an object’s inertia.'),
