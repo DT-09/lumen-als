@@ -41,6 +41,6 @@ Attach a persistent writable volume at `/var/data`. Keep the service behind HTTP
 7. Test the concept universe, concept list, function plotter, reduced motion, keyboard focus and mobile navigation.
 8. Open a second browser profile and verify its workspace is isolated.
 9. Restart the backend and verify data persists from the configured volume.
-10. Run `python -m pytest -q` and `python evaluate.py` on the exact release candidate.
+10. Run `python -m pytest -q` and `python evaluate.py` on the exact product build.
 
 Do not describe deployment as complete until these checks have been performed against the live deployment. The ZIP does not contain your Cloudflare credentials or backend host credentials and cannot deploy itself.
