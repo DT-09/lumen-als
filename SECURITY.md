@@ -1,23 +1,28 @@
 # Security and data handling
 
-## Workspace model
+## Current service model
 
-When `PACELAB_SESSION_ISOLATION=1`, the API issues an opaque, HttpOnly, SameSite=Lax cookie. A one-way hash of that cookie selects a separate SQLite database for the browser workspace. The raw cookie is not used as a filename.
+STEMPROOF accepts structured question banks and persists audit records as JSON files under `STEMPROOF_DATA_DIR`. The current release has no user authentication, tenant isolation, account recovery, audit deletion endpoint or role-based access control. Anyone who can reach the API can create and retrieve audit records if they know the generated audit identifier.
 
-This is workspace separation, not authentication. Anyone who obtains a browser's cookie may be able to access that workspace. There is no account recovery, identity verification or cross-device synchronization.
+This is not an acceptable boundary for confidential customer content.
 
-## Deployment requirements
+## Before public customer use
 
-- Serve both the website and API over HTTPS.
-- Keep session isolation enabled on public deployments.
-- Mount persistent storage at the configured data directory.
-- Use host-level rate limits and request-size limits.
-- Restrict direct access to the backend where possible.
-- Do not commit secrets, API credentials or personal learning data.
-- Define a retention and deletion policy before collecting real learner data.
+- Put the API behind authentication and authorization.
+- Implement tenant isolation and verify it with cross-tenant access tests.
+- Add audit deletion, retention schedules and backup deletion procedures.
+- Enforce request-size limits, rate limits and upload quotas at the edge and origin.
+- Use HTTPS for the site and API.
+- Restrict direct backend access where practical.
+- Keep persistent storage and backups private.
+- Do not log uploaded question-bank contents or personal data.
+- Define a data-processing and incident-response procedure.
+- Do not commit secrets, credentials or customer material.
 
-## Uploaded material
+## Demonstration guidance
 
-Uploaded files are processed by the configured API and indexed in the workspace database. Users should upload only material they have permission to process. Operators should protect the backend volume and backups as user data.
+Until those controls exist, use synthetic, public-domain or properly redacted sample questions only. The sample question bank in this repository is synthetic demonstration data.
 
-Report suspected vulnerabilities privately to the repository owner.
+## Reporting
+
+Report suspected vulnerabilities privately to the repository owner. Do not publish customer data or exploit details in public issues.
