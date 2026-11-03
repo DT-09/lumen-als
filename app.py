@@ -5,7 +5,9 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 from fastapi import FastAPI,File,HTTPException,UploadFile
-from fastapi.responses import JSONResponse,Response\nfrom fastapi.staticfiles import StaticFiles\nfrom fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse,Response
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel,Field
 from verifier import audit_items
 from reports import build_pdf
@@ -83,5 +85,4 @@ def csv_report(audit_id:str):
 @app.get("/api/audits/{audit_id}/report.pdf")
 def pdf_report(audit_id:str):
     return Response(build_pdf(get(audit_id)),media_type="application/pdf",headers={"Content-Disposition":f'attachment; filename="stemproof-{audit_id}.pdf"'})
-@app.get("/")
-def root(): return {"service":"STEMPROOF","health":"/api/health","docs":"/docs"}
+app.mount("/",StaticFiles(directory=str(Path(__file__).parent/"web"),html=True),name="site")
