@@ -60,7 +60,10 @@ def test_home_serves_release_frontend_and_primary_views():
     response = client.get('/')
     assert response.status_code == 200
     html = response.text
-    assert 'LUMEN ALS — Adaptive Learning System' in html
+    assert 'Lumen — Learn in every direction' in html
+    assert 'CHROMATIC ATLAS' in html
+    assert 'id="engineNotice"' in html
+    assert 'id="conceptSearch"' in html
     assert 'id="universeCanvas"' in html
     assert 'id="practiceArea"' in html
     assert 'id="mathGraph"' in html
@@ -76,3 +79,39 @@ def test_state_api_exposes_live_workspace_fields():
     assert isinstance(data['sources'], list)
     assert isinstance(data['topics'], list)
     assert 'concepts' in data['concept_map']
+
+
+def test_health_endpoint_reports_backend_identity():
+    client = TestClient(app.app)
+    response = client.get('/api/health')
+    assert response.status_code == 200
+    assert response.json() == {
+        'ok': True,
+        'service': 'lumen-als-api',
+        'version': app.app.version,
+    }
+
+
+def test_frontend_controls_have_real_targets():
+    import re
+    from html.parser import HTMLParser
+
+    class IdCollector(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.ids = set()
+        def handle_starttag(self, tag, attrs):
+            value = dict(attrs).get('id')
+            if value:
+                self.ids.add(value)
+
+    html = (ROOT / 'web' / 'index.html').read_text(encoding='utf-8')
+    parser = IdCollector()
+    parser.feed(html)
+    script = html.split('<script>', 1)[1].split('</script>', 1)[0]
+    # quizAnswer is created dynamically when a written-response question is rendered.
+    refs = set(re.findall(r"\\$\\('([^']+)'\\)", script)) - {'quizAnswer'}
+    assert refs <= parser.ids
+    views = set(re.findall(r'data-view="([^"]+)"', html))
+    gotos = set(re.findall(r'data-goto="([^"]+)"', html))
+    assert views | gotos <= {value.removeprefix('view-') for value in parser.ids if value.startswith('view-')}
