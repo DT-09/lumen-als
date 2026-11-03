@@ -6,14 +6,14 @@ if not exist ".venv\Scripts\python.exe" (
   py -m venv .venv
   if errorlevel 1 goto failed
 )
-echo Installing or updating required packages...
+echo Installing STEMPROOF dependencies...
 .venv\Scripts\python.exe -m pip install --upgrade pip
 if errorlevel 1 goto failed
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 if errorlevel 1 goto failed
 echo.
-echo Starting PaceLab at http://127.0.0.1:8000
-start "PaceLab browser" cmd /c "timeout /t 3 >nul & start http://127.0.0.1:8000"
+echo Starting STEMPROOF API at http://127.0.0.1:8000
+start "STEMPROOF API" cmd /c "timeout /t 3 >nul & start http://127.0.0.1:8000/docs"
 .venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
 if errorlevel 1 goto failed
 goto end
