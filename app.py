@@ -14,7 +14,9 @@ from reports import build_pdf
 
 DATA_DIR=Path(os.environ.get("STEMPROOF_DATA_DIR","./data")); DATA_DIR.mkdir(parents=True,exist_ok=True)
 LOCK=Lock()
-app=FastAPI(title="STEMPROOF Verification API",version="1.0.0",description="Evidence-first verification for mathematics and physics assessments")\norigins=[x.strip() for x in os.environ.get("STEMPROOF_CORS_ORIGINS","http://127.0.0.1:8080,http://localhost:8080").split(",") if x.strip()]\napp.add_middleware(CORSMiddleware,allow_origins=origins,allow_methods=["GET","POST"],allow_headers=["Content-Type"])
+app=FastAPI(title="STEMPROOF Verification API",version="1.0.0",description="Evidence-first verification for mathematics and physics assessments")
+origins=[x.strip() for x in os.environ.get("STEMPROOF_CORS_ORIGINS","http://127.0.0.1:8080,http://localhost:8080").split(",") if x.strip()]
+app.add_middleware(CORSMiddleware,allow_origins=origins,allow_methods=["GET","POST"],allow_headers=["Content-Type"])
 
 def save(record):
     aid=uuid.uuid4().hex[:12]; record={**record,"audit_id":aid,"created_at":datetime.now(timezone.utc).isoformat(),"reviews":{}}
