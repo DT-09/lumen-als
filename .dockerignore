@@ -2,6 +2,9 @@
 __pycache__
 .pytest_cache
 *.pyc
-lumen.sqlite3
+pacelab.sqlite3
 data
 .git
+.env
+.env.*
+!.env.example
