@@ -146,6 +146,11 @@ def test_spaced_review_schedule_and_answer_key_privacy():
         assert len(due['due_questions'])==1
         assert 'answer' not in due['due_questions'][0]
         assert 'explanation' not in due['due_questions'][0]
+        advanced=engine.record_stored_answer(question['id'],'Inertia')
+        assert advanced['review']['interval_days']==3
+        reset=engine.record_stored_answer(question['id'],'Velocity')
+        assert reset['review']['interval_days']==1
+        assert reset['review']['repetitions']==0
 
 
 def test_review_api_is_available_without_a_due_queue():
