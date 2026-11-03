@@ -115,3 +115,25 @@ def test_frontend_controls_have_real_targets():
     views = set(re.findall(r'data-view="([^"]+)"', html))
     gotos = set(re.findall(r'data-goto="([^"]+)"', html))
     assert views | gotos <= {value.removeprefix('view-') for value in parser.ids if value.startswith('view-')}
+
+
+def test_spaced_review_schedule_and_answer_key_privacy():
+    with tempfile.TemporaryDirectory() as td:
+        engine.DB_PATH=str(Path(td)/'review.sqlite3')
+        question={
+            'id':'review-question-1','type':'mcq','question':'Which term describes the tendency to resist a change in motion?',
+            'options':['Inertia','Velocity'],'answer':'Inertia','topic':'Inertia & Motion','source':'physics.pdf',
+            'locator':'Page 2','explanation':'Mass measures inertia.','keywords':[]
+        }
+        import json
+        con=engine.connect()
+        con.execute('INSERT INTO quiz_history(digest,question,topic,payload) VALUES(?,?,?,?)',
+                    (question['id'],question['question'],question['topic'],json.dumps(question)))
+        con.commit(); con.close()
+        result=engine.record_stored_answer(question['id'],'Inertia')
+        assert result['correct'] is True
+        assert result['review']['interval_days']==1
+        session=engine.review_session()
+        assert session['scheduled_count']==1
+        assert session['due_count']==0
+        assert session['due_questions']==[]
