@@ -13,13 +13,13 @@ def test_multiple_solution_requires_complete_set():
 def test_symbolic_equivalence(): assert verify_item(it("expression",expression="(x+1)^2",expected_answer="x^2+2*x+1")).status=="verified"
 def test_newton2(): assert verify_item(it("newton2",values={"force":12,"mass":3})).status=="verified"
 def test_kinematics(): assert verify_item(it("kinematics",values={"u":5,"a":2,"t":3,"target":"v"},expected_answer="11")).status=="verified"
-def test_mcq_only_needs_review(): assert verify_item(it("mcq",options=["a","b"],correct_option="A")).status=="needs_review"
+def test_mcq_only_needs_review(): assert verify_item(it("mcq",options=["a","b"],correct_option="A",expected_answer="A")).status=="needs_review"
 def test_unsupported_not_passed(): assert verify_item(it("essay")).status=="needs_review"
 @pytest.mark.parametrize("s",["__import__('os').system('whoami')","x.__class__","open('/etc/passwd')","[x for x in (1,2)]","2**1000"])
 def test_reject_unsafe_math(s):
     with pytest.raises(ValueError): parse_math(s)
 def test_audit_summary():
-    r=audit_items([it("equation",expression="x=4",variable="x"),it("equation",expression="x=4",variable="x",expected_answer="9"),it("essay")])
+    r=audit_items([it("equation",id="A",expression="x=4",variable="x"),it("equation",id="B",expression="x=4",variable="x",expected_answer="9"),it("essay",id="C")])
     assert r["summary"]=={"verified":1,"defect":1,"needs_review":1}
 def test_duplicate_ids_are_reviewed():
     r=audit_items([it("equation",expression="x=4",variable="x"),it("equation",expression="x=4",variable="x")])
