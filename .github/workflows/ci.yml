@@ -37,7 +37,7 @@ jobs:
               text=p.read_text(encoding="utf-8").lower()
               assert "stemproof" in text, f"Missing brand in {p}"
           candidates=[p for p in Path(".").rglob("*") if p.is_file() and ".git" not in p.parts and p.suffix.lower() in {".html",".py",".js",".md",".txt",".yml",".yaml",".json",".webmanifest",".svg",".bat"}]
-          legacy=("pacelab","pacelabs","learning studio","learning in motion")
+          legacy=("pace"+"lab","pace"+"labs","learning"+" studio","learning"+" in motion")
           matches=[(str(p),word) for p in candidates for word in legacy if word in p.read_text(encoding="utf-8",errors="ignore").lower()]
           if matches: raise SystemExit(f"Legacy identity references remain: {matches}")
           PY
