@@ -125,3 +125,20 @@ def test_review_endpoint_returns_due_questions_without_private_fields():
         item = response.json()["due_questions"][0]
         assert item["id"] == q["id"]
         assert "answer" not in item and "explanation" not in item
+
+
+def test_public_pages_home_is_an_interactive_learning_experience():
+    html = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+    for marker in ('<title>PaceLab — Make understanding move</title>', 'id="playground"', 'id="labCanvas"', 'id="force"', 'id="mass"', 'id="connections"', 'data-concept="acceleration"', 'id="practice"', 'id="answers"', 'id="nextQuestion"', 'href="/workspace.html"'):
+        assert marker in html
+    assert "requestAnimationFrame(drawLab)" in html
+    assert "function selectConcept" in html
+    assert "function chooseAnswer" in html
+
+def test_workspace_page_is_separate_from_public_homepage():
+    landing = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+    workspace = (ROOT / "web" / "workspace.html").read_text(encoding="utf-8")
+    assert "<title>PaceLab — Make understanding move</title>" in landing
+    assert '<title>PaceLab — Learn with evidence</title>' in workspace
+    assert 'id="view-library"' in workspace and 'id="view-tutor"' in workspace
+    assert 'href="/" aria-label="Return to PaceLab home"' in workspace
