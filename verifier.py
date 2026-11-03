@@ -78,11 +78,13 @@ def verify_item(item):
             if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,20}",name): raise ExpressionError("Invalid variable name.")
             x=sp.Symbol(name)
             if (lhs.free_symbols|rhs.free_symbols)-{x}: raise ExpressionError("Only the declared variable may appear.")
+            difference=sp.simplify(lhs-rhs)
             solutions=sp.solve(sp.Eq(lhs,rhs),x)
             supplied_values=expected if isinstance(expected,list) else [expected]
             answers=[parse_math(value) for value in supplied_values]
             if any(answer.free_symbols for answer in answers): raise ExpressionError("Expected answers must be concrete values.")
             evidence={"method":"SymPy solve on restricted expression","equation":f"{lhs} = {rhs}","variable":name,"computed_solution_set":[str(v) for v in solutions],"supplied_answers":[str(v) for v in answers]}
+            if difference==0: return make(item,"needs_review","medium","Equation is an identity","The equation is true for all values in its domain. This release does not certify the full domain or exclusions automatically.","math.equation.identity_review",evidence)
             if not solutions: return make(item,"defect","high","Equation has no solution","No solution exists for the declared variable.","math.equation.empty_set",evidence)
             if len(solutions)>1 and not isinstance(expected,list):
                 return make(item,"needs_review","medium","Multiple solutions require a complete answer set","The equation has multiple solutions. Supply expected_answer as an array containing the complete solution set; a single matching value is not enough to verify completeness.","math.equation.multiple_solution_review",evidence)
@@ -91,8 +93,11 @@ def verify_item(item):
             return make(item,"defect","high","Answer-key mismatch","The supplied answer set does not match the independently computed solution set.","math.equation.mismatch",evidence)
         if kind=="expression":
             ref,ans=parse_math(item.get("expression","")),parse_math(expected)
+            ref_den=sp.denom(sp.together(ref)); ans_den=sp.denom(sp.together(ans))
+            if (ref_den.free_symbols or ans_den.free_symbols):
+                return make(item,"needs_review","medium","Variable denominator requires domain review","Symbolic cancellation can hide excluded values. This release does not certify equivalence when either expression has a variable denominator.","math.expression.domain_review",{"reference":str(ref),"supplied_answer":str(ans),"reference_denominator":str(ref_den),"answer_denominator":str(ans_den)})
             diff=sp.simplify(ref-ans); evidence={"method":"symbolic simplification of reference minus answer","reference":str(ref),"supplied_answer":str(ans),"simplified_difference":str(diff)}
-            if diff==0: return make(item,"verified","info","Expressions are equivalent","The expressions simplify to the same symbolic result.","math.expression.equivalent",evidence)
+            if diff==0: return make(item,"verified","info","Expressions are equivalent","The expressions simplify to the same symbolic result within the supported domain.","math.expression.equivalent",evidence)
             return make(item,"defect","high","Expression mismatch","The supplied answer is not symbolically equivalent to the reference expression.","math.expression.mismatch",evidence)
         if kind=="newton2":
             v=item.get("values") or {}; force,mass=number(v["force"]),number(v["mass"])
