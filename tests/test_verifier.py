@@ -36,3 +36,19 @@ def test_api_upload_review_and_exports(tmp_path,monkeypatch):
     assert c.get(f"/api/audits/{aid}/report.json").status_code==200
     assert c.get(f"/api/audits/{aid}/report.csv").status_code==200
     assert c.get(f"/api/audits/{aid}/report.pdf").status_code==200
+
+def test_identity_equation_is_not_misreported_as_no_solution():
+    assert verify_item(it("equation",expression="x=x",variable="x")).status=="needs_review"
+
+def test_variable_denominator_expression_requires_domain_review():
+    assert verify_item(it("expression",expression="(x^2-1)/(x-1)",expected_answer="x+1")).status=="needs_review"
+
+def test_root_serves_multi_page_product():
+    from fastapi.testclient import TestClient
+    import app
+    c=TestClient(app.app)
+    home=c.get("/")
+    assert home.status_code==200 and "STEMPROOF" in home.text
+    assert c.get("/platform.html").status_code==200
+    assert c.get("/audit.html").status_code==200
+    assert c.get("/api/health").json()["service"]=="stemproof-verification-api"
