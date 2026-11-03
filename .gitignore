@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
 .pytest_cache/
-lumen.sqlite3
+pacelab.sqlite3
 *.pyc
 .env
 .env.*
