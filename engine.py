@@ -1,6 +1,7 @@
 """Core learning engine for LUMEN ALS. Deterministic, inspectable, source-aware baseline."""
 from __future__ import annotations
 import re, math, json, sqlite3, hashlib, os
+from datetime import datetime, timedelta, timezone
 from contextvars import ContextVar, Token
 from pathlib import Path
 from typing import Iterable
@@ -30,6 +31,10 @@ CREATE TABLE IF NOT EXISTS mastery (
 );
 CREATE TABLE IF NOT EXISTS quiz_history (
  digest TEXT PRIMARY KEY, question TEXT NOT NULL, topic TEXT NOT NULL, payload TEXT NOT NULL DEFAULT '{}'
+);
+CREATE TABLE IF NOT EXISTS review_queue (
+ question_id TEXT PRIMARY KEY, due_at TEXT NOT NULL, interval_days INTEGER NOT NULL DEFAULT 1,
+ repetitions INTEGER NOT NULL DEFAULT 0, last_correct INTEGER, updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 '''
 
@@ -430,9 +435,30 @@ def record_answer(q, answer):
     else: beta += 1
     con.execute('INSERT INTO mastery(topic,alpha,beta,updated_at) VALUES(?,?,?,CURRENT_TIMESTAMP) ON CONFLICT(topic) DO UPDATE SET alpha=excluded.alpha,beta=excluded.beta,updated_at=CURRENT_TIMESTAMP',(q['topic'],alpha,beta))
     con.execute('INSERT INTO attempts(topic,question,correct) VALUES(?,?,?)',(q['topic'],q['question'],int(correct)))
+    previous=con.execute('SELECT repetitions FROM review_queue WHERE question_id=?',(q['id'],)).fetchone()
+    repetitions=(int(previous['repetitions'])+1) if correct and previous else (1 if correct else 0)
+    interval_days=([1,3,7,14,30][min(repetitions-1,4)] if correct else 1)
+    due_at=(datetime.now(timezone.utc)+timedelta(days=interval_days)).isoformat(timespec='seconds')
+    con.execute('INSERT INTO review_queue(question_id,due_at,interval_days,repetitions,last_correct,updated_at) VALUES(?,?,?,?,?,CURRENT_TIMESTAMP) ON CONFLICT(question_id) DO UPDATE SET due_at=excluded.due_at,interval_days=excluded.interval_days,repetitions=excluded.repetitions,last_correct=excluded.last_correct,updated_at=CURRENT_TIMESTAMP',(q['id'],due_at,interval_days,repetitions,int(correct)))
     con.commit(); con.close()
     post=posterior_summary(alpha,beta)
-    return {'correct':correct,'answer':q['answer'],'explanation':q.get('explanation','Source-derived answer.'),'source':q.get('source','Unknown source'),'locator':q.get('locator','Unknown location'),'mastery':post['mean'],'mastery_interval_low':post['interval_low'],'mastery_interval_high':post['interval_high'],'posterior_sd':post['posterior_sd'],'key_concepts':keywords,'matched_concepts':matched,'coverage':round(coverage,2),'question_type':qtype,'grading_note':('Keyword coverage heuristic; this is not semantic grading.' if qtype=='short_answer' else 'Exact source-derived key comparison.' if qtype=='mcq' else 'Numeric-value check; unit equivalence is not fully validated.')}
+    return {'correct':correct,'answer':q['answer'],'explanation':q.get('explanation','Source-derived answer.'),'source':q.get('source','Unknown source'),'locator':q.get('locator','Unknown location'),'mastery':post['mean'],'mastery_interval_low':post['interval_low'],'mastery_interval_high':post['interval_high'],'posterior_sd':post['posterior_sd'],'key_concepts':keywords,'matched_concepts':matched,'coverage':round(coverage,2),'question_type':qtype,'review':{'due_at':due_at,'interval_days':interval_days,'repetitions':repetitions,'last_correct':bool(correct)},'grading_note':('Keyword coverage heuristic; this is not semantic grading.' if qtype=='short_answer' else 'Exact source-derived key comparison.' if qtype=='mcq' else 'Numeric-value check; unit equivalence is not fully validated.')}
+
+def review_session(limit=10):
+    """Return due retrieval items without exposing answer keys or grading metadata."""
+    now=datetime.now(timezone.utc).isoformat(timespec='seconds')
+    con=connect()
+    rows=con.execute('SELECT r.question_id,r.due_at,r.interval_days,r.repetitions,r.last_correct,q.payload FROM review_queue r LEFT JOIN quiz_history q ON q.digest=r.question_id ORDER BY r.due_at LIMIT 100').fetchall()
+    con.close()
+    due=[]; upcoming=[]
+    for row in rows:
+        try: q=json.loads(row['payload'] or '{}')
+        except Exception: q={}
+        if not q or q.get('id')!=row['question_id']: continue
+        item={k:q[k] for k in ('id','type','question','options','topic','source','locator','selection_reason') if k in q}
+        item.update({'due_at':row['due_at'],'interval_days':row['interval_days'],'repetitions':row['repetitions'],'last_correct':None if row['last_correct'] is None else bool(row['last_correct'])})
+        (due if row['due_at']<=now else upcoming).append(item)
+    return {'due_count':len(due),'scheduled_count':len(due)+len(upcoming),'next_due_at':(due[0]['due_at'] if due else (upcoming[0]['due_at'] if upcoming else None)),'due_questions':due[:max(1,min(int(limit),30))]}
 
 def concept_summary():
     con=connect(); rows=con.execute('SELECT source,locator,concepts,prerequisites FROM chunks ORDER BY id').fetchall(); con.close()
@@ -450,12 +476,14 @@ def concept_summary():
 
 def clear_data():
     con=connect()
-    for table in ('chunks','attempts','mastery','quiz_history'): con.execute(f'DELETE FROM {table}')
+    for table in ('chunks','attempts','mastery','quiz_history','review_queue'): con.execute(f'DELETE FROM {table}')
     con.commit(); con.close()
 
 def evaluation():
     con=connect(); n=con.execute('SELECT COUNT(*) FROM chunks').fetchone()[0]; topics=con.execute('SELECT COUNT(DISTINCT topic) FROM chunks').fetchone()[0]
     attempts=con.execute('SELECT COUNT(*) FROM attempts').fetchone()[0]; correct=con.execute('SELECT COALESCE(SUM(correct),0) FROM attempts').fetchone()[0]
+    due=con.execute('SELECT COUNT(*) FROM review_queue WHERE due_at<=?',(datetime.now(timezone.utc).isoformat(timespec='seconds'),)).fetchone()[0]
+    scheduled=con.execute('SELECT COUNT(*) FROM review_queue').fetchone()[0]
     con.close()
-    return {'indexed_chunks':n,'topic_count':topics,'quiz_attempts':attempts,'observed_accuracy':round(correct/attempts,3) if attempts else None,
-            'evaluation_note':'Live counters from this local session. These are not a benchmark score. Use the included evaluation script for reproducible retrieval and refusal tests.'}
+    return {'indexed_chunks':n,'topic_count':topics,'quiz_attempts':attempts,'observed_accuracy':round(correct/attempts,3) if attempts else None,'reviews_due':due,'reviews_scheduled':scheduled,
+            'evaluation_note':'Live counters from this workspace. These are not a benchmark score. Review scheduling uses a simple interval ladder, not a validated forgetting-curve model.'}
