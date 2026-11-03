@@ -13,6 +13,7 @@ STEMPROOF is an assessment-quality assurance application for test-preparation pr
 - `web/audit.html` — interactive audit workspace
 - `web/docs.html` — input schema and API reference
 - `web/pilot.html` — bounded commercial evaluation offer
+- `web/pilot.html` — bounded commercial evaluation offer
 - `web/contact.html` — evaluation request brief
 
 ## Run locally
