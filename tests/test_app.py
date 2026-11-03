@@ -160,3 +160,28 @@ def test_review_api_is_available_without_a_due_queue():
         assert response.status_code==200
         assert response.json()['due_count']==0
         assert response.json()['due_questions']==[]
+
+
+def test_review_endpoint_returns_due_questions_without_private_fields():
+    with tempfile.TemporaryDirectory() as td:
+        engine.DB_PATH=str(Path(td)/'review-endpoint.sqlite3')
+        question={
+            'id':'api-review-1','type':'mcq','question':'What is inertia?',
+            'options':['Resistance to change in motion','Net force'],'answer':'Resistance to change in motion',
+            'topic':'Inertia & Motion','source':'physics.pdf','locator':'Page 2',
+            'explanation':'Mass is a measure of inertia.','keywords':[]
+        }
+        import json
+        con=engine.connect()
+        con.execute('INSERT INTO quiz_history(digest,question,topic,payload) VALUES(?,?,?,?)',
+                    (question['id'],question['question'],question['topic'],json.dumps(question)))
+        con.execute('INSERT INTO review_queue(question_id,due_at,interval_days,repetitions,last_correct) VALUES(?,?,?,?,?)',
+                    (question['id'],'2000-01-01T00:00:00+00:00',1,0,0))
+        con.commit(); con.close()
+        response=TestClient(app.app).get('/api/review')
+        assert response.status_code==200
+        data=response.json()
+        assert data['due_count']==1
+        assert data['due_questions'][0]['id']==question['id']
+        assert 'answer' not in data['due_questions'][0]
+        assert 'explanation' not in data['due_questions'][0]
