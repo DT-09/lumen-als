@@ -81,7 +81,7 @@ async def upload(files: list[UploadFile] = File(...)):
                 doc=fitz.open(stream=raw,filetype='pdf')
                 for i,page in enumerate(doc):
                     txt=page.get_text('text')
-                    txt='\\n'.join(line for line in txt.splitlines() if not re.search(r'^Page \\d+$',line.strip(),re.I))
+                    txt='\n'.join(line for line in txt.splitlines() if not re.search(r'^Page \d+$',line.strip(),re.I))
                     try:
                         import pytesseract
                         from PIL import Image
@@ -91,7 +91,7 @@ async def upload(files: list[UploadFile] = File(...)):
                             if pix.n>4: pix=fitz.Pixmap(fitz.csRGB,pix)
                             mode='RGB' if pix.n>=3 else 'L'
                             ocr=pytesseract.image_to_string(Image.frombytes(mode,[pix.width,pix.height],pix.samples))
-                            if len(ocr.strip())>20: txt+='\\nFigure OCR: '+ocr
+                            if len(ocr.strip())>20: txt+='\nFigure OCR: '+ocr
                     except Exception: pass
                     pages.append((f'Page {i+1}',txt))
                 kind='pdf'
@@ -109,20 +109,20 @@ async def upload(files: list[UploadFile] = File(...)):
                                 ocr=pytesseract.image_to_string(Image.open(__import__('io').BytesIO(shape.image.blob)).convert('RGB'))
                                 if len(ocr.strip())>15: parts.append('Figure OCR: '+ocr)
                             except Exception: pass
-                    pages.append((f'Slide {i+1}','\\n'.join(parts)))
+                    pages.append((f'Slide {i+1}','\n'.join(parts)))
                 kind='slides'
             elif suffix=='.docx':
                 doc=Document(__import__('io').BytesIO(raw))
                 pages=[(f'Paragraph {i+1}',p.text) for i,p in enumerate(doc.paragraphs) if p.text.strip()]
-                for ti,t in enumerate(doc.tables): pages.append((f'Table {ti+1}','\\n'.join(' | '.join(c.text for c in row.cells) for row in t.rows)))
+                for ti,t in enumerate(doc.tables): pages.append((f'Table {ti+1}','\n'.join(' | '.join(c.text for c in row.cells) for row in t.rows)))
                 kind='document'
             elif suffix in ('.txt','.md'):
                 content=raw.decode('utf-8-sig',errors='replace'); pages=[(f'Line {i+1}',line) for i,line in enumerate(content.splitlines()) if line.strip()]; kind='text'
             elif suffix in ('.srt','.vtt'):
-                content=raw.decode('utf-8-sig',errors='replace'); blocks=re.split(r'\\n\\s*\\n',content); kind='transcript'
+                content=raw.decode('utf-8-sig',errors='replace'); blocks=re.split(r'\n\s*\n',content); kind='transcript'
                 for block in blocks:
                     lines=[x.strip() for x in block.splitlines() if x.strip()]; time=next((x for x in lines if '-->' in x),None)
-                    text_lines=[x for x in lines if '-->' not in x and not re.fullmatch(r'\\d+',x) and x!='WEBVTT']
+                    text_lines=[x for x in lines if '-->' not in x and not re.fullmatch(r'\d+',x) and x!='WEBVTT']
                     if text_lines: pages.append((f'Timestamp {time.split(" --> ")[0]}' if time else 'Transcript segment',' '.join(text_lines)))
             elif suffix in ('.mp4','.mov','.mkv','.webm','.mp3','.wav','.m4a'):
                 try:
