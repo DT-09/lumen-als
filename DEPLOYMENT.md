@@ -1,52 +1,49 @@
-# PaceLab deployment runbook
+# STEMPROOF deployment runbook
 
-## What visitors see
+## Deployment topology
 
-Cloudflare Pages serves the public interactive learning website at /. The full Learning Studio is served at /workspace.html. The public site includes a responsive landing experience, a live Newton's second-law model, an interactive concept map and a three-question knowledge check. These experiences run in the browser and do not require the API.
+- Cloudflare Pages serves the static multi-page website from `web/`.
+- A separate FastAPI service runs the verification engine and audit API.
+- The Pages Function at `web/functions/api/[[path]].js` forwards same-origin `/api/*` requests to the backend.
 
-The Learning Studio needs a separate FastAPI backend for uploaded sources, evidence retrieval, practice generation, review history and progress persistence.
+The static pages can be browsed without the API. The audit workspace requires a reachable API.
 
 ## Cloudflare Pages
 
 | Setting | Value |
 |---|---|
-| Project name | pacelabs |
-| Production branch | main |
-| Root directory | web |
+| Project name | `stemproof` |
+| Repository | `DT-09/StemProof` |
+| Production branch | `main` |
+| Root directory | `web` |
 | Build command | Leave blank |
-| Build output directory | . |
+| Output directory | `.` |
 
-The Pages Function at web/functions/api/[[path]].js proxies same-origin /api/* requests. Set the Pages environment variable PACELAB_API_ORIGIN to the backend's HTTPS origin only, for example https://api.example.com. Do not include a path, /api, credentials or a trailing slash.
-
-If the Pages project is not yet created, create a Pages project named pacelabs from repository DT-09/PaceLab, branch main. This yields pacelabs.pages.dev. Do not claim deployment until the production URL loads and is smoke-tested.
+Set the Pages environment variable `STEMPROOF_API_ORIGIN` to the backend HTTPS origin only, for example `https://api.example.com`. Do not include a path, credentials or trailing slash. Redeploy after changing environment variables.
 
 ## FastAPI backend
 
-Deploy the repository root with the included Dockerfile. Mount persistent storage at /var/data and configure:
+Deploy the repository root with the included Dockerfile. Mount persistent storage at `/var/data`. Configure:
 
-    PACELAB_SESSION_ISOLATION=1
-    PACELAB_DATA_DIR=/var/data
-    PACELAB_COOKIE_SECURE=1
-    PORT=8000
+```
+STEMPROOF_DATA_DIR=/var/data
+PORT=8000
+```
 
-The service must use HTTPS. Keep session isolation enabled. The cookie is a pseudonymous workspace selector, not authentication. Apply host-level rate limits and request limits. Restrict direct backend access where supported.
+The Dockerfile sets the data directory. The service exposes `/api/health`; verify it before connecting Pages. Keep HTTPS enabled.
 
-## Release smoke tests
+## Release checks
 
-1. Open https://pacelabs.pages.dev/; confirm the public website and navigation load.
-2. Move both sliders in the force laboratory; confirm acceleration and the model update.
-3. Select several concept nodes; confirm the explanation and active node change.
-4. Complete all three knowledge-check questions and restart the check.
-5. Open /workspace.html; confirm the API connection indicator.
-6. Open /api/health directly on the backend; confirm ok: true and service pacelab-api.
-7. Open /api/state on the Pages domain; confirm JSON is returned.
-8. Upload the sample Markdown file; confirm indexed passages and source locators.
-9. Ask a question answered by the uploaded source; confirm the tutor cites the source and locator.
-10. Ask an unrelated question; confirm the system reports insufficient evidence.
-11. Generate practice, submit an answer and confirm feedback is recorded.
-12. Complete a review item and confirm the review queue updates.
-13. Test a separate browser profile; confirm it receives a separate workspace.
-14. Restart the backend; confirm persistent volume data survives.
-15. Run python -m pytest -q and python evaluate.py against the release commit.
+1. Open the Pages production URL and inspect all nine pages.
+2. Open `/audit.html` and run the built-in sample.
+3. Confirm the sample produces verified, defect and needs-review outcomes.
+4. Download the PDF, CSV and JSON reports.
+5. Record a reviewer decision and confirm it persists in the audit record.
+6. Upload the included `sample_question_bank.json`.
+7. Verify `/api/health` on the backend.
+8. Run `python -m pytest -q` against the exact release commit.
+9. Test mobile navigation and keyboard focus.
 
-Do not describe the hosted product as production-verified until the live smoke tests pass.
+## Deployment boundary
+
+The current backend stores audits as JSON files. It does not provide authentication, tenant isolation, billing, audit deletion, contractual retention controls or a secure customer upload portal. Use synthetic, public or properly redacted data for demonstrations. Do not accept confidential customer assessment banks until access controls, retention policy and secure transfer are implemented. Do not claim production readiness solely because the site deploys.

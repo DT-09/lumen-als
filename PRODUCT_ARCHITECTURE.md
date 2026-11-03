@@ -1,24 +1,29 @@
-# PaceLab product architecture
+# STEMPROOF product architecture
 
-## Learning loop
+## Product objective
 
-`Collect → Connect → Understand → Retrieve → Review`
+Provide an independent, inspectable verification layer for supported mathematics and physics assessment items. The first buyer profile is an assessment publisher or test-preparation provider maintaining a structured question bank.
 
-| Layer | Responsibility | Current implementation |
+## Verification flow
+
+`Import → Normalize → Route → Verify → Record evidence → Human review → Export`
+
+| Layer | Responsibility | Implementation |
 |---|---|---|
-| Collect | Ingest learner-owned material | FastAPI upload routes; PDF, PPTX, DOCX, TXT, MD, SRT and VTT |
-| Connect | Surface candidate concepts | Deterministic term extraction and explicit prerequisite patterns |
-| Understand | Answer from indexed evidence | BM25 retrieval, query coverage threshold, source excerpts and locators |
-| Retrieve | Test recall | Source-derived practice questions; answer keys remain server-side |
-| Review | Revisit earlier questions | SQLite review queue with a simple interval ladder |
-| Reflect | Show activity and estimates | Topic counters, attempt accuracy and approximate Beta summaries |
+| Import | Accept assessment bank | FastAPI CSV and JSON upload |
+| Normalize | Parse required fields and nested values | Input normalization and schema checks |
+| Route | Select a supported verification rule | Item type dispatch |
+| Verify | Recompute answer or compare expressions | Restricted Python AST parser and SymPy; explicit physics equations |
+| Evidence | Preserve inputs and result | Rule ID, inputs, computed value and answer comparison |
+| Review | Record editorial disposition | Approve, reject, correct or defer |
+| Export | Deliver an audit record | PDF, CSV and JSON |
 
 ## Request path
 
-`Browser → Cloudflare Pages Function → FastAPI → isolated SQLite workspace`
+`Browser → Cloudflare Pages Function → FastAPI → JSON audit store`
 
-The frontend is static. The Python backend is a separate service. The Pages Function forwards API requests to the configured HTTPS origin.
+The static frontend is served from `web/`. The Python service is a separate origin in hosted deployments. The Pages Function proxies same-origin `/api/*` requests to the configured HTTPS backend.
 
 ## Deliberate constraints
 
-PaceLab favours inspectable source evidence over unsupported answers. Heuristic concept extraction, grading and estimates are labelled as such. The system does not claim validated educational efficacy, semantic grading, a generative tutor or a full computer algebra system.
+The engine is not a general exam solver. Unsupported items are sent to human review. A verified result is limited to its named rule; it does not prove clarity, uniqueness, pedagogical quality, syllabus alignment or psychometric validity. Authentication and tenant isolation are not implemented in this release.

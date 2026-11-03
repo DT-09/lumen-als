@@ -1,1 +1,1 @@
-This directory contains original PaceLab demonstration learning material. It is not an external textbook, lecture or public dataset. The Markdown and transcript files exercise text-line and timestamp source locators.
+This directory is retained only as a source-ingestion fixture from the former learning-workspace prototype. It is not used by STEMPROOF's assessment-verification workflow. The active synthetic question-bank fixture is sample_question_bank.json.

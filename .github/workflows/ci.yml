@@ -1,8 +1,8 @@
-name: PaceLab CI
+name: STEMPROOF CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, stemproof-rebuild]
   pull_request:
     branches: [main]
 
@@ -14,41 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: python -m pip install -r requirements.txt
-      - name: Check frontend JavaScript syntax
+      - name: Check JavaScript
+        run: node --check web/assets/site.js
+      - name: Check site pages and identity
         run: |
           python - <<'PY'
           from pathlib import Path
-          html = Path("web/index.html").read_text(encoding="utf-8")
-          script = html.split("<script>", 1)[1].split("</script>", 1)[0]
-          Path("/tmp/pacelab-frontend.js").write_text(script, encoding="utf-8")
+          pages = ["index.html","platform.html","verification.html","workflows.html","benchmark.html","audit.html","docs.html","pilot.html","contact.html"]
+          for page in pages:
+              p=Path("web")/page
+              assert p.exists(), f"Missing page: {p}"
+              text=p.read_text(encoding="utf-8").lower()
+              assert "stemproof" in text, f"Missing brand in {p}"
+          candidates=[p for p in Path(".").rglob("*") if p.is_file() and ".git" not in p.parts and p.suffix.lower() in {".html",".py",".js",".md",".txt",".yml",".yaml",".json",".webmanifest",".svg",".bat"}]
+          legacy=("pace"+"lab","pace"+"labs","learning"+" studio","learning"+" in motion")
+          matches=[(str(p),word) for p in candidates for word in legacy if word in p.read_text(encoding="utf-8",errors="ignore").lower()]
+          if matches: raise SystemExit(f"Legacy identity references remain: {matches}")
           PY
-          node --check /tmp/pacelab-frontend.js
-      - name: Check repository identity and canonical frontend
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          files = [p for p in Path(".").rglob("*") if p.is_file() and ".git" not in p.parts and p.suffix.lower() in {".html", ".py", ".js", ".md", ".txt", ".yml", ".yaml", ".json", ".webmanifest", ".svg"}]
-          forbidden = ("lu" + "men", "hack" + "athon")
-          matches = [(str(p), word) for p in files for word in forbidden if word in p.read_text(encoding="utf-8", errors="ignore").lower()]
-          if matches:
-              raise SystemExit(f"Forbidden legacy references: {matches}")
-          assert Path("web/index.html").is_file()
-          assert not Path("static/index.html").exists()
-          PY
-      - name: Run API and engine tests
+      - name: Run tests
         run: python -m pytest -q
-      - name: Run retrieval evaluation
-        run: python evaluate.py
