@@ -1,0 +1,1 @@
+window.STEMPROOF_API_ORIGIN = ""; // Same-origin Pages Function proxy. Set a full HTTPS origin only for split-origin local testing.
