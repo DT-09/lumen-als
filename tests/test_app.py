@@ -110,7 +110,7 @@ def test_frontend_controls_have_real_targets():
     parser.feed(html)
     script = html.split('<script>', 1)[1].split('</script>', 1)[0]
     # quizAnswer is created dynamically when a written-response question is rendered.
-    refs = set(re.findall(r"\\$\\('([^']+)'\\)", script)) - {'quizAnswer'}
+    refs = set(re.findall(r"\$\('([^']+)'\)", script)) - {'quizAnswer'}
     assert refs <= parser.ids
     views = set(re.findall(r'data-view="([^"]+)"', html))
     gotos = set(re.findall(r'data-goto="([^"]+)"', html))
