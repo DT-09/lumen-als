@@ -6,6 +6,10 @@ def it(kind,**kw):
 
 def test_equation_correct(): assert verify_item(it("equation",expression="2*x+3=11",variable="x")).status=="verified"
 def test_equation_wrong(): assert verify_item(it("equation",expression="3*x-6=0",variable="x",expected_answer="3")).status=="defect"
+def test_multiple_solution_requires_complete_set():
+    one=verify_item(it("equation",expression="x^2=9",variable="x",expected_answer="3"))
+    both=verify_item(it("equation",expression="x^2=9",variable="x",expected_answer=["-3","3"]))
+    assert one.status=="needs_review" and both.status=="verified"
 def test_symbolic_equivalence(): assert verify_item(it("expression",expression="(x+1)^2",expected_answer="x^2+2*x+1")).status=="verified"
 def test_newton2(): assert verify_item(it("newton2",values={"force":12,"mass":3})).status=="verified"
 def test_kinematics(): assert verify_item(it("kinematics",values={"u":5,"a":2,"t":3,"target":"v"},expected_answer="11")).status=="verified"
@@ -17,13 +21,18 @@ def test_reject_unsafe_math(s):
 def test_audit_summary():
     r=audit_items([it("equation",expression="x=4",variable="x"),it("equation",expression="x=4",variable="x",expected_answer="9"),it("essay")])
     assert r["summary"]=={"verified":1,"defect":1,"needs_review":1}
-def test_api():
+def test_duplicate_ids_are_reviewed():
+    r=audit_items([it("equation",expression="x=4",variable="x"),it("equation",expression="x=4",variable="x")])
+    assert r["summary"]["needs_review"]==2
+def test_api_upload_review_and_exports(tmp_path,monkeypatch):
     import app
+    monkeypatch.setattr(app,"DATA_DIR",tmp_path)
     from fastapi.testclient import TestClient
     c=TestClient(app.app)
     r=c.post("/api/audits/preview",json={"items":[it("equation",expression="x=4",variable="x")]})
     assert r.status_code==200
     aid=r.json()["audit_id"]
-    assert c.post(f"/api/audits/{aid}/reviews",json={"item_id":"T1","decision":"approved"}).status_code==200
+    assert c.post(f"/api/audits/{aid}/reviews",json={"item_id":"T1","decision":"approved","note":"checked"}).status_code==200
+    assert c.get(f"/api/audits/{aid}/report.json").status_code==200
     assert c.get(f"/api/audits/{aid}/report.csv").status_code==200
     assert c.get(f"/api/audits/{aid}/report.pdf").status_code==200
