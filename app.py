@@ -61,7 +61,7 @@ class Review(BaseModel):
 @app.get("/api/health")
 def health(): return {"ok":True,"service":"stemproof-verification-api","version":app.version}
 @app.post("/api/audits")
-async def upload(file:UploadFile=File(...)): return run(parse_file(file.filename or "items.json",await file.read()))
+async def upload(file:UploadFile=File(...)): return run(parse_file(file.filename or "items.json",await file.read(8*1024*1024+1)))
 @app.post("/api/audits/preview")
 def preview(req:Preview): return run(req.items)
 @app.get("/api/audits/{audit_id}")
