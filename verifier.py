@@ -79,12 +79,16 @@ def verify_item(item):
             x=sp.Symbol(name)
             if (lhs.free_symbols|rhs.free_symbols)-{x}: raise ExpressionError("Only the declared variable may appear.")
             solutions=sp.solve(sp.Eq(lhs,rhs),x)
-            answer=parse_math(expected)
-            if answer.free_symbols: raise ExpressionError("Expected answer must be a concrete value.")
-            evidence={"method":"SymPy solve on restricted expression","equation":f"{lhs} = {rhs}","variable":name,"computed_solution_set":[str(v) for v in solutions],"supplied_answer":str(answer)}
+            supplied_values=expected if isinstance(expected,list) else [expected]
+            answers=[parse_math(value) for value in supplied_values]
+            if any(answer.free_symbols for answer in answers): raise ExpressionError("Expected answers must be concrete values.")
+            evidence={"method":"SymPy solve on restricted expression","equation":f"{lhs} = {rhs}","variable":name,"computed_solution_set":[str(v) for v in solutions],"supplied_answers":[str(v) for v in answers]}
             if not solutions: return make(item,"defect","high","Equation has no solution","No solution exists for the declared variable.","math.equation.empty_set",evidence)
-            if any(sp.simplify(v-answer)==0 for v in solutions): return make(item,"verified","info","Answer matches computed solution","Supplied answer belongs to the independently computed solution set.","math.equation.match",evidence)
-            return make(item,"defect","high","Answer-key mismatch","Supplied answer is not in the computed solution set.","math.equation.mismatch",evidence)
+            if len(solutions)>1 and not isinstance(expected,list):
+                return make(item,"needs_review","medium","Multiple solutions require a complete answer set","The equation has multiple solutions. Supply expected_answer as an array containing the complete solution set; a single matching value is not enough to verify completeness.","math.equation.multiple_solution_review",evidence)
+            matches=(len(answers)==len(solutions) and all(any(sp.simplify(solution-answer)==0 for answer in answers) for solution in solutions) and all(any(sp.simplify(answer-solution)==0 for solution in solutions) for answer in answers))
+            if matches: return make(item,"verified","info","Complete answer set matches","The supplied answer set matches the independently computed solution set.","math.equation.match",evidence)
+            return make(item,"defect","high","Answer-key mismatch","The supplied answer set does not match the independently computed solution set.","math.equation.mismatch",evidence)
         if kind=="expression":
             ref,ans=parse_math(item.get("expression","")),parse_math(expected)
             diff=sp.simplify(ref-ans); evidence={"method":"symbolic simplification of reference minus answer","reference":str(ref),"supplied_answer":str(ans),"simplified_difference":str(diff)}
@@ -122,6 +126,14 @@ def verify_item(item):
         return make(item,"needs_review","medium","Automatic verification incomplete",str(e),"system.incomplete",{"type":kind,"supplied_answer":str(expected)})
 
 def audit_items(items):
-    findings=[verify_item(i).to_dict() for i in items]
+    ids=[str(item.get("id","UNKNOWN")) for item in items]
+    duplicate_ids={value for value in ids if ids.count(value)>1}
+    findings=[]
+    for item in items:
+        if str(item.get("id","UNKNOWN")) in duplicate_ids:
+            f=make(item,"needs_review","medium","Duplicate item identifier","This identifier appears more than once in the uploaded bank. Assign unique stable IDs before review decisions are recorded.","schema.duplicate_id",{"item_id":str(item.get("id","UNKNOWN"))})
+        else:
+            f=verify_item(item)
+        findings.append(f.to_dict())
     summary={s:sum(f["status"]==s for f in findings) for s in ("verified","defect","needs_review")}
     return {"product":"STEMPROOF","schema_version":"1.0","item_count":len(items),"summary":summary,"findings":findings}
