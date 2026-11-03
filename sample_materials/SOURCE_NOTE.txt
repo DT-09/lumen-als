@@ -1,1 +1,1 @@
-These are original sample learning materials authored for testing Lumen's source-ingestion and citation workflow. They are not an external textbook, lecture, or public dataset. The PDF, slide deck, and transcript exercise page, slide, and timestamp source locators.
+This directory contains original PaceLab demonstration learning material. It is not an external textbook, lecture or public dataset. The Markdown and transcript files exercise text-line and timestamp source locators.
