@@ -101,6 +101,17 @@ const $=id=>document.getElementById(id);let state=null,concepts=[],selectedConce
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3200)}
 function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==='view-'+v));document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='universe')drawMap();if(v==='progress')loadProgress();if(v==='library')loadState()}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+const commandOverlay=$('commandOverlay'),commandInput=$('commandInput');
+function closeCommand(){commandOverlay.hidden=true}
+function openCommand(){commandOverlay.hidden=false;commandInput.value='';filterCommands();requestAnimationFrame(()=>commandInput.focus())}
+function filterCommands(){const q=commandInput.value.trim().toLowerCase();commandOverlay.querySelectorAll('[data-command-view]').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(q))}
+$('commandTrigger').addEventListener('click',openCommand);$('commandClose').addEventListener('click',closeCommand);
+commandOverlay.addEventListener('click',e=>{if(e.target===commandOverlay)closeCommand()});
+commandInput.addEventListener('input',filterCommands);
+commandInput.addEventListener('keydown',e=>{if(e.key==='Enter'){const first=[...commandOverlay.querySelectorAll('[data-command-view]')].find(b=>!b.hidden);if(first)first.click()}});
+commandOverlay.querySelectorAll('[data-command-view]').forEach(b=>b.addEventListener('click',()=>{go(b.dataset.commandView);closeCommand()}));
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand()}if(e.key==='Escape'&&!commandOverlay.hidden)closeCommand()});
+
 async function api(path,opts={}){const r=await fetch('/api/'+path,{...opts,headers:{...(opts.body instanceof FormData?{}:{'Content-Type':'application/json'}),...(opts.headers||{})}});let d={};try{d=await r.json()}catch{}if(!r.ok)throw Error(d.detail||('Request failed ('+r.status+')'));return d}
 function setConnection(ok,label){$('led').classList.toggle('on',ok);$('apiLabel').textContent=label}
 async function loadState(){try{state=await api('state');setConnection(true,'Workspace connected');renderState()}catch(e){setConnection(false,'API unavailable');$('apiLabel').title=e.message}}
