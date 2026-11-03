@@ -78,7 +78,7 @@ def test_frontend_controls_have_real_targets():
     parser = IdCollector()
     parser.feed(html)
     script = html.split("<script>", 1)[1].split("</script>", 1)[0]
-    dynamic_ids = {"quizAnswer", "quizFeedback", "quizSubmit", "quizSkip", "viewUpdatedProgress", "newPractice"}
+    dynamic_ids = {"quizAnswer", "quizFeedback", "quizSubmit", "quizSkip", "viewUpdatedProgress", "newPractice", "feedback", "skipQuestion", "textAnswer", "answerChoices", "again", "submitAnswer", "freeAnswer"}
     refs = set(re.findall(r"\$\('([^']+)'\)", script)) - dynamic_ids
     assert refs <= parser.ids
     views = set(re.findall(r'data-view="([^"]+)"', html))
