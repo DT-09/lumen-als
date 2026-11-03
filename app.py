@@ -10,7 +10,7 @@ import fitz
 from pptx import Presentation
 from docx import Document
 import engine as engine_module
-from engine import add_document, ask, make_quiz, record_answer, record_stored_answer, topics_summary, concept_summary, evaluation, clear_data, get_chunks
+from engine import add_document, ask, make_quiz, record_answer, record_stored_answer, topics_summary, concept_summary, evaluation, clear_data, get_chunks, review_session
 
 ROOT=Path(__file__).parent
 app=FastAPI(title='LUMEN ALS — Adaptive Learning System', version='1.1.0')
@@ -207,6 +207,10 @@ def api_answer(req:AnswerRequest):
     if len(req.answer) > 2000: raise HTTPException(413, 'Answer is too long (maximum 2,000 characters).')
     try: return record_stored_answer(req.question_id,req.answer)
     except ValueError as e: raise HTTPException(404,str(e))
+
+@app.get('/api/review')
+def api_review():
+    return review_session()
 
 @app.get('/api/evaluation')
 def api_evaluation(): return evaluation()

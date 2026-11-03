@@ -109,9 +109,49 @@ def test_frontend_controls_have_real_targets():
     parser = IdCollector()
     parser.feed(html)
     script = html.split('<script>', 1)[1].split('</script>', 1)[0]
-    # quizAnswer is created dynamically when a written-response question is rendered.
-    refs = set(re.findall(r"\$\('([^']+)'\)", script)) - {'quizAnswer'}
+    # These controls are created dynamically when a question or session result is rendered.
+    dynamic_ids = {'quizAnswer', 'quizFeedback', 'quizSubmit', 'quizSkip', 'viewUpdatedProgress', 'newPractice'}
+    refs = set(re.findall(r"\$\('([^']+)'\)", script)) - dynamic_ids
     assert refs <= parser.ids
     views = set(re.findall(r'data-view="([^"]+)"', html))
     gotos = set(re.findall(r'data-goto="([^"]+)"', html))
     assert views | gotos <= {value.removeprefix('view-') for value in parser.ids if value.startswith('view-')}
+
+
+def test_spaced_review_schedule_and_answer_key_privacy():
+    with tempfile.TemporaryDirectory() as td:
+        engine.DB_PATH=str(Path(td)/'review.sqlite3')
+        question={
+            'id':'review-question-1','type':'mcq','question':'Which term describes the tendency to resist a change in motion?',
+            'options':['Inertia','Velocity'],'answer':'Inertia','topic':'Inertia & Motion','source':'physics.pdf',
+            'locator':'Page 2','explanation':'Mass measures inertia.','keywords':[]
+        }
+        import json
+        con=engine.connect()
+        con.execute('INSERT INTO quiz_history(digest,question,topic,payload) VALUES(?,?,?,?)',
+                    (question['id'],question['question'],question['topic'],json.dumps(question)))
+        con.commit(); con.close()
+        result=engine.record_stored_answer(question['id'],'Inertia')
+        assert result['correct'] is True
+        assert result['review']['interval_days']==1
+        session=engine.review_session()
+        assert session['scheduled_count']==1
+        assert session['due_count']==0
+        assert session['due_questions']==[]
+        con=engine.connect()
+        con.execute("UPDATE review_queue SET due_at='2000-01-01T00:00:00+00:00' WHERE question_id=?",(question['id'],))
+        con.commit(); con.close()
+        due=engine.review_session()
+        assert due['due_count']==1
+        assert len(due['due_questions'])==1
+        assert 'answer' not in due['due_questions'][0]
+        assert 'explanation' not in due['due_questions'][0]
+
+
+def test_review_api_is_available_without_a_due_queue():
+    with tempfile.TemporaryDirectory() as td:
+        engine.DB_PATH=str(Path(td)/'review-api.sqlite3')
+        response=TestClient(app.app).get('/api/review')
+        assert response.status_code==200
+        assert response.json()['due_count']==0
+        assert response.json()['due_questions']==[]
