@@ -109,8 +109,9 @@ def test_frontend_controls_have_real_targets():
     parser = IdCollector()
     parser.feed(html)
     script = html.split('<script>', 1)[1].split('</script>', 1)[0]
-    # quizAnswer is created dynamically when a written-response question is rendered.
-    refs = set(re.findall(r"\$\('([^']+)'\)", script)) - {'quizAnswer'}
+    # These controls are created dynamically when a question or session result is rendered.
+    dynamic_ids = {'quizAnswer', 'quizFeedback', 'quizSubmit', 'quizSkip', 'viewUpdatedProgress', 'newPractice'}
+    refs = set(re.findall(r"\$\('([^']+)'\)", script)) - dynamic_ids
     assert refs <= parser.ids
     views = set(re.findall(r'data-view="([^"]+)"', html))
     gotos = set(re.findall(r'data-goto="([^"]+)"', html))
