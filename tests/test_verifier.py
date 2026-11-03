@@ -51,4 +51,5 @@ def test_root_serves_multi_page_product():
     assert home.status_code==200 and "STEMPROOF" in home.text
     assert c.get("/platform.html").status_code==200
     assert c.get("/audit.html").status_code==200
+    assert c.get("/pilot.html").status_code==200
     assert c.get("/api/health").json()["service"]=="stemproof-verification-api"
