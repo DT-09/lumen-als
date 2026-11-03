@@ -9,10 +9,10 @@ STEMPROOF is an assessment-quality assurance application for test-preparation pr
 - `web/platform.html` — platform architecture
 - `web/verification.html` — verification methods and boundaries
 - `web/workflows.html` — editorial and dispute workflows
-- `web/benchmark.html` — benchmark methodology and results
+- `web/benchmark.html` — benchmark methodology and limitations
 - `web/audit.html` — interactive audit workspace
-- `web/docs.html` — input schema and API documentation
-- `web/contact.html` — evaluation request
+- `web/docs.html` — input schema and API reference
+- `web/contact.html` — evaluation request brief
 
 ## Run locally
 Python 3.11+:
@@ -23,23 +23,21 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn app:app --reload --host 127.0.0.1 --port 8000
 ```
-Open `http://127.0.0.1:8000/api/health`. Serve `web/` as a static site. For local split-origin testing, configure the browser's API base in `web/assets/config.js`; for Cloudflare Pages, set `STEMPROOF_API_ORIGIN` to the HTTPS origin of the FastAPI service.
+Open `http://127.0.0.1:8000`. FastAPI serves the multi-page site and API from one local origin. API documentation is at `/docs`.
 
 ## Supported item types
 | Type | Check |
 |---|---|
-| `equation` | Solve a single-variable equation and compare the supplied answer with the solution set |
+| `equation` | Solve a single-variable equation and compare the complete supplied answer set with the computed solution set |
 | `expression` | Symbolic equivalence between a reference expression and supplied answer |
 | `newton2` | Recalculate acceleration from net force and mass |
 | `kinematics` | Recalculate final velocity or displacement for constant acceleration |
 | `mcq` | Check internal consistency of answer-key fields only; not an independent proof of the option |
 
-Unsupported or malformed items are marked `needs_review`, never silently passed.
+Unsupported or malformed items are marked `needs_review`, never silently passed. Multi-solution equations require `expected_answer` as an array containing the complete solution set.
 
 ## Example JSON
-```json
-[{"id":"ALG-001","subject":"mathematics","type":"equation","prompt":"Solve 2x + 3 = 11.","expression":"2*x+3=11","variable":"x","expected_answer":"4"},{"id":"PHY-001","subject":"physics","type":"newton2","prompt":"A 3 kg object experiences 12 N net force. Find acceleration.","values":{"force":12,"mass":3},"expected_answer":"4"}]
-```
+See `sample_question_bank.json`. Every item requires `id`, `subject`, `type`, `prompt` and `expected_answer`.
 
 ## API
 - `GET /api/health`
@@ -52,12 +50,15 @@ Unsupported or malformed items are marked `needs_review`, never silently passed.
 ## Engineering boundaries
 Expressions are parsed using a restricted AST grammar; arbitrary calls, attributes, imports and code execution are rejected. SymPy receives only expressions produced by that parser. A verified answer means the supplied answer matched a specific implemented check. It does not prove clarity, uniqueness, pedagogy, syllabus alignment or correctness outside the encoded model. Human approval is required before publishing changes.
 
-## Test
+## Tests
 ```bash
 pip install pytest httpx
 pytest -q
 ```
 Tests are software checks for implemented rules, not psychometric validation or evidence of learning efficacy.
 
-## Deployment
-Deploy `web/` as a static site and FastAPI as a separate HTTPS service. Configure the Pages Function variable `STEMPROOF_API_ORIGIN`. This repository does not yet provide authentication, tenant isolation, billing, or production retention controls. Add these before accepting confidential customer question banks. PDF/DOCX ingestion, diagram interpretation, general proof checking and psychometric analysis are not claimed as implemented.
+## Cloudflare deployment
+Deploy `web/` as a Cloudflare Pages static site with root directory `web`, no build command and output directory `.`. The Pages Function at `web/functions/api/[[path]].js` proxies `/api/*` to the separately deployed FastAPI service. Set the Pages environment variable `STEMPROOF_API_ORIGIN` to the backend HTTPS origin (no trailing slash). Deploy the root Dockerfile to a container host with persistent volume mounted at `/var/data`; set `STEMPROOF_DATA_DIR=/var/data` and `PORT=8000`.
+
+## Production readiness boundary
+The current release is a working deterministic audit workflow for the supported item types. It does not include user authentication, tenant isolation, billing, retention controls, audit deletion, or production-grade customer data governance. Do not accept confidential customer question banks until these controls are implemented. PDF/DOCX ingestion, diagram interpretation, general proof checking and psychometric analysis are not implemented.
