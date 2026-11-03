@@ -4,7 +4,7 @@ Lumen is a learning workspace that turns a learner's own course material into an
 
 ## Current product scope and limitations
 
-This release candidate includes a responsive cinematic knowledge universe, an accessible concept list, supported-material ingestion, source-grounded tutoring, server-held quiz answer keys, assessment feedback, a self-contained function plotter, progress estimates, and a system-evaluation view. The universe is rendered as an interactive projected spatial graph on Canvas rather than a WebGL scene; it supports rotation, zoom, concept selection, keyboard entry and a reduced-motion mode. The math lab plots a constrained set of expressions; it is not a computer algebra system and does not perform symbolic integration. The tutor currently retrieves and quotes indexed source passages; it is not a general-purpose generative LLM. Answered practice questions enter a simple spaced-review queue. Quiz generation and grading are heuristic, and mastery estimates are not validated educational measurements.
+The current build includes a responsive cinematic knowledge universe, an accessible concept list, supported-material ingestion, source-grounded tutoring, server-held quiz answer keys, assessment feedback, a self-contained function plotter, progress estimates, and a system-evaluation view. The universe is rendered as an interactive projected spatial graph on Canvas rather than a WebGL scene; it supports rotation, zoom, concept selection, keyboard entry and a reduced-motion mode. The math lab plots a constrained set of expressions; it is not a computer algebra system and does not perform symbolic integration. The tutor currently retrieves and quotes indexed source passages; it is not a general-purpose generative LLM. Answered practice questions enter a simple spaced-review queue. Quiz generation and grading are heuristic, and mastery estimates are not validated educational measurements.
 
 Lumen is under active product development. Do not treat the current heuristic learner model, question generation, grading, or review intervals as validated measures of learning. Product claims must match tested behavior.
 
@@ -73,10 +73,8 @@ Only successfully extracted and indexed text can ground course answers. Image-on
 - `web/functions/api/[[path]].js`: Cloudflare Pages API proxy. Configure `LUMEN_API_ORIGIN` in Pages.
 - `evaluate.py`: curated retrieval/refusal evaluation; run it to regenerate `evaluation_results.json` for the current code.
 - `tests/`: API and engine regression tests.
-- `DEMO_SCRIPT.md`: suggested timed demo and recording checklist.
-- `DEVPOST_DRAFT.md`: submission copy and limitations/disclosure language.
 
-## Verify a development build
+## Verify the product build
 
 Run from the project root:
 
