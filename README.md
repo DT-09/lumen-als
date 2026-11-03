@@ -94,3 +94,14 @@ Topic labels are heuristic. Mastery uses a simple Beta(2,2)-style prior updated 
 ## AI and tool disclosure
 
 Built with Python, FastAPI, SQLite, PyMuPDF, python-pptx, python-docx and AI-assisted development. Disclose AI coding assistance in the hackathon submission as required by the event rules. The entrant should review, understand and be able to explain the submitted code.
+
+## Deployment health check
+
+The FastAPI service exposes `GET /api/health`. After deploying the backend, verify that it returns `ok: true` before connecting Cloudflare Pages. The frontend now displays an actionable connection banner for common deployment failures:
+
+- **503** — `LUMEN_API_ORIGIN` is not configured in Pages.
+- **502** — the configured backend cannot be reached.
+- **404 / 405** — the origin or API routing is wrong, or the backend deployment is outdated.
+- **508** — the Pages proxy points back to the Pages frontend and would loop.
+
+Set `LUMEN_API_ORIGIN` to the HTTPS origin of the separate FastAPI service only (for example, `https://your-api.example.com`), without an `/api` path. Redeploy Pages after changing it.
