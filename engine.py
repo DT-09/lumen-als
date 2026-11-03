@@ -1,4 +1,4 @@
-"""Core learning engine for PACELAB ALS. Deterministic, inspectable, source-aware baseline."""
+"""Core PaceLab learning engine: deterministic, inspectable and source-aware baseline."""
 from __future__ import annotations
 import re, math, json, sqlite3, hashlib, os
 from datetime import datetime, timedelta, timezone
