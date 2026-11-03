@@ -46,7 +46,7 @@ async def isolate_browser_workspaces(request: Request, call_next):
         engine_module.reset_request_db_path(token)
 
 @app.get('/',response_class=HTMLResponse)
-def home(): return (ROOT/'web'/'index.html').read_text(encoding='utf-8')
+def home(): return (ROOT/'web'/'workspace.html').read_text(encoding='utf-8')
 
 @app.get('/api/health')
 def health(): return {'ok':True,'service':'pacelab-api','version':app.version}
