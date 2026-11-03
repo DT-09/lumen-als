@@ -23,7 +23,7 @@ def parse_math(source: Any) -> sp.Expr:
         return sp.sympify(source)
     text=str(source or "").strip().replace("^","**").replace("π","pi")
     if not text or len(text)>240: raise ExpressionError("Expression is empty or too long (240 characters maximum).")
-    if not re.fullmatch(r"[A-Za-z0-9_+*/().,\\-\\s*]+",text): raise ExpressionError("Unsupported expression characters.")
+    if not re.fullmatch(r"[A-Za-z0-9_+*/().,\-\s*]+",text): raise ExpressionError("Unsupported expression characters.")
     try: tree=ast.parse(text,mode="eval")
     except SyntaxError as e: raise ExpressionError("Invalid expression syntax.") from e
     symbols={}
