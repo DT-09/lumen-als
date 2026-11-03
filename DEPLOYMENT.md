@@ -1,46 +1,52 @@
-# Deployment runbook
+# PaceLab deployment runbook
 
 ## Architecture
 
-- Cloudflare Pages serves the static frontend from `web/`.
-- A Pages Function proxies `/api/*` to the separately hosted FastAPI backend.
-- The Python backend runs in a Docker-compatible environment with a persistent writable volume for per-browser SQLite workspaces.
+- Cloudflare Pages serves the static application from `web/`.
+- The Pages Function at `web/functions/api/[[path]].js` proxies same-origin `/api/*` requests.
+- FastAPI runs as a separate container service.
+- SQLite workspaces are stored on a persistent writable volume.
 
-Pages is not the Python backend host for this project. The Python parser stack (including PyMuPDF and python-pptx) and SQLite file persistence must be tested on the selected backend host.
+Pages does not run Python, parse documents or host the SQLite database.
 
-## Cloudflare Pages settings
+## Cloudflare Pages
 
-- Repository root directory: `web`
-- Build command: none
-- Build output directory: `.`
-- Variable: `LUMEN_API_ORIGIN=https://<backend-origin>` (HTTPS origin only, no trailing slash)
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Root directory | `web` |
+| Build command | Leave blank |
+| Build output directory | `.` |
+| Environment variable | `PACELAB_API_ORIGIN` |
 
-The Pages Function is `web/functions/api/[[path]].js`. It returns a descriptive 503 when the variable is absent and a 502 if the upstream cannot be reached.
+Set `PACELAB_API_ORIGIN` to the backend's HTTPS origin only, for example `https://api.example.com`. Do not include a path, `/api`, or trailing slash.
 
-## Backend settings
+## FastAPI backend
 
-Use the included `Dockerfile`. Configure:
+Deploy the repository root with the included Dockerfile. Mount persistent storage at `/var/data` and configure:
 
 ```text
-LUMEN_SESSION_ISOLATION=1
-LUMEN_DATA_DIR=/var/data
-LUMEN_COOKIE_SECURE=1
-PORT=<provided by host, if applicable>
+PACELAB_SESSION_ISOLATION=1
+PACELAB_DATA_DIR=/var/data
+PACELAB_COOKIE_SECURE=1
+PORT=8000
 ```
 
-Attach a persistent writable volume at `/var/data`. Keep the service behind HTTPS. The workspace cookie is an opaque bearer identifier, not authentication. Do not expose the API without session isolation, persistent storage and platform-level abuse protections.
+The service must use HTTPS. Do not disable session isolation on a public deployment. The cookie is a pseudonymous workspace selector, not authentication. Apply host-level rate limits, request limits and monitoring. Restrict direct backend access if your host supports it.
 
 ## Release smoke tests
 
-1. `GET /api/state` on the backend returns JSON.
-2. The deployed Pages site's `/api/state` reaches that backend through the proxy.
-3. Upload the included Newton's laws sample PDF and confirm the page citation is present.
-4. Ask a supported question and verify the displayed excerpt and source locator.
-5. Ask an unrelated question and verify the backend reports insufficient evidence.
-6. Generate a practice set, submit an answer and verify grading plus the progress estimate update.
-7. Test the concept universe, concept list, function plotter, reduced motion, keyboard focus and mobile navigation.
-8. Open a second browser profile and verify its workspace is isolated.
-9. Restart the backend and verify data persists from the configured volume.
-10. Run `python -m pytest -q` and `python evaluate.py` on the exact product build.
+1. Open the backend's `/api/health`; confirm `ok: true` and service `pacelab-api`.
+2. Open the Pages domain; confirm the workspace reports a connected API.
+3. Open `/api/state` on the Pages domain; confirm JSON is returned.
+4. Upload `sample_materials/newtons_laws_sample.md`; confirm indexed passages and source locators.
+5. Ask a question answered by the uploaded source; confirm the tutor cites the source and locator.
+6. Ask an unrelated question; confirm the system reports insufficient evidence.
+7. Generate practice, submit an answer and confirm feedback is recorded.
+8. Complete a review item and confirm the review queue updates.
+9. Check concept selection, math plotting, reset confirmation, keyboard focus, reduced motion and mobile navigation.
+10. Open a separate browser profile; confirm it receives a separate workspace.
+11. Restart the backend; confirm the persistent volume retains workspace data.
+12. Run `python -m pytest -q` and `python evaluate.py` against the exact release commit.
 
-Do not describe deployment as complete until these checks have been performed against the live deployment. The ZIP does not contain your Cloudflare credentials or backend host credentials and cannot deploy itself.
+Do not describe the hosted product as verified until the live smoke tests pass.
