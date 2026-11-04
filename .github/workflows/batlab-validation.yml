@@ -1,4 +1,4 @@
-name: BATLAB validation
+name: VESPER validation
 on:
   push:
     branches: [main]
@@ -24,6 +24,6 @@ jobs:
           test -s web/index.html
           test -s web/assets/batlab.css
           test -s web/assets/batlab.js
-          grep -q 'BATLAB' web/index.html
+          grep -q 'VESPER' web/index.html
           grep -qi 'Discovery lab' web/assets/batlab.js
           grep -qi 'Flight records' web/assets/batlab.js
