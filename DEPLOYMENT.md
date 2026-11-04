@@ -1,13 +1,13 @@
 # VESPER deployment
 
-## Static learner platform
+## Static self-education platform
 
 Deploy the `web/` directory to Cloudflare Pages.
 
 | Setting | Value |
 |---|---|
-| Product | VESPER |
-| Repository | `DT-09/StemBat` |
+| Product | VESPER — The Independent Learning Environment |
+| Repository | `DT-09/Vesper` |
 | Production branch | `main` |
 | Root directory | `web` |
 | Build command | Leave blank |
@@ -17,18 +17,22 @@ No environment variables or backend service are required for the current learner
 
 ## Smoke checks before publishing
 
-1. Open the root URL and confirm VESPER loads with the observatory identity.
-2. Navigate to Observatory, Explore, all six subjects, Concept Atlas, Model Lab, Learning Signals, Recall Queue, Flight Log, Field Notes and Settings.
-3. Complete a concept check and confirm its task-level state changes.
-4. Reload and confirm local progress persists.
-5. Change pendulum length and gravity; confirm the predicted period changes.
-6. Save a model observation and confirm it appears in Field Notes.
-7. Export the learning record as JSON.
-8. Clear local data and confirm the guest experience returns.
-9. Test mobile navigation, keyboard focus and reduced-motion preference.
+1. Open the root URL and complete guest onboarding.
+2. Create, edit and delete an inquiry.
+3. Build a learning plan and open its concept route.
+4. Study a concept, attempt its authored check and save a reflection.
+5. Open the Knowledge Map and inspect the stated prerequisite relationships.
+6. Change variables in all three Model Bench models and confirm their outputs update.
+7. Create an investigation, record an observation and save its interpretation and limitations.
+8. Create a project, edit its working document and export it as Markdown.
+9. Add and evaluate a resource; create and delete a Field Journal entry.
+10. Add a recall item and mark it reviewed.
+11. Export all local data, reload, and confirm the records persist.
+12. Clear local data and confirm the first-run experience returns.
+13. Test mobile navigation, keyboard focus and reduced-motion settings.
 
 ## Release boundary
 
-The legacy FastAPI assessment-verification service remains repository code but is not part of VESPER. Do not expose old STEMPROOF audit routes as VESPER capabilities.
+The legacy FastAPI verifier at the repository root is not part of the VESPER learner application. Do not expose legacy assessment-verification routes as VESPER capabilities.
 
-The current app is a substantial static learner experience, not a production adaptive-learning service. Comprehensive curriculum, robust reasoning verification, validated adaptive diagnosis, cloud accounts, backups, guardian controls, community, analytics and billing remain unimplemented.
+The current application is a static, local-first self-education workspace. It is not yet a cloud platform or a validated adaptive-learning service. Comprehensive curriculum, robust reasoning verification, AI-assisted route generation, live research, source verification, secure accounts, backups, guardian controls, collaboration, analytics and billing remain unimplemented.
