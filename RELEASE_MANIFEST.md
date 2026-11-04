@@ -1,42 +1,42 @@
-# STEMPROOF release manifest
+# VESPER release manifest
 
 ## Release identity
-- Product: STEMPROOF
-- Static website: `web/index.html`
-- API entry point: `app.py`
-- Verification engine: `verifier.py`
-- Report generator: `reports.py`
-- Current version: `1.1.0`
+- Product: VESPER — The Independent Learning Environment
+- Static application: `web/index.html`
+- Application runtime: `web/assets/batlab.js`
+- Current product architecture: `PRODUCT_ARCHITECTURE.md`
+- Release version: 2.0.0 (self-education system rebuild)
 
-## Included capabilities
-- Multi-page product website: overview, platform, verification, workflows, benchmark, audit workspace, docs, pilot and evaluation brief.
-- CSV and JSON question-bank ingestion with bounded file and item counts.
-- Restricted AST parser for supported mathematical expressions.
-- Single-variable equation solving with complete solution-set comparison.
-- Symbolic expression equivalence with variable-denominator domain review.
-- Newton's second-law numerical checks.
-- Selected constant-acceleration kinematics checks.
-- Explicit verified, defect and needs-review outcomes.
-- Duplicate item-ID detection and ambiguous-review protection.
-- Evidence records, reviewer decisions and atomic JSON-file persistence.
-- PDF, CSV and JSON exports.
-- Authenticated audit deletion.
-- Production bearer-token enforcement, disabled production API docs and explicit HTTPS CORS configuration.
-- Browser audit workspace with operator-key entry and authenticated report downloads.
-- Synthetic sample question bank and automated tests.
+## Included learner systems
+- Curiosity Engine: create, edit and delete learner-owned questions.
+- Knowledge Architect: create flexible learning plans with learner-selected concepts.
+- Learning Studio: 18 authored starter concepts, core relationships, narrow retrieval checks and reflection capture.
+- Knowledge Map: inspect the currently authored prerequisite graph.
+- Investigation Lab: record research questions, hypotheses, variables, controls, observations, interpretations and limitations.
+- Model Bench: interactive linear-function, ideal-pendulum and Ohm's-law teaching models with prediction/observation notes.
+- Creation Workshop: manage research, model, software, experiment and technical-explanation projects; export project documents as Markdown.
+- Resource Library: save source metadata and learner-entered quality assessments.
+- Field Journal: create and manage learner-authored notes and reflections.
+- Recall Practice: maintain a learner-managed retrieval queue.
+- Knowledge Intelligence: inspect task-level records and project/investigation activity without a mastery score.
+- Local-first storage, legacy learner-record migration, JSON export and data clearing.
+- Responsive workspace, mobile navigation, keyboard-accessible controls and reduced-motion preference.
 
 ## Known limitations
-- Authentication is one shared operator bearer key; there are no individual accounts, roles or tenant isolation.
-- JSON-file storage is not a managed multi-tenant database; active-file deletion does not erase backups.
-- No billing, customer portal, formal retention management, backup-erasure workflow, rate limiting or operational monitoring.
-- No natural-language parsing of arbitrary questions, diagram interpretation, proof checking, psychometric analysis or syllabus mapping.
-- MCQ key checking is internal consistency only and remains a review item when fields agree.
-- A verified result certifies only the specific implemented rule; it is not a general guarantee of question quality.
-- CI and unit tests do not establish customer value or educational efficacy.
+- The application is static and stores data in browser local storage. There are no accounts, cloud sync, server backup or cross-device restore.
+- The starter concept library contains 18 concepts across six STEM domains. It is not a comprehensive reviewed curriculum.
+- Prerequisite relationships are incomplete and manually authored.
+- Retrieval checks use narrow expected-answer matching. They do not verify proofs, extended reasoning, diagrams, full working, code or transfer.
+- The three Model Bench models are simplified teaching models, not research-grade simulators.
+- Investigation records are learner-entered; VESPER does not conduct experiments or independently validate scientific conclusions.
+- Resource quality labels are entered by the learner and are not independently verified.
+- No AI-generated learning plans, live research, source discovery, source verification, collaboration, billing or aggregate learner analytics are implemented.
+- Task-level evidence is not a mastery certificate, grade prediction or proof of durable retention.
 
 ## Release gates
-- [ ] Python test suite passes on the release commit.
-- [ ] JavaScript syntax check passes.
-- [ ] Identity and required-page checks pass.
-- [ ] Live Pages and API integration smoke tests pass after user deployment.
-- [ ] Tenant-aware identity, managed storage and governance controls are implemented before confidential customer use.
+- [ ] JavaScript syntax validation passes on the release commit.
+- [ ] Static platform validation passes.
+- [ ] Python regression suite passes.
+- [ ] Live Pages smoke tests pass after deployment.
+- [ ] Mobile, keyboard and reduced-motion checks are completed.
+- [ ] Privacy and security review is completed before adding accounts, analytics or sync.
