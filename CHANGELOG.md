@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.0 — Launch reliability and backup hardening
+- Validate imported backups against the VESPER product identity and supported schema version.
+- Reject oversized backup files and normalise malformed imported records before restoring them.
+- Keep only known starter-concept identifiers in restored learning routes.
+- Preserve browser download URLs long enough for the browser to begin saving exports.
+- Version the offline application cache so clients refresh the updated runtime.
+- Add regression assertions for backup validation, imported-state normalisation and export lifecycle.
+
+
 ## 2.0.0 — Self-education system rebuild
 - Repositioned VESPER as an independent learning environment for curious, self-directed STEM learners.
 - Replaced the observatory/course-led information architecture with learner-owned questions, learning plans, study, investigation, creation and evidence.
