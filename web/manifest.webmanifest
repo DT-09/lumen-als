@@ -1,8 +1,10 @@
 {
+  "id": "/",
   "name": "VESPER — The Independent Learning Environment",
   "short_name": "VESPER",
   "description": "A self-education system for curious learners. Turn questions into learning routes, investigations and original work.",
   "start_url": "/#/home",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#111416",
   "theme_color": "#111416",
@@ -10,7 +12,8 @@
     {
       "src": "/favicon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
