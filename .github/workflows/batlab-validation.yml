@@ -25,5 +25,5 @@ jobs:
           test -s web/assets/batlab.css
           test -s web/assets/batlab.js
           grep -q 'VESPER' web/index.html
-          grep -qi 'Discovery lab' web/assets/batlab.js
-          grep -qi 'Flight records' web/assets/batlab.js
+          grep -qi 'Model Lab' web/assets/batlab.js
+          grep -qi 'Flight Log' web/assets/batlab.js
