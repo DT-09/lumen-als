@@ -1,82 +1,77 @@
-# STEMPROOF
+# BATLAB
 
-**Independent verification for mathematics and physics assessment content.**
+**A focused STEM discovery environment. Explore. Experiment. Understand.**
 
-STEMPROOF is an assessment-quality assurance application for test-preparation providers, assessment publishers and education teams. It independently checks supported question-bank items, records the calculation or rule used, and routes unsupported cases to human review.
+BATLAB is a learner-first environment for exploring mathematics, physics, chemistry, biology, computer science and engineering. The bat is a quiet companion and attention cue. It is not a chatbot that interrupts the learner.
 
-## Product surfaces
-- `web/index.html` — product overview
-- `web/platform.html` — platform
-- `web/verification.html` — verification methods
-- `web/workflows.html` — editorial workflows
-- `web/benchmark.html` — benchmark methodology
-- `web/audit.html` — interactive audit workspace
-- `web/docs.html` — input schema and API reference
-- `web/pilot.html` — bounded commercial pilot
-- `web/contact.html` — evaluation request brief
+The product is organised around a learning cycle:
+
+**Discover → Understand → Attempt → Verify → Connect → Revisit**
+
+The objective is not lesson completion. It is to help learners build connected understanding and demonstrate what they can do independently.
+
+## Current learner experience
+
+- **The Roost:** personal learning home with a next-step prompt, subject entry points and local activity summary.
+- **Explore STEM:** searchable concept library across six STEM domains.
+- **Focus Chamber:** one concept, explanation, key relationship, independent retrieval check and optional notebook save.
+- **Knowledge Terrain:** navigable concept map with evidence states: not assessed, developing and demonstrated.
+- **Discovery Lab:** interactive simple-pendulum model with adjustable length and gravitational acceleration, predicted period and observation notes.
+- **Flight Records:** local history of attempts and successful checks, with JSON export.
+- **Field Notebook:** learner-authored notes and experiment observations.
+- **Environment settings:** optional bat cues, reduced motion and local-data controls.
+- **Guest-first use:** no signup wall; learning activity is stored in browser local storage.
+
+## Adaptive behaviour and honest boundaries
+
+The current build has a deterministic, local learning-state foundation. It records attempts and successful checks, changes concept status and uses that state to inform the learner's next action. This is a functional starting point, not yet the full adaptive intelligence system described in the product vision.
+
+The following are **not yet implemented** and must not be represented as live capabilities:
+
+- prerequisite-aware diagnosis across the full STEM concept graph;
+- misconception classification and confidence calibration;
+- robust proof, diagram, code and open-response verification;
+- long-term spaced retrieval and transfer measurement;
+- aggregate learning-pattern analysis;
+- server-side accounts, cloud sync, guardian controls or multi-user community;
+- production membership billing and entitlements;
+- a conversational AI tutor or a production-grade bat agent;
+- a broad, independently reviewed curriculum or a validated learning-efficacy study.
+
+The starter checks are narrow, authored exercises. A successful response is evidence for that task only, not a certificate of mastery or a validated measure of ability. The pendulum uses the small-angle ideal model and states its assumptions.
 
 ## Run locally
 
-Python 3.11+:
+The learner experience is static and can run without a backend:
+
 ```bash
-python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app:app --reload --host 127.0.0.1 --port 8000
+cd web
+python -m http.server 8080
 ```
 
-Open `http://127.0.0.1:8000`. FastAPI serves the website and API from one local origin. Local API documentation is at `/docs`.
+Open `http://localhost:8080`. The app uses hash-based navigation and browser local storage. No build step is required.
 
-## Supported item types
+## Deploy
 
-| Type | Check |
+Deploy the `web/` directory as a static Cloudflare Pages project:
+
+| Setting | Value |
 |---|---|
-| `equation` | Solve a single-variable equation and compare the complete supplied answer set |
-| `expression` | Symbolic equivalence between a reference expression and supplied answer |
-| `newton2` | Recalculate acceleration from net force and mass |
-| `kinematics` | Recalculate final velocity or displacement for constant acceleration |
-| `mcq` | Check answer-key field consistency only; not an independent solution of the options |
+| Production branch | `main` |
+| Root directory | `web` |
+| Build command | None |
+| Output directory | `.` |
 
-Unsupported or malformed items are marked `needs_review`, never silently passed. Multi-solution equations require `expected_answer` as an array containing the complete solution set.
+The primary learner experience does not require the legacy FastAPI service. The existing assessment-verification API and its old STEMPROOF routes remain in the repository as legacy code, are not linked from BATLAB, and are not part of the learner product. Do not deploy or expose those routes as BATLAB capabilities.
 
-## Example input
+## Data and privacy
 
-See `sample_question_bank.json`. Every item requires `id`, `subject`, `type`, `prompt` and `expected_answer`.
+The current learner app stores notes, attempts, completion flags and settings in the browser's local storage. It does not send learner activity to a server. Data can be exported as JSON or cleared in Settings. Clearing site data in the browser also removes local progress. There is no cloud backup in this build.
 
-## API
+For use by minors, any future account, analytics, community, synchronisation or payment feature requires age-appropriate privacy design, data minimisation, guardian/consent review where required, secure access controls and clear retention/deletion rules. No camera, microphone or eye tracking is used.
 
-- `GET /api/health`
-- `POST /api/audits` — CSV/JSON multipart upload
-- `POST /api/audits/preview` — JSON body `{"items":[...]}`
-- `GET /api/audits/{id}`
-- `POST /api/audits/{id}/reviews`
-- `GET /api/audits/{id}/report.{pdf,csv,json}`
-- `DELETE /api/audits/{id}` — removes the active audit JSON file
+## Engineering direction
 
-## Engineering boundaries
+The intended next architecture is a versioned STEM concept graph, a deterministic subject-specific verification library, an evidence-based route engine, a retention scheduler, a simulation registry and an optional secure sync service. AI may assist with explanations, but it must not be the sole authority for scientific correctness or mastery decisions.
 
-Expressions are parsed using a restricted AST grammar; arbitrary calls, attributes, imports and code execution are rejected. SymPy receives only expressions produced by that parser. A verified answer means the supplied answer matched a specific implemented check. It does not prove clarity, uniqueness, pedagogy, syllabus alignment or correctness outside the encoded model. Human approval is required before publishing changes.
-
-## Tests
-
-```bash
-pip install pytest httpx
-python -m pytest -q
-```
-
-Tests cover the implemented rules and API paths. They are not psychometric validation or evidence of learning efficacy.
-
-## Cloudflare deployment
-
-Deploy `web/` as a Cloudflare Pages static site with root directory `web`, no build command and output directory `.`. The Pages Function at `web/functions/api/[[path]].js` proxies `/api/*` to the separately deployed FastAPI service. Set Pages `STEMPROOF_API_ORIGIN` to the backend HTTPS origin. Deploy the root Dockerfile to a container host with a private persistent volume mounted at `/var/data`.
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the full production environment configuration.
-
-## Security and production boundary
-
-The Docker production configuration requires `STEMPROOF_ENV=production`, an explicit HTTPS `STEMPROOF_CORS_ORIGINS` list and a `STEMPROOF_API_TOKEN` containing at least 32 characters. The audit workspace stores the operator key in browser session storage for the current tab and sends it as a bearer token.
-
-This is one shared operator key, not individual authentication or tenant isolation. JSON-file persistence is not a managed multi-tenant database, and deleting an active audit does not erase backups. Use synthetic, public-domain or properly redacted data only. Do not accept confidential customer banks until tenant-aware identity, authorization, managed storage, retention, monitoring and contractual controls are implemented.
-
-PDF/DOCX ingestion, diagram interpretation, general proof checking, natural-language question parsing, psychometric analysis and syllabus mapping are not implemented.
+The product should remain focused: the bat signals only when useful, the study environment stays quiet, and the learner remains in control.
