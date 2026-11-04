@@ -1,0 +1,29 @@
+name: BATLAB validation
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  static-platform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check learner application syntax
+        run: node --check web/assets/batlab.js
+      - name: Validate install metadata
+        run: python -c "import json; json.load(open('web/manifest.webmanifest', encoding='utf-8'))"
+      - name: Check required learner surfaces
+        run: |
+          test -s web/index.html
+          test -s web/assets/batlab.css
+          test -s web/assets/batlab.js
+          grep -q 'BATLAB' web/index.html
+          grep -q 'Discovery Lab' web/assets/batlab.js
+          grep -q 'Flight Records' web/assets/batlab.js
