@@ -42,13 +42,16 @@ app = FastAPI(
     redoc_url=None if PRODUCTION else "/redoc",
     openapi_url=None if PRODUCTION else "/openapi.json",
 )
+origin_setting = os.environ.get("STEMPROOF_CORS_ORIGINS", "").strip()
+if PRODUCTION and not origin_setting:
+    raise RuntimeError("Production requires STEMPROOF_CORS_ORIGINS to be set explicitly.")
 origins = [
     value.strip()
-    for value in os.environ.get(
-        "STEMPROOF_CORS_ORIGINS", "http://127.0.0.1:8080,http://localhost:8080"
-    ).split(",")
+    for value in (origin_setting or "http://127.0.0.1:8080,http://localhost:8080").split(",")
     if value.strip()
 ]
+if PRODUCTION and ("*" in origins or any(not value.startswith("https://") for value in origins)):
+    raise RuntimeError("Production CORS origins must be explicit HTTPS origins; wildcards are not allowed.")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
