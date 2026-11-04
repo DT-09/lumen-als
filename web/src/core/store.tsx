@@ -14,7 +14,7 @@ function migrate(raw: unknown): VesperWorkspace {
   next.profile.name = old.profile?.name || "";
   next.questions = (old.questions || []).map((x: any) => ({ id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || x.createdAt || now(), title: x.title || x.question || "Untitled question", motivation: x.why || "", field: x.area || "", known: x.known || "", scope: x.answer || "", status: x.status || "active" }));
   next.paths = (old.routes || []).map((x: any) => ({ id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: now(), title: x.title || "Untitled path", objective: x.goal || "", questionId: x.questionId, steps: (x.steps || []).map((s: any) => typeof s === "string" ? ({ id: uid(), createdAt: now(), updatedAt: now(), title: s, description: "", done: false }) : ({ id: uid(), createdAt: now(), updatedAt: now(), title: s.text || s.title || "Concept", description: "", done: !!s.done })), status: "active" }));
-  next.investigations = old.investigations || [];
+  next.investigations = (old.investigations || []).map((x: any) => ({ ...x, id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || now(), observations: x.observations || [], status: x.status || "active" }));
   next.resources = old.resources || [];
   next.projects = (old.works || []).map((x: any) => ({ ...x, kind: x.type || "Project", question: x.question || "", description: x.description || "", status: x.status || "active" }));
   next.journal = old.journal || [];
@@ -44,7 +44,7 @@ const StoreContext = createContext<StoreApi | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<VesperWorkspace>(() => {
-    try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? migrate(JSON.parse(raw)) : blank(); }
+    try { const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("vesper-workspace-v3"); return raw ? migrate(JSON.parse(raw)) : blank(); }
     catch { return blank(); }
   });
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (error) { console.error("Vesper could not persist workspace data", error); } }, [data]);
