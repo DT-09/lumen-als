@@ -19,7 +19,7 @@
 | System | Purpose | Current capability |
 |---|---|---|
 | Curiosity Engine | Learner-owned questions | Capture, edit, contextualise and delete inquiries |
-| Knowledge Architect | Flexible routes | Learner-selected concepts and authored prerequisite map |
+| Knowledge Architect | Flexible routes | Transparent keyword-based concept suggestions, learner-selected route and authored prerequisite map |
 | Learning Studio | Concept acquisition | 18 starter explanations, relationships, narrow checks and reflection |
 | Investigation Lab | Scientific inquiry | Hypothesis, variables, controls, observation, interpretation and limitations records |
 | Creation Workshop | Original work | Project records and editable Markdown-ready working documents |
@@ -55,7 +55,7 @@ The current public learner application is a static JavaScript application with h
 
 ## Not implemented
 
-AI-based route generation, live web research, source verification, a comprehensive reviewed curriculum, robust open-response or proof verification, validated adaptive diagnosis, cloud accounts, sync, backups, collaboration, moderation, analytics pipeline, billing and validated learning-outcome research.
+AI-based route generation (current local suggestions use keyword matching only), live web research, source verification, a comprehensive reviewed curriculum, robust open-response or proof verification, validated adaptive diagnosis, cloud accounts, sync, backups, collaboration, moderation, analytics pipeline, billing and validated learning-outcome research.
 
 ## Next engineering priorities
 
