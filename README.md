@@ -2,54 +2,52 @@
 
 **Build. Apply. Test. A bat-guided STEM discovery environment.**
 
-BATLAB is a learner-first environment for exploring mathematics, physics, chemistry, biology, computer science and engineering. The bat is a quiet companion and attention cue. It is not a chatbot that interrupts the learner.
+BATLAB is a learner-first environment for exploring mathematics, physics, chemistry, biology, computer science and engineering. The bat is a quiet attention companion, not an interruptive chatbot. The experience is designed around a single learning loop:
 
-The product is organised around a learning cycle:
+**Discover → Build a model → Apply → Test → Reflect → Revisit**
 
-**Discover → Understand → Attempt → Verify → Connect → Revisit**
+## Learner experience
 
-The objective is not lesson completion. It is to help learners build connected understanding and demonstrate what they can do independently.
+- **The Roost:** guest-first home, session goal, next-step recommendation, subject entry points and local activity summary.
+- **Explore STEM:** searchable starter library across six STEM domains, with open navigation rather than a locked grade path.
+- **Focus Chamber:** one concept at a time, concise explanation, key relationship, confidence check, independent retrieval task and notebook save.
+- **Knowledge Terrain:** concept relationships, prerequisite labels, evidence states and cross-subject bridges.
+- **Discovery Lab:** six interactive models — linear function explorer, simple pendulum, simplified atomic shell explorer, schematic cell structure explorer, insertion-sort visualiser and ideal Ohm's-law workbench.
+- **Echo Intelligence:** explains what local attempts and prerequisite relationships support, and what remains uncertain.
+- **Revisit Queue:** successful task checks schedule a simple local retrieval prompt.
+- **Flight Records:** inspect attempts and task-level outcomes; export a JSON learning record.
+- **Field Notebook:** save, review and delete learner-authored notes and observations.
+- **Focus environment:** hide navigation while studying, dismissible bat cues, reduced-motion option and session goal.
+- **Guest-first:** no signup wall; progress remains in browser local storage.
 
-## Current learner experience
+## Learning evidence and limits
 
-- **The Roost:** personal learning home with a next-step prompt, subject entry points and local activity summary.
-- **Explore STEM:** searchable concept library across six STEM domains.
-- **Focus Chamber:** one concept, explanation, key relationship, independent retrieval check and optional notebook save.
-- **Knowledge Terrain:** navigable concept map with evidence states: not assessed, developing and demonstrated.
-- **Discovery Lab:** interactive simple-pendulum model with adjustable length and gravitational acceleration, predicted period and observation notes.
-- **Flight Records:** local history of attempts and successful checks, with JSON export.
-- **Field Notebook:** learner-authored notes and experiment observations.
-- **Environment settings:** optional bat cues, reduced motion and local-data controls.
-- **Guest-first use:** no signup wall; learning activity is stored in browser local storage.
+The current route logic is deterministic and local. It uses authored prerequisite relationships, recent activity, task outcomes and optional self-reported confidence. A successful check schedules a revisit after two days. This is a basic retrieval prompt, not a validated spaced-repetition algorithm.
 
-## Adaptive behaviour and honest boundaries
+The 18 concept checks are narrow authored tasks with simple answer matching. They do not yet verify proofs, diagrams, working, open responses or code. The six lab models are deliberately simplified and state their assumptions. They are educational visualisations, not research-grade simulators.
 
-The current build has a deterministic, local learning-state foundation. It records attempts and successful checks, changes concept status and uses that state to inform the learner's next action. This is a functional starting point, not yet the full adaptive intelligence system described in the product vision.
+BATLAB does **not** currently provide:
+- a complete or independently reviewed STEM curriculum;
+- robust misconception diagnosis or validated mastery measurement;
+- comprehensive prerequisite inference or transfer assessment;
+- AI tutoring or an autonomous bat agent;
+- accounts, cloud sync, backup, guardian controls or multi-user profiles;
+- community features, moderation or aggregate learner analytics;
+- production billing, memberships or entitlement management;
+- a validated learning-efficacy study.
 
-The following are **not yet implemented** and must not be represented as live capabilities:
-
-- prerequisite-aware diagnosis across the full STEM concept graph;
-- misconception classification and confidence calibration;
-- robust proof, diagram, code and open-response verification;
-- long-term spaced retrieval and transfer measurement;
-- aggregate learning-pattern analysis;
-- server-side accounts, cloud sync, guardian controls or multi-user community;
-- production membership billing and entitlements;
-- a conversational AI tutor or a production-grade bat agent;
-- a broad, independently reviewed curriculum or a validated learning-efficacy study.
-
-The starter checks are narrow, authored exercises. A successful response is evidence for that task only, not a certificate of mastery or a validated measure of ability. The pendulum uses the small-angle ideal model and states its assumptions.
+Do not treat a passed task as proof of general mastery, academic attainment or ability. Echo can report insufficient evidence. Recommendations are suggestions; learners can choose another route.
 
 ## Run locally
 
-The learner experience is static and can run without a backend:
+The learner experience is static and requires no backend:
 
 ```bash
 cd web
 python -m http.server 8080
 ```
 
-Open `http://localhost:8080`. The app uses hash-based navigation and browser local storage. No build step is required.
+Open `http://localhost:8080`. The application uses hash-based navigation and browser local storage. No build step is required.
 
 ## Deploy
 
@@ -62,16 +60,14 @@ Deploy the `web/` directory as a static Cloudflare Pages project:
 | Build command | None |
 | Output directory | `.` |
 
-The primary learner experience does not require the legacy FastAPI service. The existing assessment-verification API and its old STEMPROOF routes remain in the repository as legacy code, are not linked from BATLAB, and are not part of the learner product. Do not deploy or expose those routes as BATLAB capabilities.
+The legacy FastAPI assessment-verification service at the repository root is not part of the BATLAB learner experience. Do not expose old STEMPROOF routes as BATLAB capabilities.
 
-## Data and privacy
+## Privacy and safety
 
-The current learner app stores notes, attempts, completion flags and settings in the browser's local storage. It does not send learner activity to a server. Data can be exported as JSON or cleared in Settings. Clearing site data in the browser also removes local progress. There is no cloud backup in this build.
+This build stores learning activity, notes, confidence selections and settings in local browser storage. It does not send learner activity to a server. Learners can export or clear local data. There is no cloud backup.
 
-For use by minors, any future account, analytics, community, synchronisation or payment feature requires age-appropriate privacy design, data minimisation, guardian/consent review where required, secure access controls and clear retention/deletion rules. No camera, microphone or eye tracking is used.
+No camera, microphone, eye tracking, audio prompts, public learner ranking or streak pressure is used. Because the intended audience includes minors, any future accounts, analytics, community, sync or payments require age-appropriate privacy design, data minimisation, access controls, retention and deletion rules, and guardian/consent review where required.
 
 ## Engineering direction
 
-The intended next architecture is a versioned STEM concept graph, a deterministic subject-specific verification library, an evidence-based route engine, a retention scheduler, a simulation registry and an optional secure sync service. AI may assist with explanations, but it must not be the sole authority for scientific correctness or mastery decisions.
-
-The product should remain focused: the bat signals only when useful, the study environment stays quiet, and the learner remains in control.
+The next production phase requires a versioned content graph, reviewed curriculum, subject-specific verification, richer reasoning capture, tested simulation models, accessible automated and manual testing, secure optional sync and privacy review. AI may assist explanations but must not be the sole authority for mathematical or scientific correctness.
