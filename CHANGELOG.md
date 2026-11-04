@@ -5,7 +5,10 @@
 - Replaced the observatory/course-led information architecture with learner-owned questions, learning plans, study, investigation, creation and evidence.
 - Added the Curiosity Engine, Knowledge Architect, Learning Studio, Knowledge Map, Investigation Lab, Model Bench, Creation Workshop, Resource Library, Field Journal, Recall Practice and Knowledge Intelligence.
 - Added interactive linear-function, ideal-pendulum and Ohm's-law models.
-- Added browser-local persistence, export, data clearing and migration of available legacy learner records.
+- Added browser-local persistence, export, validated backup restore, data clearing and migration of available legacy learner records.
+- Added editable learning plans with actionable milestones, editable journal and resource records, investigation deletion, recall review history and a distraction-free study mode.
+- Replaced the homepage orbital graphic with a clear independent-learning cycle and a context-aware continue-work panel.
+- Corrected simplified electron-shell occupancy for elements 1–20.
 - Rebuilt the interface around a restrained graphite, mineral green, ivory and brass design system.
 - Updated product architecture, deployment instructions and release boundaries.
 - Updated the static validation workflow and legacy shell regression assertion.
