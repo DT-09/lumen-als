@@ -23,7 +23,7 @@ No environment variables or backend service are required for the current learner
 4. Practise the six Self-Education Method workflows and confirm the local practice checklist persists.
 5. Study a concept, attempt its authored check and save a reflection.
 6. Open the Knowledge Map and inspect the stated prerequisite relationships.
-7. Change variables in all three Model Bench models and confirm their outputs update.
+7. Change variables and controls in all six Model Bench models and confirm their outputs update.
 8. Create an investigation, record an observation and save its interpretation and limitations.
 9. Create a project, edit its working document and export it as Markdown.
 10. Add and evaluate a resource; create and delete a Field Journal entry.
