@@ -9,7 +9,7 @@ VESPER is a local-first self-education system for curious learners devoted to ed
 ## Product systems
 
 - **Curiosity Engine:** capture and refine questions, interests, prior knowledge and intended outcomes.
-- **Knowledge Architect:** create flexible learning plans and inspect authored prerequisite relationships.
+- **Knowledge Architect:** create flexible learning plans, receive transparent keyword-based starter suggestions, and inspect authored prerequisite relationships. Suggestions are limited by the small local concept index.
 - **Learning Studio:** study starter concepts, inspect core relationships, attempt narrow retrieval checks and save reflections.
 - **Investigation Lab:** define research questions, hypotheses, variables, controls, observations, interpretations and limitations.
 - **Creation Workshop:** manage research papers, models, software, experiments and other original outputs.
@@ -17,6 +17,7 @@ VESPER is a local-first self-education system for curious learners devoted to ed
 - **Field Journal:** preserve learner-authored reasoning, observations and corrections.
 - **Knowledge Intelligence:** inspect task-level evidence without inventing mastery scores.
 - **Recall Practice:** maintain a learner-managed list of concepts to revisit.
+- **Self-Education Method:** practise question design, prerequisite mapping, source evaluation, retrieval, investigation and creation.
 
 ## Current implementation boundary
 
