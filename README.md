@@ -1,6 +1,6 @@
 # BATLAB
 
-**A focused STEM discovery environment. Explore. Experiment. Understand.**
+**Build. Apply. Test. A bat-guided STEM discovery environment.**
 
 BATLAB is a learner-first environment for exploring mathematics, physics, chemistry, biology, computer science and engineering. The bat is a quiet companion and attention cue. It is not a chatbot that interrupts the learner.
 
