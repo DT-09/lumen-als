@@ -2,76 +2,64 @@
 
 ## Product definition
 
-**BATLAB is a focused STEM discovery environment.**
+**BATLAB is a bat-guided STEM exploration and learning environment.**
 
-It combines a bat-inspired attention environment with a scientific laboratory experience. It is built around three actions:
+- **Build:** form a mental, visual or mathematical model.
+- **Apply:** manipulate a model, solve a problem or connect ideas to a system.
+- **Test:** retrieve knowledge independently and reflect on the evidence.
 
-- **B — Build a model:** form a mental and mathematical model of a concept.
-- **A — Apply:** manipulate variables, solve problems and connect ideas to real systems.
-- **T — Test:** retrieve knowledge, explain reasoning and apply it in a new context.
-
-The bat is a quiet guide. It provides short, contextual cues; it is not a noisy chatbot or a reward machine.
-
-## Learner promise
-
-A learner should be able to enter without creating an account, choose a question, explore an explanation, manipulate a model, attempt a task, inspect the result, save their reasoning and return to the idea later.
-
-The product should help learners move from passive familiarity to independent demonstration.
+The bat is an attention guide. It is brief, dismissible and quiet during focus. It is not a reward machine or a chatbot that competes with the task.
 
 ## Experience map
 
-| Environment | Purpose | Core interaction |
+| Environment | Purpose | Implemented interaction |
 |---|---|---|
-| Roost | Personal home | Next useful action, recent work, subject entry points |
-| Archives / Explore | Discovery | Search concepts and move between STEM domains |
-| Focus Chamber | Concentrated study | One objective, one explanation, one task |
-| Knowledge Terrain | Concept relationships | Navigate prerequisites and cross-subject bridges |
-| Discovery Lab | Scientific investigation | Change parameters, predict and observe |
-| Echo | Adaptive reflection | Explain the evidence behind a recommendation |
-| Flight Records | Learning evidence | Inspect attempts and task-level outcomes |
-| Field Notebook | Learner-owned thinking | Save notes, explanations and observations |
+| The Roost | Personal home | Goal, route recommendation, subject entry points and local activity |
+| Explore STEM | Discovery | Search and browse six STEM domains |
+| Focus Chamber | Concentrated study | Explanation, key relation, confidence selection, authored retrieval task |
+| Knowledge Terrain | Concept relationships | Starter prerequisite graph, evidence state and cross-domain bridges |
+| Discovery Lab | Scientific investigation | Six interactive models across the STEM domains |
+| Echo Intelligence | Adaptive reflection | Local evidence summary, uncertainty and recommendation rationale |
+| Revisit Queue | Retrieval practice | Due and upcoming local revisit prompts |
+| Flight Records | Learning evidence | Attempts, outcomes and JSON export |
+| Field Notebook | Learner-owned thinking | Create, inspect and delete notes |
+| Settings | Environment control | Bat cues, reduced motion, session goal, export and clear local data |
 
 ## BAT attention design
 
-The bat companion is a visual attention guide. Its cues should be brief, contextual and dismissible.
+Signals are short, contextual and dismissible:
+- Orient — establish the current objective.
+- Focus — keep attention on the current model or task.
+- Predict — anticipate an outcome before changing a variable.
+- Connect — relate the concept to another idea.
+- Retrieve — recall before rereading.
+- Reflect — inspect the reasoning behind an answer.
 
-| Cue | Purpose |
-|---|---|
-| Orient | Establish the current objective |
-| Focus | Draw attention to the relevant model or variable |
-| Predict | Ask the learner to anticipate an outcome |
-| Connect | Reveal a relationship between ideas |
-| Retrieve | Encourage recall before rereading |
-| Reflect | Ask the learner to inspect their reasoning |
+Focus mode hides the navigation rail. Audio is off. Reduced-motion preference is respected. There is no camera, microphone, eye tracking, public weakness ranking or streak pressure.
 
-The interface must become quieter during focused work. Audio is off by default. No flashing, streak pressure, countdown urgency, camera, microphone or eye tracking.
+## Learning Flight Engine
 
-## Learning system
+Current local inputs:
+- selected session goal;
+- last explored concept;
+- authored prerequisite relationships;
+- task attempts and successful checks;
+- optional self-reported confidence;
+- due revisit timestamps.
 
-The target learning cycle is:
+Current outputs:
+- next concept suggestion;
+- prerequisite suggestion after an unsuccessful attempt;
+- a short rationale shown to the learner;
+- a two-day revisit prompt after a successful check.
 
-**Discover → Understand → Attempt → Verify → Connect → Revisit**
+The route is deterministic and explainable. Learners can skip it and choose any concept. This is not a comprehensive adaptive intelligence engine.
 
-### Learning Flight Engine
+## Echo Intelligence
 
-Inputs:
-- learner-selected goal or concept;
-- attempts and task outcomes;
-- stated confidence, when the learner chooses to provide it;
-- prerequisite relationships;
-- retention and transfer evidence, when available.
+Echo must distinguish evidence from inference. Current Echo reports attempts, task outcomes, confidence when supplied, and prerequisite relationships. It does not infer a psychological profile or claim to identify a misconception from one answer. It can state that evidence is insufficient.
 
-Outputs:
-- next concept or prerequisite;
-- explanation or experiment choice;
-- independent check;
-- later retrieval activity.
-
-The system must explain why it recommends an activity and allow the learner to skip or change route.
-
-### Echo Intelligence
-
-Echo should distinguish:
+Future diagnosis categories may include:
 - concept gap;
 - prerequisite gap;
 - reasoning gap;
@@ -79,76 +67,72 @@ Echo should distinguish:
 - incomplete evidence;
 - insufficient evidence.
 
-It must not turn one wrong answer into a broad claim about ability. Aggregate patterns may eventually help improve content, but must not reveal another learner's identity or work.
+These categories require subject-specific evidence and validation before being presented as reliable diagnoses.
 
-### Verification Engine
+## Verification and simulations
 
-Use deterministic checks where a reliable formal method exists. Use explicit rubrics and carefully bounded model assistance for open responses. Code execution, diagrams, proofs and scientific simulations require isolated and subject-specific verification. A correct final answer with invalid reasoning must not automatically count as mastery.
+Current concept checks use authored expected answers and simple string matching. They are intentionally narrow. They do not verify full working, proofs, diagrams, code or open responses.
 
-### Concept Graph
+Current Discovery Lab models:
+1. Linear function explorer — slope, intercept and input-output behaviour.
+2. Simple pendulum — period from length and gravitational acceleration using the small-angle ideal model.
+3. Atomic shell explorer — simplified electron-shell visualisation for the first 20 elements; not a quantum orbital model.
+4. Cell structure explorer — schematic eukaryotic animal cell; not to scale.
+5. Insertion-sort visualiser — stepwise comparison and movement in a small list.
+6. Ohm's-law workbench — ideal resistor relationship at constant resistance.
 
-Each concept should have:
-- stable identifier and version;
-- subject and topic;
-- learning objectives;
-- prerequisite edges;
-- related cross-disciplinary concepts;
-- misconceptions;
-- explanation variants;
-- tasks and verification method;
-- evidence requirements;
-- references and review status.
+These are teaching models, not research-grade simulations. Assumptions and limitations must remain visible.
 
-## Data and privacy model
+## Concept graph
 
-The current implementation is guest-first and local-only. It stores progress, attempts, notes and settings in browser local storage. There is no cloud sync or server-side learner profile.
+The starter graph contains 18 concepts across six domains and a small set of authored prerequisite edges. It is not a complete curriculum. A production graph needs:
+- stable concept identifiers and content versions;
+- learning objectives and age/level metadata;
+- prerequisite and cross-disciplinary edges with rationale;
+- misconception catalogue with evidence requirements;
+- explanation variants and worked examples;
+- task bank, verification method and evidence threshold;
+- references, reviewer identity and review date.
 
-A future multi-user system should use data minimisation, explicit retention and deletion rules, secure authentication, encryption in transit and at rest, access controls, age-appropriate privacy design and guardian/consent review where required. Community features must be optional and moderated.
+## Data and privacy
 
-## Current implementation
+The current build is guest-first and local-only. Browser storage contains activity, notes, confidence selections, settings and revisit timestamps. There is no server profile, sync, backup, community, analytics pipeline or billing.
 
-Implemented in the repository:
-- BATLAB branded static learner shell and responsive cave-inspired design;
+A future multi-user system requires data minimisation, secure authentication, encryption, access controls, retention/deletion rules, age-appropriate privacy design and guardian/consent review where required. Community must be optional and moderated.
+
+## Current implementation and release boundary
+
+Implemented:
+- BATLAB branded responsive website shell;
 - six STEM subject areas and 18 starter concepts;
-- searchable concept library;
-- concept explanations, key relationships and authored independent checks;
-- local attempt and outcome records;
-- simple prerequisite-aware next-step routing;
-- Echo view that reports what local evidence supports and what remains uncertain;
-- Knowledge Terrain with authored prerequisite labels and cross-subject examples;
-- interactive idealised simple-pendulum model;
-- notebook, flight records, JSON export and local-data clearing;
-- Focus Chamber toggle, bat cues and reduced-motion preference;
-- no-signup guest entry.
+- searchable concept library and subject pages;
+- focused concept experience and narrow independent checks;
+- local activity state, confidence capture and explainable next-step suggestions;
+- starter prerequisite map and cross-domain bridges;
+- six interactive educational models;
+- local revisit queue;
+- notebook, flight records and JSON export;
+- focus mode, bat cues, reduced motion, guest onboarding and local-data clearing.
 
-## Current limitations
+Not implemented:
+- comprehensive reviewed curriculum;
+- robust reasoning, proof, diagram, code or open-response verification;
+- validated misconception diagnosis, mastery or retention/transfer measurement;
+- complete graph and adaptive route optimisation;
+- AI tutor or production-grade autonomous companion;
+- secure accounts, sync, backups, guardian controls or multi-user profiles;
+- community, moderation, aggregate analytics or billing;
+- accessibility audit, broad device/browser QA and validated learning outcomes.
 
-This is a functional front-end foundation, not a production adaptive-learning platform. The current concept set is a small starter library, not a complete curriculum. The checks are authored, narrow tasks. The route logic is deterministic and local. The concept graph is partial. The pendulum is one idealised simulation.
+## Acceptance principles
 
-Not yet implemented:
-- full curriculum coverage and expert-reviewed content;
-- a versioned graph with comprehensive prerequisite and cross-domain edges;
-- robust diagnosis of misconceptions and reasoning;
-- proof, diagram, code and open-response verification;
-- spaced retrieval, retention and transfer measurement;
-- multi-step experiment authoring and a broad simulation library;
-- secure accounts, sync, backup, guardian controls and multi-user profiles;
-- aggregate learning analytics with privacy protections;
-- optional moderated community;
-- tested membership billing and entitlements;
-- validated educational outcomes.
-
-Do not market these unimplemented capabilities as available.
-
-## Release acceptance principles
-
-1. A learner can start without signup.
+1. A learner can start without an account.
 2. Every visible control performs its stated action.
-3. Learning progress survives reload and can be exported or cleared.
-4. Every assessment outcome explains the task and its limits.
-5. Unsupported work is labelled for review, never silently certified.
-6. Simulations state their assumptions and model boundaries.
+3. Local progress survives reload and can be exported or cleared.
+4. Assessment outcomes explain their scope and limitations.
+5. Unsupported work is not silently certified.
+6. Every simulation states its assumptions and model boundaries.
 7. Focus and reduced-motion settings work across the experience.
 8. Mobile, keyboard and screen-reader journeys are tested.
-9. No learning efficacy, mastery, accuracy or diagnosis claims are made without evidence.
+9. No learning-efficacy, mastery, diagnosis or accuracy claims without evidence.
 10. The bat supports attention; it never competes with learning.
