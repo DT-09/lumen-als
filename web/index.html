@@ -12,4 +12,11 @@
 </head>
 <body><div id="root"><div style="padding:40px;color:#f0eee7;font:14px sans-serif">Opening your workspace…</div></div>
 <script src="/assets/batlab.js" defer></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+</script>
 </body></html>
