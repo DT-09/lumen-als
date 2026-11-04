@@ -2,22 +2,22 @@
 
 ## Static self-education platform
 
-Deploy the `web/` directory to Cloudflare Pages.
+Deploy the web/ directory to Cloudflare Pages.
 
 | Setting | Value |
 |---|---|
 | Product | VESPER — The Independent Learning Environment |
-| Repository | `DT-09/Vesper` |
-| Production branch | `main` |
-| Root directory | `web` |
+| Repository | DT-09/Vesper |
+| Production branch | main |
+| Root directory | web |
 | Build command | Leave blank |
-| Output directory | `.` |
+| Output directory | . |
 
 No environment variables or backend service are required for the current learner experience. It uses hash-based navigation and browser local storage.
 
-## Smoke checks before publishing
+## Release smoke checks
 
-1. Open the root URL and complete guest onboarding.
+1. Open the production URL and complete guest onboarding.
 2. Create, edit and delete an inquiry.
 3. Build a learning plan, inspect transparent keyword-based starter suggestions and open its concept route.
 4. Practise the six Self-Education Method workflows and confirm the local practice checklist persists.
@@ -30,10 +30,11 @@ No environment variables or backend service are required for the current learner
 11. Add a recall item and mark it reviewed.
 12. Export all local data, reload, and confirm the records persist.
 13. Clear local data and confirm the first-run experience returns.
-14. Test mobile navigation, keyboard focus and reduced-motion settings.
+14. Reload once while online, then disconnect and confirm the application shell opens offline.
+15. Test mobile navigation, keyboard focus and reduced-motion settings.
 
 ## Release boundary
 
 The legacy FastAPI verifier at the repository root is not part of the VESPER learner application. Do not expose legacy assessment-verification routes as VESPER capabilities.
 
-The current application is a static, local-first self-education workspace. It is not yet a cloud platform or a validated adaptive-learning service. Comprehensive curriculum, robust reasoning verification, AI-assisted route generation, live research, source verification, secure accounts, backups, guardian controls, collaboration, analytics and billing remain unimplemented.
+The current application is a static, local-first self-education workspace. It is not yet a cloud platform or a validated adaptive-learning service. Comprehensive curriculum, robust reasoning verification, AI-assisted route generation, live research, source verification, secure accounts, backups, guardian controls, collaboration, analytics and billing remain unimplemented. Do not market these as available features.
