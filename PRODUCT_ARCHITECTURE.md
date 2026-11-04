@@ -1,110 +1,66 @@
-# VESPER — Product and Experience Architecture
+# VESPER — Product Architecture
 
 ## Product definition
 
-**VESPER is a learner-first STEM learning observatory.** It is designed for curiosity with structure: open exploration, focused study, interactive models and evidence-aware routes.
+**VESPER is a self-education system for curious, self-directed learners.** It helps people turn questions into structured learning, independent investigation, original work and demonstrated capability. It is not a course catalogue, school replacement or generic AI tutor.
 
-The name evokes the first star at dusk: a point of orientation in a large field of possibilities. The bat remains the quiet nocturnal companion and attention guide, not the product's entire identity.
+## Core learning loop
 
-**Discover → Build a model → Apply → Test → Reflect → Revisit**
+1. **Question:** capture a curiosity and clarify what is being asked.
+2. **Map:** identify concepts, prerequisites, sources and capabilities needed.
+3. **Learn:** study explanations, primary sources, worked examples and models.
+4. **Investigate:** form hypotheses, define variables, examine evidence and record limitations.
+5. **Create:** produce a model, paper, code artefact, experiment or technical explanation.
+6. **Demonstrate:** test retrieval, reasoning and application; distinguish evidence from assumption.
+7. **Evolve:** refine the question and choose a further direction.
 
-## Experience architecture
+## Product systems
 
-| Space | Purpose | Current interaction |
+| System | Purpose | Current capability |
 |---|---|---|
-| Observatory | Personal home | Session intention, route suggestion, subject portals and local activity |
-| Explore | Open discovery | Search and browse six STEM domains |
-| Focus Studio | Concentrated learning | Explanation, key relation, confidence reflection and authored retrieval task |
-| Concept Atlas | Knowledge structure | Starter prerequisite graph, evidence state and cross-domain bridges |
-| Model Lab | Scientific investigation | Six interactive educational models |
-| Learning Signals | Adaptive reflection | Local evidence summary, uncertainty and recommendation rationale |
-| Recall Queue | Retrieval practice | Local due and upcoming revisit prompts |
-| Flight Log | Learning evidence | Attempts, task outcomes and JSON export |
-| Field Notes | Learner-owned thinking | Create, inspect and delete notes |
-| Settings | Environment control | Bat cues, reduced motion, session goal, export and local-data clearing |
+| Curiosity Engine | Learner-owned questions | Capture, edit, contextualise and delete inquiries |
+| Knowledge Architect | Flexible routes | Learner-selected concepts and authored prerequisite map |
+| Learning Studio | Concept acquisition | 18 starter explanations, relationships, narrow checks and reflection |
+| Investigation Lab | Scientific inquiry | Hypothesis, variables, controls, observation, interpretation and limitations records |
+| Creation Workshop | Original work | Project records and editable Markdown-ready working documents |
+| Resource Library | Source literacy | Save links, bibliographic details and learner-entered source evaluation |
+| Field Journal | Metacognition | Learner-owned notes and reflections |
+| Knowledge Intelligence | Evidence review | Task records and project/investigation counts; no mastery score |
+| Recall Practice | Retrieval continuity | Learner-managed revisit list |
 
-## Identity and interaction principles
+## Architecture and state
 
-- **Nocturnal observatory:** midnight ink, moonlit blue, warm star-metal and quiet ivory; avoid generic neon dashboards.
-- **Clarity over spectacle:** visual atmosphere frames the work; it never obscures a concept, control or equation.
-- **One meaningful objective:** focused study presents one concept and one task at a time.
-- **Learner agency:** recommendations are explainable and optional; all subjects remain browsable.
-- **Quiet companion:** bat cues are brief, conditional and dismissible; they become quiet in focus mode.
-- **Accessible by default:** keyboard-visible focus, responsive layout and reduced-motion support; audio, camera, microphone and eye tracking are absent.
-- **Evidence before claims:** task outcomes are scoped to the task; insufficient evidence is an acceptable state.
+The current public learner application is a static JavaScript application with hash-based navigation and browser local storage. It has no application server dependency. The data model is versioned at the application level and includes profile, questions, plans, resources, investigations, projects, notes, sessions/checks, recall items and settings. A migration path preserves available legacy BATLAB/VESPER local records where possible.
 
-## Learning Flight Engine
+## Content and evidence boundaries
 
-Current local inputs:
-- selected session intention;
-- last explored concept;
-- authored prerequisite relationships;
-- task attempts and successful checks;
-- optional self-reported confidence;
-- due revisit timestamps.
+- The starter concept set contains 18 authored concepts across mathematics, physics, chemistry, biology, computer science and engineering.
+- The prerequisite graph is intentionally small and incomplete. Missing edges mean unknown, not unrelated.
+- Authored answer matching is narrow and task-specific. It does not assess proofs, open responses, diagrams, code, complete working or transfer.
+- A correct check is not a mastery certificate or evidence of long-term retention.
+- Investigation records are learner-entered. VESPER does not independently validate hypotheses, methods or conclusions.
+- Source-quality labels are entered by the learner. Saving a source does not verify its credibility.
+- The platform must show uncertainty rather than infer psychological traits or fabricate expertise.
 
-Current outputs:
-- next concept suggestion;
-- prerequisite suggestion after an unsuccessful attempt;
-- a short explanation of the route rationale;
-- a two-day revisit prompt after a successful check.
+## Design principles
 
-The route is deterministic and explainable. It is not a comprehensive adaptive intelligence engine or a validated spaced-repetition system.
+- Curiosity before curriculum.
+- Learner agency before platform prescription.
+- Sources and evidence before confident claims.
+- Practice and creation before passive completion.
+- Visible assumptions and limitations.
+- Local-first privacy until secure, age-appropriate services exist.
+- Accessibility, keyboard support and reduced motion.
+- No streak pressure, public rankings, attention tracking or manipulative engagement loops.
 
-## Learning Signals
+## Not implemented
 
-The system must distinguish observation from inference. Current signals report attempts, narrow task outcomes, confidence when supplied and authored prerequisite relationships. It does not infer psychological traits or diagnose misconceptions from one answer.
+AI-based route generation, live web research, source verification, a comprehensive reviewed curriculum, robust open-response or proof verification, validated adaptive diagnosis, cloud accounts, sync, backups, collaboration, moderation, analytics pipeline, billing and validated learning-outcome research.
 
-Future diagnosis categories may include concept gap, prerequisite gap, reasoning gap, calculation/transcription error, incomplete evidence and insufficient evidence. Each requires subject-specific evidence and validation before being presented as reliable.
+## Next engineering priorities
 
-## Model Lab
-
-Current models:
-1. Linear function explorer — slope, intercept and input-output behaviour.
-2. Simple pendulum — ideal period from length and gravitational acceleration under the small-angle approximation.
-3. Atomic shell explorer — simplified shell visualisation for the first 20 elements; not a quantum orbital model.
-4. Cell structure explorer — schematic eukaryotic animal cell; not to scale.
-5. Insertion-sort visualiser — stepwise comparison and movement in a small list.
-6. Ohm's-law workbench — ideal resistor relationship at constant resistance.
-
-These are teaching models, not research-grade simulations. Assumptions and limitations must remain visible.
-
-## Concept graph and content quality
-
-The starter graph contains 18 authored concepts across six domains and a small set of prerequisite edges. It is not a complete curriculum. A production graph needs stable concept identifiers and versions, learning objectives, level metadata, justified prerequisite and cross-disciplinary edges, misconception catalogues, explanation variants, worked examples, verification methods, evidence thresholds, references and reviewer records.
-
-## Verification
-
-Current checks use authored expected answers and narrow string matching. They do not verify proofs, full working, diagrams, code or open responses. Future verification should be subject-specific:
-- deterministic numeric and symbolic checks with units and tolerances;
-- dimensional analysis and constraint checks;
-- rubrics and reviewer escalation for explanations and proofs;
-- isolated execution for code;
-- model-based checks for simulation predictions;
-- explicit uncertainty when evidence is ambiguous.
-
-AI may help explain or generate practice, but must not be the sole authority for correctness or mastery.
-
-## Data and privacy
-
-The current build is guest-first and local-only. Browser storage contains activity, notes, confidence selections, settings and revisit timestamps. There is no server profile, sync, backup, community, analytics pipeline or billing.
-
-A future multi-user system requires data minimisation, secure authentication, encryption, access controls, retention/deletion rules, age-appropriate privacy design and guardian/consent review where required. Community must be optional and moderated.
-
-## Production roadmap
-
-1. **Content integrity:** expand and review the concept library; add citations, versioning, objectives and misconception-aware tasks.
-2. **Learning evidence:** capture working and reasoning; implement deterministic subject-specific verification and honest uncertainty.
-3. **Adaptive routes:** build a validated prerequisite graph, confidence calibration and evidence-based revisit scheduling.
-4. **Model library:** add reviewed interactive models across all STEM domains with visible assumptions.
-5. **Platform services:** design secure optional accounts, sync, backup, export/deletion and age-appropriate controls.
-6. **Operational readiness:** accessibility audit, device/browser QA, security review, monitoring, recovery and learning-outcome evaluation.
-7. **Community and commerce:** only after moderation, privacy, guardian and billing controls are designed and tested.
-
-## Release boundary
-
-Implemented now: VESPER-branded responsive website, six STEM domains, 18 starter concepts, searchable discovery, focused concept study, narrow checks, local evidence and recommendations, starter concept graph, six interactive models, recall queue, notebook, flight log, export, focus mode, bat cues and guest onboarding.
-
-Not implemented: comprehensive reviewed curriculum, robust reasoning verification, validated mastery or retention/transfer measurement, complete graph optimisation, AI tutor, secure accounts/sync/backups, guardian controls, community/moderation, aggregate analytics or billing.
-
-Do not market unimplemented capabilities as available.
+1. Expand and review the concept graph with stable IDs, learning objectives, citations, prerequisite rationales and subject-specific verification.
+2. Add stronger evidence capture: working, explanations, diagrams, code and transfer tasks, each with an appropriate validation method.
+3. Build secure optional sync and export/restore only after threat modelling, age-appropriate privacy review and deletion controls.
+4. Add research workflows with citation metadata, provenance, source comparison and explicit uncertainty.
+5. Evaluate learning outcomes with real users and transparent methodology before making efficacy claims.
