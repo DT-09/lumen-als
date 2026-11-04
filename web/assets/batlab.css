@@ -36,3 +36,13 @@ button.text-link:hover{text-decoration:underline}
 .milestone-copy small{display:block;font-size:9px;color:var(--muted);margin-top:4px}
 .milestone-row:has(input:checked) .milestone-copy b{text-decoration:line-through;color:var(--muted)}
 .milestone-row:focus-within{outline:2px solid var(--accent2);outline-offset:-2px}
+
+body.focus-mode .sidebar,body.focus-mode .topbar{display:none}
+body.focus-mode .main{margin-left:0}
+body.focus-mode .content{max-width:1040px;padding-top:34px}
+body.focus-mode .study-layout{grid-template-columns:minmax(0,1fr)}
+body.focus-mode .study-main{max-width:850px;margin:0 auto}
+body.focus-mode .study-aside{display:none}
+body.focus-mode .page-head{padding-bottom:15px;border-bottom:1px solid var(--line)}
+body.focus-mode .page-head h1{font-size:clamp(34px,4vw,49px)}
+body.focus-mode #focusToggle{border-color:var(--accent2);color:var(--accent2)}
