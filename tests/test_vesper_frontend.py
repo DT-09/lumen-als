@@ -77,14 +77,23 @@ def test_model_bench_has_six_domains_and_correct_first_twenty_shells():
 
 def test_external_resource_urls_are_restricted_to_http_schemes():
     source = APP.read_text(encoding="utf-8")
-    assert "!/^https?:\\/\\//i.test(url)" in source
+    assert "!/^https?:\\\\/\\\\//i.test(url)" in source
     assert 'rel="noopener noreferrer"' in source
-
 
 
 def test_repeated_controls_bind_all_matching_elements():
     import re
 
     source = APP.read_text(encoding="utf-8")
-    broken = re.findall(r'(?<!\$)\$\("\[data-[^"]+\]"\)\.forEach', source)
+    broken = re.findall(r'(?<!\$)\$\("\\[data-[^"]+\\]"\\)\\.forEach', source)
     assert not broken, f"Use the all-elements selector for repeated controls: {broken}"
+
+
+def test_offline_app_shell_is_cached_and_registered():
+    html = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+    worker = (ROOT / "web" / "sw.js").read_text(encoding="utf-8")
+    assert 'navigator.serviceWorker.register("/sw.js")' in html
+    assert 'const CACHE_NAME = "vesper-shell-v2.1.0"' in worker
+    assert "cache.addAll(SHELL_ASSETS)" in worker
+    assert 'caches.match("./index.html")' in worker
+    assert 'request.mode === "navigate"' in worker
