@@ -29,3 +29,7 @@ jobs:
           grep -qi 'Investigation Lab' web/assets/batlab.js
           grep -qi 'Creation Workshop' web/assets/batlab.js
           grep -qi 'Model bench' web/assets/batlab.js
+          grep -q 'data-plan-step' web/assets/batlab.js
+          grep -q 'function importData(file)' web/assets/batlab.js
+          grep -q 'focusToggle' web/assets/batlab.js
+          grep -q 'milestone-list' web/assets/batlab.css
