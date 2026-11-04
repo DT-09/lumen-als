@@ -28,6 +28,13 @@ function BatMark({ className = "" }: { className?: string }) { return <svg class
 function Logo() { return <Link to="/" className="brand"><span className="brand-emblem"><BatMark/></span><span><b>VESPER</b><small>STEM SELF-EDUCATION</small></span></Link>; }
 function Button({ children, onClick, variant = "quiet", type = "button" }: { children: React.ReactNode; onClick?: () => void; variant?: "quiet" | "primary" | "outline"; type?: "button" | "submit" }) { return <button type={type} onClick={onClick} className={"button " + variant}>{children}</button>; }
 function Landing() {
+  const [activeBridge,setActiveBridge]=useState("feedback");
+  const bridgeExamples: Record<string,{title:string;nodes:string[];explanation:string;question:string}> = {
+    feedback:{title:"How do systems correct change?",nodes:["Biology","Control engineering","Mathematics"],explanation:"Homeostasis and engineered controllers use feedback to regulate changing conditions. Compare sensors, response delay, gain and stability; the mechanisms are not identical.",question:"What makes a feedback system stable—or causes it to oscillate?"},
+    resonance:{title:"Why do systems respond at certain frequencies?",nodes:["Physics","Music & acoustics","Engineering"],explanation:"Mechanical vibration, musical sound and structural response can be studied through frequency, energy transfer and resonance, while each field adds its own boundary conditions.",question:"How does a system's natural frequency shape its response to an external force?"},
+    entropy:{title:"How can uncertainty be measured?",nodes:["Thermodynamics","Information theory","Computing"],explanation:"Entropy has precise but distinct meanings in physical and informational settings. Comparing their mathematics is useful only when the underlying definitions stay clear.",question:"What does entropy quantify in each setting—and what does it not tell us?"}
+  };
+
   return <div className="landing">
     <header className="site-header"><Logo/><nav><a href="#method">The method</a><a href="#environment">The environment</a><a href="#principles">Principles</a></nav><Link className="button primary" to="/workspace">Enter Vesper <ArrowUpRight size={15}/></Link></header>
     <main>
@@ -40,6 +47,31 @@ function Landing() {
       <section className="manifesto section-wrap" id="method"><div className="section-index">01 / THE IDEA</div><div><h2>STEM is not a pile of facts.<br/><em>It is a way to understand systems.</em></h2><p>Vesper connects the full process of STEM self-education: foundations, mathematical reasoning, scientific evidence, computational thinking, experimentation, modelling and technical creation. The aim is not to finish content. It is to develop the ability to reason and work independently.</p></div></section>
       <section className="method-section section-wrap"><div className="section-index">02 / THE LEARNING CYCLE</div><div className="method-content"><h2>One connected process.<br/><em>Many ways to think.</em></h2><div className="cycle-grid">{[{n:"01",t:"Discover",d:"Capture a question worth pursuing.",i:"01"},{n:"02",t:"Structure",d:"Map concepts and prerequisites.",i:"02"},{n:"03",t:"Understand",d:"Explain, connect and practise.",i:"03"},{n:"04",t:"Investigate",d:"Examine claims and evidence.",i:"04"},{n:"05",t:"Model",d:"Explore systems and relationships.",i:"05"},{n:"06",t:"Create",d:"Make something original.",i:"06"},{n:"07",t:"Retain",d:"Return, reconstruct and refine.",i:"07"}].map(x=><div className="cycle-item" key={x.n}><span>{x.n}</span><b>{x.t}</b><p>{x.d}</p><small>STAGE {x.i}</small></div>)}</div></div></section>
       <section className="environment-section" id="environment"><div className="section-wrap"><div className="section-index">03 / THE ENVIRONMENT</div><div className="environment-heading"><h2>Every discipline connects.<br/>Every discovery has context.</h2><p>Begin with STEM. Follow a useful connection into computing, design, economics, philosophy or the natural world. Keep questions, concepts, evidence, models and original work in one coherent body of knowledge.</p></div><div className="environment-grid"><div className="environment-card card-large"><span>01 / THINK</span><Lightbulb/><h3>Questions & paths</h3><p>Turn curiosity into a navigable structure of concepts, dependencies and open questions.</p><div className="mini-graph"><i/><i/><i/><i/><i/><b/><b/><b/></div></div><div className="environment-card"><span>02 / UNDERSTAND</span><BookOpen/><h3>Learning studio</h3><p>Build explanations, keep working notes and test recall.</p></div><div className="environment-card"><span>03 / INVESTIGATE</span><FlaskConical/><h3>Investigation lab</h3><p>Record hypotheses, observations, interpretations and limitations.</p></div><div className="environment-card"><span>04 / EXPLORE</span><Atom/><h3>Model bench</h3><p>Change parameters. Observe behaviour. Record what changes.</p></div><div className="environment-card"><span>05 / MAKE</span><FolderKanban/><h3>Creation workshop</h3><p>Develop research, models, technical explanations and projects.</p></div><div className="environment-card"><span>06 / CONNECT</span><Network/><h3>Knowledge graph</h3><p>See how your understanding, sources and original work relate.</p></div></div></div></section>
+      <section className="bridge-section section-wrap" id="connections">
+        <div className="section-index">04 / THINK ACROSS DISCIPLINES</div>
+        <div className="bridge-content">
+          <div className="bridge-heading">
+            <small>THE VESPER DIFFERENCE</small>
+            <h2>One question.<br/><em>More than one lens.</em></h2>
+            <p>Vesper does not keep learning inside subject boundaries. Explore how a useful idea travels between fields—and where the comparison has limits.</p>
+            <div className="bridge-tabs" role="tablist" aria-label="Interdisciplinary examples">
+              <button className={activeBridge==="feedback"?"selected":""} onClick={()=>setActiveBridge("feedback")}>Feedback loops</button>
+              <button className={activeBridge==="resonance"?"selected":""} onClick={()=>setActiveBridge("resonance")}>Resonance</button>
+              <button className={activeBridge==="entropy"?"selected":""} onClick={()=>setActiveBridge("entropy")}>Entropy</button>
+            </div>
+          </div>
+          <div className="bridge-demo" aria-live="polite">
+            <div className="bridge-demo-top"><span>CONNECTION STUDY / {activeBridge==="feedback"?"01":activeBridge==="resonance"?"02":"03"}</span><span>EXAMPLE · NOT A UNIVERSAL EQUIVALENCE</span></div>
+            <h3>{bridgeExamples[activeBridge].title}</h3>
+            <div className="bridge-nodes">
+              {bridgeExamples[activeBridge].nodes.map((node,i)=><div className={"bridge-node node-"+i} key={node}><span>0{i+1}</span><b>{node}</b></div>)}
+            </div>
+            <div className="bridge-explanation"><small>WHAT CONNECTS THEM</small><p>{bridgeExamples[activeBridge].explanation}</p></div>
+            <div className="bridge-question"><small>QUESTION TO PURSUE</small><b>{bridgeExamples[activeBridge].question}</b></div>
+            <Link to="/workspace/connections" className="text-link">Explore and record your own connections <ArrowUpRight size={14}/></Link>
+          </div>
+        </div>
+      </section>
       <section className="principles section-wrap" id="principles"><div className="section-index">04 / DESIGN PRINCIPLES</div><div className="principle-content"><h2>Quiet in appearance.<br/><em>Serious in purpose.</em></h2><div className="principle-list"><div><b>01</b><span>Substance over activity</span><p>Progress reflects work and understanding, not streaks or time spent.</p></div><div><b>02</b><span>Evidence over assertion</span><p>Keep observations, interpretations and limitations distinct.</p></div><div><b>03</b><span>Connection over silos</span><p>Every record can relate to the wider learning process.</p></div><div><b>04</b><span>Learner agency</span><p>Your questions, priorities and conclusions remain yours.</p></div></div></div></section>
       <section className="closing"><div className="closing-mark">v.</div><p>BUILD THE ABILITY TO LEARN INDEPENDENTLY.</p><h2>Start with the fundamentals.</h2><Link className="button primary large" to="/workspace">Enter Vesper <ArrowUpRight size={16}/></Link></section>
     </main>
