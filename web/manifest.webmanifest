@@ -1,1 +1,16 @@
-{"name":"VESPER — STEM Learning Observatory","short_name":"VESPER","description":"A focused STEM learning observatory. Explore, model, apply and test.","start_url":"/#/home","display":"standalone","background_color":"#090e18","theme_color":"#090e18","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml"}]}
+{
+  "name": "VESPER — The Independent Learning Environment",
+  "short_name": "VESPER",
+  "description": "A self-education system for curious learners. Turn questions into learning routes, investigations and original work.",
+  "start_url": "/#/home",
+  "display": "standalone",
+  "background_color": "#111416",
+  "theme_color": "#111416",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
