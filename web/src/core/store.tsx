@@ -15,10 +15,10 @@ function migrate(raw: unknown): VesperWorkspace {
   next.questions = (old.questions || []).map((x: any) => ({ id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || x.createdAt || now(), title: x.title || x.question || "Untitled question", motivation: x.why || "", field: x.area || "", known: x.known || "", scope: x.answer || "", status: x.status || "active" }));
   next.paths = (old.routes || []).map((x: any) => ({ id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: now(), title: x.title || "Untitled path", objective: x.goal || "", questionId: x.questionId, steps: (x.steps || []).map((s: any) => typeof s === "string" ? ({ id: uid(), createdAt: now(), updatedAt: now(), title: s, description: "", done: false }) : ({ id: uid(), createdAt: now(), updatedAt: now(), title: s.text || s.title || "Concept", description: "", done: !!s.done })), status: "active" }));
   next.investigations = (old.investigations || []).map((x: any) => ({ ...x, id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || now(), observations: x.observations || [], status: x.status || "active" }));
-  next.resources = old.resources || [];
+  next.resources = (old.resources || []).map((x: any) => ({ ...x, id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || now(), title: x.title || "Untitled resource", author: x.author || "", kind: x.kind || x.type || "Reference", url: x.url || "", contribution: x.contribution || x.claim || "", limitations: x.limitations || "" }));
   next.projects = (old.works || []).map((x: any) => ({ ...x, kind: x.type || "Project", question: x.question || "", description: x.description || "", status: x.status || "active" }));
-  next.journal = old.journal || [];
-  next.recall = old.recall || [];
+  next.journal = (old.journal || []).map((x: any) => ({ ...x, id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || now(), title: x.title || "Reflection", body: x.body || "", mood: x.mood || x.kind || "Reflection" }));
+  next.recall = (old.recall || []).map((x: any) => ({ ...x, id: x.id || uid(), createdAt: x.createdAt || now(), updatedAt: x.updatedAt || now(), title: x.title || "Concept to revisit", dueAt: x.dueAt || x.due || now(), lastResult: x.lastResult || x.note || "Not reviewed yet" }));
   return next;
 }
 
@@ -49,7 +49,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   });
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (error) { console.error("Vesper could not persist workspace data", error); } }, [data]);
   const add = useCallback(<T extends { id: string; createdAt: string; updatedAt: string }>(key: keyof VesperWorkspace, value: Omit<T, "id" | "createdAt" | "updatedAt">) => {
-    const stamp = now(); setData(prev => ({ ...prev, [key]: [...(prev[key] as T[]), { ...value, id: uid(), createdAt: stamp, updatedAt: stamp }] }));
+    const stamp = now(); setData(prev => ({ ...prev, [key]: [...(prev[key] as unknown as T[]), { ...value, id: uid(), createdAt: stamp, updatedAt: stamp }] }));
   }, []);
   const api = useMemo<StoreApi>(() => ({
     data,
