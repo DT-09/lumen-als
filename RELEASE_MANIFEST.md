@@ -19,7 +19,7 @@
 - Field Journal: create and manage learner-authored notes and reflections.
 - Recall Practice: maintain a learner-managed retrieval queue.
 - Knowledge Intelligence: inspect task-level records and project/investigation activity without a mastery score.
-- Local-first storage, legacy learner-record migration, JSON export and data clearing.
+- Local-first storage, legacy learner-record migration, JSON export, validated backup restore and data clearing.
 - Responsive workspace, mobile navigation, keyboard-accessible controls and reduced-motion preference.
 
 ## Known limitations
