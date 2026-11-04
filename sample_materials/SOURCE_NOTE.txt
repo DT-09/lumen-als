@@ -1,1 +1,0 @@
-This directory is retained only as a source-ingestion fixture from the former learning-workspace prototype. It is not used by STEMPROOF's assessment-verification workflow. The active synthetic question-bank fixture is sample_question_bank.json.
