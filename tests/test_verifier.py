@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from verifier import parse_math,verify_item,audit_items
 
 def it(kind,**kw):
@@ -42,6 +43,15 @@ def test_identity_equation_is_not_misreported_as_no_solution():
 
 def test_variable_denominator_expression_requires_domain_review():
     assert verify_item(it("expression",expression="(x^2-1)/(x-1)",expected_answer="x+1")).status=="needs_review"
+
+def test_sample_bank_has_expected_release_one_outcomes():
+    import json
+    sample=json.loads((Path(__file__).parents[1]/"sample_question_bank.json").read_text(encoding="utf-8"))
+    result=audit_items(sample)
+    assert result["item_count"]==8
+    assert result["summary"]=={"verified":5,"defect":2,"needs_review":1}
+    assert next(f for f in result["findings"] if f["item_id"]=="ALG-004")["status"]=="verified"
+    assert next(f for f in result["findings"] if f["item_id"]=="REV-001")["status"]=="needs_review"
 
 def test_root_serves_multi_page_product():
     from fastapi.testclient import TestClient
