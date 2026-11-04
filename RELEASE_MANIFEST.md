@@ -6,7 +6,7 @@
 - Application runtime: web/assets/batlab.js
 - Offline application worker: web/sw.js
 - Product architecture: PRODUCT_ARCHITECTURE.md
-- Release version: 2.1.0 (offline application shell)
+- Release version: 2.2.0 (launch reliability and backup hardening)
 
 ## Included learner systems
 - Curiosity Engine: create, edit and delete learner-owned questions.
@@ -20,7 +20,7 @@
 - Field Journal: create and manage learner-authored notes and reflections.
 - Recall Practice: maintain a learner-managed retrieval queue.
 - Knowledge Intelligence: inspect task-level records and project/investigation activity without a mastery score.
-- Local-first storage, legacy learner-record migration, JSON export, validated backup restore and data clearing.
+- Local-first storage, legacy learner-record migration, version-checked JSON backup restore, malformed-record normalisation, 10 MB import limit, JSON export and data clearing.
 - Offline application-shell caching after the first successful online load.
 - Responsive workspace, mobile navigation, keyboard-accessible controls and reduced-motion preference.
 
