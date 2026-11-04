@@ -2,7 +2,8 @@
 
 ## 2.2.0 — Launch reliability and backup hardening
 - Validate imported backups against the VESPER product identity and supported schema version.
-- Reject oversized backup files and normalise malformed imported records before restoring them.
+- Reject backup files above 10 MB and normalise malformed imported records before restoring them.
+- Replace unsafe imported record IDs and validate linked question references to prevent malformed backup data from entering route and control attributes.
 - Keep only known starter-concept identifiers in restored learning routes.
 - Preserve browser download URLs long enough for the browser to begin saving exports.
 - Version the offline application cache so clients refresh the updated runtime.
