@@ -53,13 +53,13 @@ def test_sample_bank_has_expected_release_one_outcomes():
     assert next(f for f in result["findings"] if f["item_id"]=="ALG-004")["status"]=="verified"
     assert next(f for f in result["findings"] if f["item_id"]=="REV-001")["status"]=="needs_review"
 
-def test_root_serves_multi_page_product():
+def test_root_serves_batlab_learner_experience():
     from fastapi.testclient import TestClient
     import app
     c=TestClient(app.app)
     home=c.get("/")
-    assert home.status_code==200 and "STEMPROOF" in home.text
-    assert c.get("/platform.html").status_code==200
-    assert c.get("/audit.html").status_code==200
-    assert c.get("/pilot.html").status_code==200
+    assert home.status_code==200 and "BATLAB" in home.text
+    assert c.get("/assets/batlab.js").status_code==200
+    assert c.get("/assets/batlab.css").status_code==200
+    assert c.get("/manifest.webmanifest").status_code==200
     assert c.get("/api/health").json()["service"]=="stemproof-verification-api"
