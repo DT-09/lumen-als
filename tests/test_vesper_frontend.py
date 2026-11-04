@@ -73,6 +73,8 @@ def test_local_backup_export_restore_and_validation_exist():
     assert 'parsed.schemaVersion!==1' in source
     assert "file.size>10*1024*1024" in source
     assert 'Object.prototype.hasOwnProperty.call(topics,k)' in source
+    assert 'safeId=v=>typeof v==="string"&&/^[a-z0-9_-]{1,64}$/i.test(v)?v:uid()' in source
+    assert 'questionId:safeRef(p.questionId)' in source
     assert "setTimeout(()=>URL.revokeObjectURL(url),1000)" in source
 
 
