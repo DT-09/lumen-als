@@ -70,6 +70,10 @@ def test_local_backup_export_restore_and_validation_exist():
     assert "importDataFile" in source
     assert "normalizeState" in source
     assert "localStorage.setItem(KEY" in source
+    assert 'parsed.schemaVersion!==1' in source
+    assert "file.size>10*1024*1024" in source
+    assert 'Object.prototype.hasOwnProperty.call(topics,k)' in source
+    assert "setTimeout(()=>URL.revokeObjectURL(url),1000)" in source
 
 
 def test_model_bench_has_six_domains_and_correct_first_twenty_shells():
@@ -104,7 +108,7 @@ def test_offline_app_shell_is_cached_and_registered():
     html = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
     worker = WORKER.read_text(encoding="utf-8")
     assert 'navigator.serviceWorker.register("/sw.js")' in html
-    assert 'const CACHE_NAME = "vesper-shell-v2.1.0"' in worker
+    assert 'const CACHE_NAME = "vesper-shell-v2.2.0"' in worker
     assert "cache.addAll(SHELL_ASSETS)" in worker
     assert 'caches.match("./index.html")' in worker
     assert 'request.mode === "navigate"' in worker
