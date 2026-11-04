@@ -1,20 +1,15 @@
 # Changelog
 
-## 1.1.0 — Release hardening
-- Added production fail-closed startup requiring a 32+ character bearer token.
-- Disabled interactive API documentation in production.
-- Required explicit HTTPS CORS origins in production.
-- Added authenticated audit deletion and atomic audit-file writes.
-- Prevented reviewer decisions against duplicated item identifiers.
-- Added no-store and basic response security headers to API responses.
-- Added an operator access-key field and authenticated report downloads to the audit workspace.
-- Expanded deployment and security guidance; added API access-control tests.
-- Clarified that the shared-key release is for a single operator and is not a multi-tenant customer portal.
+## 2.0.0 — Self-education system rebuild
+- Repositioned VESPER as an independent learning environment for curious, self-directed STEM learners.
+- Replaced the observatory/course-led information architecture with learner-owned questions, learning plans, study, investigation, creation and evidence.
+- Added the Curiosity Engine, Knowledge Architect, Learning Studio, Knowledge Map, Investigation Lab, Model Bench, Creation Workshop, Resource Library, Field Journal, Recall Practice and Knowledge Intelligence.
+- Added interactive linear-function, ideal-pendulum and Ohm's-law models.
+- Added browser-local persistence, export, data clearing and migration of available legacy learner records.
+- Rebuilt the interface around a restrained graphite, mineral green, ivory and brass design system.
+- Updated product architecture, deployment instructions and release boundaries.
+- Updated the static validation workflow and legacy shell regression assertion.
 
-## 1.0.0 — STEMPROOF product rebuild
-- Replaced the legacy learning workspace with an assessment verification product.
-- Added a deterministic mathematics and physics verification engine.
-- Added evidence-backed audit records, reviewer decisions and report exports.
-- Built a multi-page product website and interactive audit workspace.
-- Added commercial pilot scope, technical documentation and release boundaries.
-- Replaced legacy deployment configuration and tests.
+## 1.1.0 — Legacy assessment-verifier hardening
+- Hardened the legacy FastAPI verifier with production access controls and regression tests.
+- The verifier is repository code only; it is not part of the VESPER learner application.
