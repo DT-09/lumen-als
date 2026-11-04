@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101512">
+<meta name="description" content="VESPER — an independent STEM learning workspace. Turn questions into understanding, investigation and original work.">
+<meta property="og:title" content="VESPER — Independent STEM Workspace">
+<meta property="og:description" content="Discover. Understand. Investigate. Create. Demonstrate.">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./assets/app.css">
+<title>VESPER — Independent STEM Workspace</title>
+</head>
+<body>
+<div id="app"><div class="boot">VESPER <span>Preparing your workspace…</span></div></div>
+<script src="./assets/app.js" defer></script>
+<script>
+if ("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
