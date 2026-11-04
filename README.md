@@ -6,7 +6,7 @@ Vesper helps learners connect STEM concepts with useful ideas from wider discipl
 
 ## Product architecture
 
-- **Questions** — capture and refine the questions that drive learning.
+- **Questions** — capture and refine the questions that drive learning; each question has a workbench aggregating linked paths, concepts, connections, investigations and projects.
 - **Connections** — record meaningful relationships across disciplines, with relationship types, rationale and follow-up questions.
 - **Learning paths** — map concepts, prerequisites and milestones.
 - **Learning studio** — build explanations, notes and understanding checks.
@@ -18,7 +18,7 @@ Vesper helps learners connect STEM concepts with useful ideas from wider discipl
 - **Knowledge graph** — view the records that make up the learner's knowledge system.
 - **Recall practice** — schedule deliberate reconstruction of important concepts.
 
-The website and learner application are separate experiences in one React application: `/` is the public product website and `/workspace` is the learner environment.
+The website and learner application are separate experiences in one React application: `/` is the public product website and `/workspace` is the learner environment. Each question can be opened at `/workspace/questions/:id` to inspect its linked learning and inquiry work.
 
 ## Technology
 
