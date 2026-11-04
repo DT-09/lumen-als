@@ -1,73 +1,60 @@
-# BATLAB
+# VESPER
 
-**Build. Apply. Test. A bat-guided STEM discovery environment.**
+**A universe of ideas. One clear next step.**
 
-BATLAB is a learner-first environment for exploring mathematics, physics, chemistry, biology, computer science and engineering. The bat is a quiet attention companion, not an interruptive chatbot. The experience is designed around a single learning loop:
+VESPER is a learner-first STEM learning observatory for mathematics, physics, chemistry, biology, computer science and engineering. It combines structured concept learning with interactive models, focused study, evidence-aware recommendations and a quiet bat companion.
 
 **Discover → Build a model → Apply → Test → Reflect → Revisit**
 
-## Learner experience
+## The learner experience
 
-- **The Roost:** guest-first home, session goal, next-step recommendation, subject entry points and local activity summary.
-- **Explore STEM:** searchable starter library across six STEM domains, with open navigation rather than a locked grade path.
-- **Focus Chamber:** one concept at a time, concise explanation, key relationship, confidence check, independent retrieval task and notebook save.
-- **Knowledge Terrain:** concept relationships, prerequisite labels, evidence states and cross-subject bridges.
-- **Discovery Lab:** six interactive models — linear function explorer, simple pendulum, simplified atomic shell explorer, schematic cell structure explorer, insertion-sort visualiser and ideal Ohm's-law workbench.
-- **Echo Intelligence:** explains what local attempts and prerequisite relationships support, and what remains uncertain.
-- **Revisit Queue:** successful task checks schedule a simple local retrieval prompt.
-- **Flight Records:** inspect attempts and task-level outcomes; export a JSON learning record.
-- **Field Notebook:** save, review and delete learner-authored notes and observations.
-- **Focus environment:** hide navigation while studying, dismissible bat cues, reduced-motion option and session goal.
-- **Guest-first:** no signup wall; progress remains in browser local storage.
+- **Observatory:** guest-first home, session intention, next-step recommendation, subject portals and activity overview.
+- **Explore:** searchable concept library across six STEM domains.
+- **Focus Studio:** one concept at a time, concise explanation, key relationship, confidence reflection, independent retrieval task and notebook capture.
+- **Concept Atlas:** prerequisite relationships, evidence states and cross-disciplinary connections.
+- **Model Lab:** six interactive models — linear functions, simple pendulum, simplified atomic shells, schematic cell structures, insertion sort and ideal Ohm's law.
+- **Learning Signals:** transparent view of attempts, task outcomes, confidence when supplied, and why a route is suggested.
+- **Recall Queue:** local retrieval prompts scheduled after successful task checks.
+- **Flight Log:** inspect task-level attempts and export a JSON learning record.
+- **Field Notes:** save, review and delete learner-authored observations.
+- **Focus environment:** hide navigation, use dismissible bat cues, respect reduced-motion settings and set a session intention.
+- **Guest-first:** no signup wall; current progress remains in this browser.
 
-## Learning evidence and limits
+## Evidence and limitations
 
-The current route logic is deterministic and local. It uses authored prerequisite relationships, recent activity, task outcomes and optional self-reported confidence. A successful check schedules a revisit after two days. This is a basic retrieval prompt, not a validated spaced-repetition algorithm.
+The current recommendation engine is deterministic and local. It uses authored prerequisite links, recent activity, task outcomes, optional self-reported confidence and due revisit timestamps. Successful task checks schedule a simple two-day retrieval prompt. This is a basic reminder, not a validated spaced-repetition algorithm.
 
-The 18 concept checks are narrow authored tasks with simple answer matching. They do not yet verify proofs, diagrams, working, open responses or code. The six lab models are deliberately simplified and state their assumptions. They are educational visualisations, not research-grade simulators.
+The starter checks use authored expected answers and narrow answer matching. They do not verify proofs, diagrams, full working, open responses or code. The six lab models state their assumptions and are educational visualisations, not research-grade simulators.
 
-BATLAB does **not** currently provide:
-- a complete or independently reviewed STEM curriculum;
-- robust misconception diagnosis or validated mastery measurement;
-- comprehensive prerequisite inference or transfer assessment;
-- AI tutoring or an autonomous bat agent;
-- accounts, cloud sync, backup, guardian controls or multi-user profiles;
-- community features, moderation or aggregate learner analytics;
-- production billing, memberships or entitlement management;
-- a validated learning-efficacy study.
+A successful task check is evidence for that task only. It is not a mastery certificate, grade prediction or proof of transfer. Learning Signals can report insufficient evidence. Learners can always choose another route.
 
-Do not treat a passed task as proof of general mastery, academic attainment or ability. Echo can report insufficient evidence. Recommendations are suggestions; learners can choose another route.
+## Current release boundary
+
+VESPER currently provides a substantial static learner experience. It does **not** yet provide a complete reviewed STEM curriculum, validated misconception diagnosis, comprehensive adaptive intelligence, AI tutoring, cloud accounts, synchronisation, backup, guardian controls, community, aggregate analytics, billing or validated learning-efficacy research.
+
+No camera, microphone, eye tracking, audio prompts, public learner rankings or streak pressure are used. Local data can be exported or cleared.
 
 ## Run locally
-
-The learner experience is static and requires no backend:
 
 ```bash
 cd web
 python -m http.server 8080
 ```
 
-Open `http://localhost:8080`. The application uses hash-based navigation and browser local storage. No build step is required.
+Open `http://localhost:8080`. The application uses hash-based navigation and browser local storage; no build step is required.
 
 ## Deploy
 
-Deploy the `web/` directory as a static Cloudflare Pages project:
+Deploy the `web/` directory as a static Cloudflare Pages project. Use `web` as the root directory, no build command and `.` as the output directory.
 
-| Setting | Value |
-|---|---|
-| Production branch | `main` |
-| Root directory | `web` |
-| Build command | None |
-| Output directory | `.` |
+The legacy FastAPI assessment-verification service at the repository root is not part of VESPER. Do not expose legacy STEMPROOF routes as VESPER capabilities.
 
-The legacy FastAPI assessment-verification service at the repository root is not part of the BATLAB learner experience. Do not expose old STEMPROOF routes as BATLAB capabilities.
+## Privacy and learner safety
 
-## Privacy and safety
+The current build stores activity, notes, confidence selections, settings and revisit timestamps in browser local storage. It does not send learner activity to a server. Learners can export or clear local data. There is no cloud backup.
 
-This build stores learning activity, notes, confidence selections and settings in local browser storage. It does not send learner activity to a server. Learners can export or clear local data. There is no cloud backup.
-
-No camera, microphone, eye tracking, audio prompts, public learner ranking or streak pressure is used. Because the intended audience includes minors, any future accounts, analytics, community, sync or payments require age-appropriate privacy design, data minimisation, access controls, retention and deletion rules, and guardian/consent review where required.
+Because the intended audience includes minors, future accounts, analytics, community, sync or payments require age-appropriate privacy design, data minimisation, access controls, retention and deletion rules, and guardian/consent review where required.
 
 ## Engineering direction
 
-The next production phase requires a versioned content graph, reviewed curriculum, subject-specific verification, richer reasoning capture, tested simulation models, accessible automated and manual testing, secure optional sync and privacy review. AI may assist explanations but must not be the sole authority for mathematical or scientific correctness.
+A production platform requires a versioned content graph, reviewed curriculum, subject-specific verification, richer reasoning capture, tested simulation models, accessibility and device QA, secure optional sync, privacy review, monitoring, backups and an evidence-based evaluation of learning outcomes. AI may assist explanations but must not be the sole authority for mathematical or scientific correctness.
