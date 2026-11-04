@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "vesper-shell-v2.1.0";
+const CACHE_NAME = "vesper-shell-v2.2.0";
 const SHELL_ASSETS = [
   "./",
   "./index.html",
