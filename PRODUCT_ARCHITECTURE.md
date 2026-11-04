@@ -22,6 +22,7 @@
 | Knowledge Architect | Flexible routes | Transparent keyword-based concept suggestions, learner-selected route and authored prerequisite map |
 | Learning Studio | Concept acquisition | 18 starter explanations, relationships, narrow checks and reflection |
 | Investigation Lab | Scientific inquiry | Hypothesis, variables, controls, observation, interpretation and limitations records |
+| Model Bench | Interactive models | Six simplified teaching models spanning mathematics, physics, chemistry, biology, computer science and engineering |
 | Creation Workshop | Original work | Project records and editable Markdown-ready working documents |
 | Resource Library | Source literacy | Save links, bibliographic details and learner-entered source evaluation |
 | Field Journal | Metacognition | Learner-owned notes and reflections |
