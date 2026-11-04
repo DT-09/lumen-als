@@ -58,7 +58,7 @@ def test_root_serves_batlab_learner_experience():
     import app
     c=TestClient(app.app)
     home=c.get("/")
-    assert home.status_code==200 and "BATLAB" in home.text
+    assert home.status_code==200 and "VESPER" in home.text
     assert c.get("/assets/batlab.js").status_code==200
     assert c.get("/assets/batlab.css").status_code==200
     assert c.get("/manifest.webmanifest").status_code==200
