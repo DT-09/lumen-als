@@ -53,3 +53,28 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Interdisciplinary connection workspace */
+.connection-intro{min-height:270px;position:relative;overflow:hidden;display:flex;align-items:center;padding:32px 38px;border:1px solid #c9a66b35;background:linear-gradient(112deg,#22231c,#171a16 68%,#171812);margin-bottom:32px}
+.connection-intro-copy{position:relative;z-index:2;max-width:610px}.connection-intro-copy>small{font:8px var(--mono);letter-spacing:.16em;color:var(--gold)}
+.connection-intro h2{font:500 clamp(29px,3.5vw,42px)/1.2 var(--serif);margin:10px 0}.connection-intro h2 em{color:var(--gold);font-weight:500}
+.connection-intro p{max-width:550px;color:var(--muted);font-size:11px;line-height:1.85}
+.connection-orbit{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:210px;height:210px;border:1px solid #c9a66b44;border-radius:50%;display:grid;place-items:center;color:var(--gold);font:9px var(--mono);letter-spacing:.2em}
+.connection-orbit:before,.connection-orbit:after{content:"";position:absolute;inset:25px;border:1px solid #9da99a55;border-radius:50%;transform:rotate(40deg) scaleX(.58)}
+.connection-orbit:after{inset:50px;border-color:#c9a66b66;transform:rotate(-40deg) scaleX(.7)}
+.connection-orbit span{z-index:1}.connection-orbit i{position:absolute;font:7px var(--mono);font-style:normal;letter-spacing:.12em;color:#b7b6aa;background:#171a16;padding:4px 6px;border:1px solid #ffffff18}.orbit-a{top:17px;left:68px}.orbit-b{right:-18px;top:100px}.orbit-c{bottom:17px;left:65px}
+.connection-seeds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.connection-card{padding:18px;border:1px solid var(--line);background:var(--panel);min-width:0}
+.connection-card-top{display:flex;justify-content:space-between;gap:8px;font:7px var(--mono);letter-spacing:.12em;color:var(--gold)}
+.connection-card h3,.connection-saved h3{font:500 20px var(--serif);margin:12px 0}
+.discipline-pair{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.discipline-pair span,.connection-saved-nodes span{border:1px solid #9da99a44;padding:5px 8px;font:8px var(--mono);color:#c6c9bd}.discipline-pair b{color:var(--gold);font-size:12px}
+.connection-card>p,.connection-saved p{font-size:10px;color:var(--muted);line-height:1.75}
+.connection-question{border-top:1px solid var(--line);padding:12px 0;margin:12px 0;font:7px var(--mono);letter-spacing:.1em;color:var(--gold)}
+.connection-question b{display:block;margin-top:6px;font:500 11px/1.6 "DM Sans",sans-serif;letter-spacing:0;color:var(--text)}
+.connection-toolbar{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:10px 0 12px}.connection-toolbar .field{min-width:220px}.connection-toolbar>span,.connection-saved small{font:8px var(--mono);color:var(--dim)}
+.connection-saved-list{display:grid;gap:8px}.connection-saved{display:grid;grid-template-columns:minmax(180px, .7fr) 1.3fr;gap:20px;padding:17px;border:1px solid var(--line);background:var(--panel);align-items:center}
+.connection-saved-nodes{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.connection-saved-nodes b{font:8px var(--mono);color:var(--gold)}
+.connection-saved h3{margin:0 0 5px}.connection-saved p{margin:0 0 6px}
+.connection-form{display:grid;gap:13px;padding:20px;border:1px solid var(--line);background:var(--panel)}
+.connection-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.connection-form-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.connection-form-actions>span{font-size:10px;color:var(--sage)}
+@media(max-width:760px){.connection-intro{padding:25px 22px}.connection-orbit{right:-115px;opacity:.25}.connection-seeds{grid-template-columns:1fr}.connection-form-grid{grid-template-columns:1fr}.connection-saved{grid-template-columns:1fr;gap:10px}.connection-toolbar{align-items:stretch;flex-direction:column}.connection-toolbar .field{min-width:0}}

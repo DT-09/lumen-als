@@ -1,14 +1,14 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { VesperWorkspace, Question, LearningPath, Investigation, Resource, Project, JournalEntry, RecallItem, Concept } from "./types";
+import type { VesperWorkspace, Question, LearningPath, Investigation, Resource, Project, JournalEntry, RecallItem, Concept, Connection } from "./types";
 
 const STORAGE_KEY = "vesper.workspace.v1";
 const now = () => new Date().toISOString();
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : "v-" + Date.now().toString(36) + Math.random().toString(36).slice(2);
-const blank = (): VesperWorkspace => ({ version: 1, profile: { name: "" }, questions: [], concepts: [], paths: [], sessions: [], investigations: [], resources: [], projects: [], journal: [], recall: [] });
+const blank = (): VesperWorkspace => ({ version: 1, profile: { name: "" }, questions: [], concepts: [], connections: [], paths: [], sessions: [], investigations: [], resources: [], projects: [], journal: [], recall: [] });
 
 function migrate(raw: unknown): VesperWorkspace {
   const value = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
-  if (value.version === 1) return { ...blank(), ...value } as VesperWorkspace;
+  if (value.version === 1) return { ...blank(), ...value, connections: (value.connections as Connection[] | undefined) || [] } as VesperWorkspace;
   const old = value as any;
   const next = blank();
   next.profile.name = old.profile?.name || "";
@@ -26,6 +26,7 @@ type StoreApi = {
   data: VesperWorkspace;
   addQuestion: (x: Omit<Question, "id" | "createdAt" | "updatedAt">) => void;
   addConcept: (x: Omit<Concept, "id" | "createdAt" | "updatedAt">) => void;
+  addConnection: (x: Omit<Connection, "id" | "createdAt" | "updatedAt">) => void;
   addPath: (x: Omit<LearningPath, "id" | "createdAt" | "updatedAt">) => void;
   updatePath: (id: string, patch: Partial<LearningPath>) => void;
   addInvestigation: (x: Omit<Investigation, "id" | "createdAt" | "updatedAt" | "observations">) => void;
@@ -55,6 +56,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     data,
     addQuestion: x => add("questions", x),
     addConcept: x => add("concepts", x),
+    addConnection: x => add("connections", x),
     addPath: x => add("paths", { ...x, steps: x.steps.map(s => ({ ...s, id: s.id || uid(), createdAt: now(), updatedAt: now() })) }),
     updatePath: (id, patch) => setData(p => ({ ...p, paths: p.paths.map(x => x.id === id ? { ...x, ...patch, updatedAt: now() } : x) })),
     addInvestigation: x => add("investigations", { ...x, observations: [] }),

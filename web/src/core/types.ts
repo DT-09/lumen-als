@@ -8,6 +8,7 @@ export interface LearningPath extends BaseRecord { title: string; objective: str
 export interface LearningSession extends BaseRecord { title: string; conceptId?: string; notes: string; reflection: string; }
 export interface Investigation extends BaseRecord { title: string; hypothesis: string; method: string; variables: string; limitations: string; status: RecordStatus; observations: Observation[]; }
 export interface Observation extends BaseRecord { text: string; interpretation: string; source: string; }
+export interface Connection extends BaseRecord { title: string; disciplineA: string; disciplineB: string; relation: string; rationale: string; question: string; }
 export interface Resource extends BaseRecord { title: string; author: string; kind: string; url: string; contribution: string; limitations: string; }
 export interface Project extends BaseRecord { title: string; kind: string; question: string; description: string; status: RecordStatus; }
 export interface JournalEntry extends BaseRecord { title: string; body: string; mood: string; }
@@ -17,6 +18,7 @@ export interface VesperWorkspace {
   profile: { name: string };
   questions: Question[];
   concepts: Concept[];
+  connections: Connection[];
   paths: LearningPath[];
   sessions: LearningSession[];
   investigations: Investigation[];

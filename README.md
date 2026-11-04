@@ -1,12 +1,13 @@
 # VESPER
 
-**An integrated environment for independent learning.**
+**A STEM-centred environment for interdisciplinary learning.**
 
-Vesper connects curiosity, structured learning, investigation, interactive modelling and original creation in one learner-owned workspace.
+Vesper helps learners connect STEM concepts with useful ideas from wider disciplines, then turn those connections into understanding, investigation, modelling and original work.
 
 ## Product architecture
 
 - **Questions** — capture and refine the questions that drive learning.
+- **Connections** — record meaningful relationships across disciplines, with relationship types, rationale and follow-up questions.
 - **Learning paths** — map concepts, prerequisites and milestones.
 - **Learning studio** — build explanations, notes and understanding checks.
 - **Investigations** — separate hypotheses, observations, interpretations and limitations.
@@ -55,4 +56,4 @@ npm run preview
 
 Workspace records are stored in the current browser. There is no account service, cross-device cloud sync, server-side learner profile, AI tutor, live research verification, collaboration or billing in this release. Exported JSON backups are not encrypted. Clearing browser data can erase the workspace.
 
-Learning routes are learner-authored plans, not expert-validated curricula. Source annotations are user-entered; Vesper does not verify publications. Model Bench currently contains an illustrative damped-oscillator model, not a general-purpose simulation engine. Recall records support learner-managed practice and do not certify mastery.
+Connections and learning routes are learner-authored records, not expert-validated curricula. Source annotations are user-entered; Vesper does not verify publications. Model Bench currently contains an illustrative damped-oscillator model, not a general-purpose simulation engine. Recall records support learner-managed practice and do not certify mastery.
