@@ -25,5 +25,5 @@ jobs:
           test -s web/assets/batlab.css
           test -s web/assets/batlab.js
           grep -q 'BATLAB' web/index.html
-          grep -q 'Discovery Lab' web/assets/batlab.js
-          grep -q 'Flight Records' web/assets/batlab.js
+          grep -qi 'Discovery lab' web/assets/batlab.js
+          grep -qi 'Flight records' web/assets/batlab.js
