@@ -79,3 +79,12 @@ def test_external_resource_urls_are_restricted_to_http_schemes():
     source = APP.read_text(encoding="utf-8")
     assert "!/^https?:\\/\\//i.test(url)" in source
     assert 'rel="noopener noreferrer"' in source
+
+
+
+def test_repeated_controls_bind_all_matching_elements():
+    import re
+
+    source = APP.read_text(encoding="utf-8")
+    broken = re.findall(r'(?<!\$)\$\("\[data-[^"]+\]"\)\.forEach', source)
+    assert not broken, f"Use the all-elements selector for repeated controls: {broken}"
