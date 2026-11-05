@@ -433,3 +433,21 @@ a.v-profile-item:hover b{color:var(--v-gold)}
 .v-sidebar nav::-webkit-scrollbar-thumb{background:#3C4650;border-radius:5px}
 @media(max-width:800px){.v-understanding-intro,.v-profile-hero{grid-template-columns:1fr;padding:23px}.v-understanding-graphic{height:155px}.v-profile-mark{width:120px;height:120px}.v-profile-mark .v-mark{width:76px}}
 @media(max-width:560px){.v-understanding-stats,.v-profile-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.v-profile-grid{grid-template-columns:1fr}.v-understanding-intro h2,.v-profile-hero h2{font-size:34px}}
+
+/* Learn experience: explicit pedagogy, retrieval practice, visible progress */
+.v-learning-loop{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}
+.v-learning-loop span{padding:7px 10px;border:1px solid #C8A96E44;border-radius:4px;background:#C8A96E0B;color:#E4D2AE;font:8px var(--v-mono);letter-spacing:.07em;text-transform:uppercase}
+.v-learning-loop i{font-style:normal;color:#829887;font-size:12px}
+.v-lesson-check{margin-top:17px;padding:16px;border:1px solid #7189A84A;border-radius:7px;background:linear-gradient(145deg,#7189A810,#0D1319)}
+.v-lesson-check>.v-eyebrow{margin-bottom:9px;color:#AFC1D5}
+.v-lesson-check>b{display:block;font:400 18px/1.35 var(--v-serif);color:#F0EBDD;margin-bottom:12px}
+.v-lesson-options{display:grid;gap:7px}
+.v-lesson-options button{padding:10px 12px;text-align:left;border:1px solid #343D47;border-radius:5px;background:#11171D;color:#B9BFBE;font:10px/1.6 var(--v-sans);cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.v-lesson-options button:hover{border-color:#C8A96E77;color:#F0EBDD}
+.v-lesson-options button.selected{border-color:#C8A96E;background:#C8A96E16;color:#F0EBDD}
+.v-lesson-feedback{margin-top:11px;padding:10px;border-left:2px solid #B77F70;background:#B77F700D;color:#C9B8B2;font-size:10px;line-height:1.7}
+.v-lesson-feedback.correct{border-left-color:#829887;background:#82988710;color:#B9CDBD}
+.v-lesson-feedback b{color:#F0EBDD}
+.v-lesson-complete{margin-top:11px}
+.v-guide-card .v-text-link{margin-top:14px}
+@media(prefers-reduced-motion:reduce){.v-lesson-options button{transition:none}}
