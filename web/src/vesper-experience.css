@@ -671,3 +671,18 @@ a.v-profile-item:hover b{color:var(--v-gold)}
 @media(max-width:800px){.v-main:before{inset:0}.v-explore-hero{grid-template-columns:1fr;min-height:0}.v-explore-visual{height:280px}.v-explore-hero-bottom{position:relative;left:auto;right:auto;margin-top:15px}.v-explore-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.v-field-guide-cards{grid-template-columns:1fr}.v-explore-hero h1{font-size:clamp(52px,12vw,80px)}}
 @media(max-width:540px){.v-explore-hero-bottom{flex-direction:column}.v-explore-filters{flex-wrap:nowrap;overflow:auto;padding-bottom:6px}.v-explore-filters button{white-space:nowrap}.v-subject-grid{grid-template-columns:1fr}.v-resource{grid-template-columns:20px minmax(0,1fr) 13px}.v-resource-access{display:none}.v-depth-tabs button{font-size:6px}.v-explore-hero-meta{gap:12px}}
 @media(prefers-reduced-motion:reduce){.v-explore-hero:after,.v-cosmos-node{animation:none}.v-subject-card,.v-resource,.v-btn{transition:none}}
+
+
+/* Scroll-led reveals and responsive motion */
+@keyframes v-scroll-rise{from{opacity:.28;transform:translateY(34px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@supports (animation-timeline:view()){
+ .v-explore-manifesto,.v-knowledge-section,.v-field-guides,.v-explore-end{animation:v-scroll-rise linear both;animation-timeline:view();animation-range:entry 0% entry 30%}
+}
+.v-explore-hero-copy{animation:v-hero-arrive .9s cubic-bezier(.2,.7,.2,1) both}
+.v-explore-visual{animation:v-hero-arrive 1.2s .12s cubic-bezier(.2,.7,.2,1) both}
+@keyframes v-hero-arrive{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.v-explore-hero h1{font-kerning:normal;text-wrap:balance}
+.v-subject-card h3{font-size:clamp(18px,1.7vw,23px)}
+.v-resource-main b{font-size:clamp(13px,1.3vw,16px)}
+.v-explore-hero:before{content:"";position:absolute;inset:auto -15% -52% 32%;height:65%;border-radius:50%;background:#647ca31a;filter:blur(65px);pointer-events:none}
+@media(prefers-reduced-motion:reduce){.v-explore-manifesto,.v-knowledge-section,.v-field-guides,.v-explore-end,.v-explore-hero-copy,.v-explore-visual{animation:none!important}}
