@@ -233,7 +233,7 @@ function Overview() {
       </article>
       <article className="echo-panel">
         <div className="echo-panel-head"><span className="echo-orb"><Sparkles size={15}/></span><div><small>ECHO / CONTEXTUAL INTELLIGENCE</small><b>Signals from your workspace</b></div><span className="local-tag">LOCAL ENGINE</span></div>
-        {signals.slice(0,2).map(signal=><div className="echo-signal" key={signal.id}><div><small>{signal.mode.toUpperCase()} · SUGGESTED NEXT STEP</small><b>{signal.title}</b><p>{signal.detail}</p></div><Link to={signal.href} aria-label={signal.action}><ArrowUpRight size={16}/></Link></div>)}
+        {signals.slice(0,3).map(signal=><div className="echo-signal" key={signal.id}><div><small>{signal.mode.toUpperCase()} · SUGGESTED NEXT STEP</small><b>{signal.title}</b><p>{signal.detail}</p></div><Link to={signal.href} aria-label={signal.action}><ArrowUpRight size={16}/></Link></div>)}
         <p className="echo-disclosure">ECHO currently uses transparent, rule-based local guidance. It does not yet call a live AI model or verify external sources.</p>
       </article>
     </section>
