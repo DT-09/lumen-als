@@ -282,3 +282,15 @@
 .echo-public-grid span{font-size:10px;color:var(--bone-ivory)}
 .echo-public-note{padding:12px 14px;border-left:2px solid var(--signal-copper);background:#C18B750d;color:var(--stone);font-size:9px;line-height:1.7;margin-top:14px}
 @media(max-width:760px){.triad-cards{grid-template-columns:1fr}.triad-card{min-height:160px}.echo-section .section-wrap{padding-top:65px;padding-bottom:65px}.echo-public-grid{grid-template-columns:1fr}}
+
+.lair-entry-routes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:9px}
+.lair-entry-routes>a{display:grid;grid-template-columns:18px minmax(0,1fr) 13px;align-items:center;gap:8px;padding:10px;border:1px solid #ffffff12;background:#1B1D22}
+.lair-entry-routes>a>svg:first-child{color:var(--echo-teal)}
+.lair-entry-routes>a>svg:last-child{color:var(--cave-gold)}
+.lair-entry-routes span{min-width:0}
+.lair-entry-routes b,.lair-entry-routes small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lair-entry-routes b{font-size:8px;font-weight:600}
+.lair-entry-routes small{font-size:7px;color:var(--stone)}
+.lair-entry-routes>a:hover{border-color:#C69A5477}
+@media(max-width:850px){.lair-entry-routes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:450px){.lair-entry-routes{grid-template-columns:1fr}}
