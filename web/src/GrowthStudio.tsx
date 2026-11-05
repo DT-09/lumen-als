@@ -55,7 +55,7 @@ export default function GrowthStudio(){
  useEffect(()=>{localStorage.setItem(GOALS_KEY,JSON.stringify(goals))},[goals]);
  useEffect(()=>{localStorage.setItem(SESSIONS_KEY,JSON.stringify(sessions))},[sessions]);
  useEffect(()=>{localStorage.setItem(PATH_KEY,path)},[path]);
- useEffect(()=>{if(!running)return;const id=window.setInterval(()=>{setSeconds(s=>{if(s<=1){setMinutes(m=>{if(m<=0){setRunning(false);return 0}return m-1});return 60}return s-1})},1000);return()=>window.clearInterval(id)},[running]);
+ useEffect(()=>{if(!running)return;const id=window.setInterval(()=>{if(minutes===0&&seconds===0){setRunning(false);return}if(seconds===0){setMinutes(m=>Math.max(0,m-1));setSeconds(59)}else setSeconds(s=>s-1)},1000);return()=>window.clearInterval(id)},[running,minutes,seconds]);
  const todaySessions=sessions.filter(s=>s.date===day());
  const weekSessions=sessions.filter(s=>(Date.now()-new Date(s.date+"T00:00:00").getTime())/86400000<7);
  const totalMinutes=weekSessions.reduce((n,s)=>n+s.minutes,0);
