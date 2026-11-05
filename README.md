@@ -8,15 +8,16 @@ It is not a fixed course catalogue or a conventional learning-management system.
 
 ## The experience
 
-- **The Lair** — the learner's home base: active inquiries, learning activity, and a view of ongoing work.
+- **The Lair** — the learner's home base: active inquiries, learning activity, goals, and a view of ongoing work.
 - **Echolocation** — begin with a question, subject, or challenge from any discipline.
 - **Flight Paths** — editable stages for framing, learning, hypothesising, investigating, adapting, and deriving.
 - **Learn** — a dedicated learning area with searchable lessons, explanations, worked examples, misconception checks, practical activities, short knowledge checks with explanatory feedback, lesson progress, and interactive models.
+- **Growth Studio** — six self-learning pathways covering metacognition, reasoning, research, problem-solving, communication, and systems thinking. Includes a focus timer, learner-defined goals, weekly study tracking, and transfer challenges.
 - **Inquiry-linked learning** — record concepts, explanations, and self-reported understanding inside each investigation.
 - **Investigate** — prediction and observation records, plus an interactive model bench for echo ranging, waveforms, and exponential sensitivity.
 - **Research** — source annotations and a framework for evaluating authority, method, scope, inference, and corroboration.
 - **Derive** — write an answer, connect evidence to claims, record limitations, and identify the next question.
-- **Roost Network** — review concepts and disciplines recorded across inquiries.
+- **Idea Constellation** — review concepts and disciplines recorded across inquiries.
 - **Learner Model** — a transparent profile derived from recorded interests, concepts, evidence, inquiry history, route decisions, and creations.
 
 The nine-stage discovery framework is Wonder → Question → Hypothesise → Research → Learn → Investigate → Adapt → Derive → Extend. It describes the logic of inquiry, not a compulsory sequence. The learning loop is intentionally non-linear. A learner can move between stages and add their own route steps.
@@ -40,7 +41,7 @@ Learners can add their own concepts, sources, observations, and explanations. So
 
 The discovery workspace and lesson-completion progress are stored locally in the browser. Inquiry records use their own versioned storage key; lesson progress uses a separate local key. Export/import backup is available in the top bar. The previous local workspace remains accessible at `/workspace`; its records are not overwritten by the new discovery workspace.
 
-There is no account system, cloud sync, collaboration service, or server-side learner profile in this release.
+Growth Studio goals, focus-session records, and selected pathway are also stored locally in the browser. There is no account system, cloud sync, collaboration service, or server-side learner profile in this release.
 
 ## Visual identity
 
