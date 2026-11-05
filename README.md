@@ -11,7 +11,7 @@ It is not a fixed course catalogue or a conventional learning-management system.
 - **The Lair** — the learner's home base: active inquiries, learning activity, goals, and a view of ongoing work.
 - **Echolocation** — begin with a question, subject, or challenge from any discipline.
 - **Flight Paths** — editable stages for framing, learning, hypothesising, investigating, adapting, and deriving.
-- **Learn** — a dedicated learning area with searchable lessons, explanations, worked examples, misconception checks, practical activities, short knowledge checks with explanatory feedback, lesson progress, and interactive models.
+- **Learn** — an explorable knowledge field spanning 14 domains, searchable subjects and concepts, three depth levels per field, open-ended inquiry prompts, and curated starting points from universities, open textbooks, research references, interactive simulations, and educational video providers. Resources open at their original providers; availability and licensing can change.
 - **Growth Studio** — six self-learning pathways covering metacognition, reasoning, research, problem-solving, communication, and systems thinking. Includes a focus timer, learner-defined goals, weekly study tracking, and transfer challenges.
 - **Inquiry-linked learning** — record concepts, explanations, and self-reported understanding inside each investigation.
 - **Investigate** — prediction and observation records, plus an interactive model bench for echo ranging, waveforms, and exponential sensitivity.
@@ -28,7 +28,7 @@ The first release uses a transparent, deterministic local rule engine. It recomm
 
 ## Content and research boundaries
 
-The initial lesson library includes authored material on:
+The authored teaching library and model bench remain available within the inquiry workflow. Initial authored material includes:
 - Echolocation and sound-based sensing
 - Deterministic chaos and sensitivity
 - Aerodynamic lift
@@ -39,13 +39,13 @@ Learners can add their own concepts, sources, observations, and explanations. So
 
 ## Data and privacy
 
-The discovery workspace and lesson-completion progress are stored locally in the browser. Inquiry records use their own versioned storage key; lesson progress uses a separate local key. Export/import backup is available in the top bar. The previous local workspace remains accessible at `/workspace`; its records are not overwritten by the new discovery workspace.
+The discovery workspace, saved learning fields, and lesson-related state are stored locally in the browser. Inquiry records use their own versioned storage key; lesson progress uses a separate local key. Export/import backup is available in the top bar. The previous local workspace remains accessible at `/workspace`; its records are not overwritten by the new discovery workspace.
 
 Growth Studio goals, focus-session records, and selected pathway are also stored locally in the browser. There is no account system, cloud sync, collaboration service, or server-side learner profile in this release.
 
 ## Visual identity
 
-The interface uses a nocturnal editorial system: obsidian `#0B0D10`, graphite `#15191F`, slate `#202630`, warm ivory `#F0EBDD`, ash `#A7A99F`, champagne `#C8A96E`, twilight blue `#7189A8`, and sage `#829887`. Typography pairs DM Serif Display for editorial headings, Manrope for interface and reading text, and IBM Plex Mono for technical labels. The original bat emblem is a V-shaped SVG mark. Motion is restrained and respects reduced-motion preferences.
+The interface uses a wider nocturnal palette: deep ink, midnight indigo, blue-black, plum, moonlit silver, muted teal, and warm amber. The translucent floating title bar, orbital knowledge-field illustration, animated subject nodes, layered gradients, responsive editorial typography, scroll-led section reveals, and bat-shaped V emblem create a more immersive identity. Motion respects reduced-motion preferences.
 
 ## Technical architecture
 
@@ -58,7 +58,8 @@ The interface uses a nocturnal editorial system: obsidian `#0B0D10`, graphite `#
 
 Core files:
 - `web/src/VesperApp.tsx` — new discovery experience
-- `web/src/learning-library.ts` — curated teaching modules
+- `web/src/ExploreLibrary.tsx` — explorable subject universe, depth pathways, and curated external sources
+- `web/src/learning-library.ts` — authored teaching modules
 - `web/src/ModelBench.tsx` — interactive scientific models
 - `web/src/vesper-experience.css` — new visual system
 - `web/src/App.tsx` — preserved previous workspace
