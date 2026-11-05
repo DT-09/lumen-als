@@ -5,6 +5,7 @@ import { Activity, ArrowDownRight, ArrowRight, ArrowUpRight, Atom, BookOpen, Boo
 import { useWorkspace } from "./core/store";
 import type { LearningPath, PathStep } from "./core/types";
 import { deriveEchoSignals, deriveLairPulse, readLairMission, writeLairMission, type LairMission } from "./core/engine";
+import { buildKnowledgeGraph } from "./core/knowledgeGraph";
 
 const nav = [
   { group: "ORIENT", items: [
@@ -326,8 +327,41 @@ function Connections() {
 }
 
 function Knowledge() {
-  const {data}=useWorkspace();const nodes=[...data.questions.map(x=>({title:x.title,type:"QUESTION"})),...data.concepts.map(x=>({title:x.title,type:"CONCEPT"})),...data.paths.map(x=>({title:x.title,type:"PATH"})),...data.investigations.map(x=>({title:x.title,type:"INQUIRY"})),...data.projects.map(x=>({title:x.title,type:"PROJECT"})),...data.resources.map(x=>({title:x.title,type:"SOURCE"})),...data.connections.map(x=>({title:x.title,type:"CONNECTION"}))];
-  return <><PageHead eyebrow="09 / CONNECTIONS" title="Knowledge graph" desc="A map of the questions, concepts, investigations and work you have recorded."/><div className="graph-panel"><div className="graph-toolbar"><span>WORKSPACE RELATIONSHIPS</span><span>{nodes.length} RECORDS</span></div>{nodes.length?<div className="graph-cloud">{nodes.map((x,i)=><div className={"graph-node node-"+(i%5)} key={x.type+x.title}><small>{x.type}</small><b>{x.title}</b></div>)}</div>:<Empty title="Your knowledge map is waiting." desc="Create questions, concepts, paths, investigations and projects. They will appear here as your workspace grows."/>}<div className="graph-legend"><span><i className="q"/> QUESTIONS</span><span><i className="c"/> CONCEPTS</span><span><i className="p"/> PROJECTS</span><span><i/> CONNECTIONS</span><span>CONNECTION RECORDS INCLUDE DISCIPLINES, RELATION TYPE AND RATIONALE</span></div><Link className="button outline" to="/workspace/connections">Explore and edit connections <ArrowUpRight size={14}/></Link></div></>;
+  const {data}=useWorkspace();
+  const graph=buildKnowledgeGraph(data);
+  const width=820, height=430;
+  const positions=graph.nodes.map((node,index)=>{
+    const angle=(index/Math.max(1,graph.nodes.length))*Math.PI*2-Math.PI/2;
+    const radius=graph.nodes.length<4?0:Math.min(178,105+Math.floor(index/12)*22);
+    return {id:node.id,x:graph.nodes.length===1?width/2:width/2+Math.cos(angle)*radius,y:graph.nodes.length===1?height/2:height/2+Math.sin(angle)*radius*.66};
+  });
+  const positionById=new Map(positions.map(point=>[point.id,point]));
+  const colorFor=(kind:string)=>kind==="question"?"#C69A54":kind==="concept"?"#8FA8A1":kind==="project"?"#C18B75":kind==="investigation"?"#8F2638":kind==="discipline"?"#B5AA96":"#7E91A5";
+  return <>
+    <PageHead eyebrow="ECHO TRAILS / KNOWLEDGE SYSTEM" title="Knowledge Network" desc="A living map of questions, concepts, investigations, sources and original work. Links appear only where your records contain a relationship."/>
+    <div className="graph-panel">
+      <div className="graph-toolbar"><span>WORKSPACE RELATIONSHIPS · LOCAL GRAPH ENGINE</span><span>{graph.nodes.length} NODES / {graph.edges.length} EDGES</span></div>
+      {graph.nodes.length ? <>
+        <div className="knowledge-map-canvas">
+          <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Knowledge graph showing recorded relationships between workspace items">
+            <defs><radialGradient id="mapGlow"><stop offset="0%" stopColor="#8F2638" stopOpacity=".15"/><stop offset="100%" stopColor="#101114" stopOpacity="0"/></radialGradient></defs>
+            <rect width={width} height={height} fill="url(#mapGlow)"/>
+            {graph.edges.map(edge=>{
+              const from=positionById.get(edge.source),to=positionById.get(edge.target);
+              if(!from||!to)return null;
+              return <g key={edge.id}><line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke="#8FA8A1" strokeOpacity=".42" strokeWidth="1.2"/><circle cx={(from.x+to.x)/2} cy={(from.y+to.y)/2} r="2" fill="#C69A54"/></g>;
+            })}
+            {graph.nodes.map(node=>{
+              const point=positionById.get(node.id);if(!point)return null;
+              return <g key={node.id}><circle cx={point.x} cy={point.y} r="7" fill={colorFor(node.kind)} stroke="#101114" strokeWidth="3"/><text x={point.x} y={point.y-14} textAnchor="middle" fill="#E8E4DA" fontSize="10" fontFamily="Manrope">{node.label.length>25?node.label.slice(0,23)+"…":node.label}</text></g>;
+            })}
+          </svg>
+        </div>
+        <div className="knowledge-node-list">{graph.nodes.map(node=><Link key={node.id} to={node.href||"/workspace"}><i style={{background:colorFor(node.kind)}}/><span>{node.kind.toUpperCase()}</span><b>{node.label}</b><ArrowUpRight size={13}/></Link>)}</div>
+        <div className="graph-legend"><span><i className="q"/> QUESTIONS</span><span><i className="c"/> CONCEPTS</span><span><i className="p"/> PROJECTS</span><span><i/> INVESTIGATIONS / CONNECTIONS / SOURCES</span><span>{graph.connectedQuestionCount} QUESTIONS WITH LINKED WORK</span></div>
+      </> : <Empty title="Your knowledge map is waiting." desc="Capture a question, create concepts and connect disciplines. The graph is built from your actual workspace records." action={<Link className="button primary" to="/workspace/questions">Capture your first question <ArrowUpRight size={14}/></Link>}/>}
+    </div>
+  </>;
 }
 function Recall() {
   const {data,addRecall,updateRecall}=useWorkspace();const form=useModalForm("Queue a concept for recall",f=>addRecall({title:String(f.get("title")),dueAt:String(f.get("dueAt")||new Date(Date.now()+86400000).toISOString().slice(0,10)),lastResult:"Not reviewed"}),<><Field name="title" label="Concept to revisit" placeholder="Name the idea" required/><Field name="dueAt" label="Next review date" placeholder="YYYY-MM-DD"/></>);
