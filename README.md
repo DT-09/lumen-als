@@ -2,74 +2,55 @@
 
 **Explore without ceilings. Understand the connected. Build independently.**
 
-Vesper is a nocturnal intellectual environment for independent learners. It helps people pursue questions across disciplines, build deep understanding, investigate evidence and create original work without grade-level or curriculum gates.
+Vesper is a cross-disciplinary learning environment for autodidacts and independent learners. Start with a question, follow the foundations it needs, connect ideas across fields, investigate evidence, build models and create original work.
 
-## Product experience
+It is not a course catalogue or a conventional learning-management system. The core experience is a connected workspace for sustained intellectual work.
 
-- **The Lair** — a persistent Batcave-inspired workspace designed around purposeful work, continuity and focus.
-- **Echolocation** — capture a question, phenomenon or problem from any discipline or level.
-- **Echo Trails** — record meaningful relationships across disciplines, with rationale and limits.
-- **Flight Paths** — map concepts and prerequisites as editable routes, never compulsory curricula.
-- **Mastery Studio** — build explanations, concepts and understanding checks.
-- **Investigation Chamber** — separate hypotheses, observations, interpretations and limitations.
-- **Laboratory** — explore mathematical models through interactive parameters.
-- **Creation Workshop** — turn understanding into original work.
-- **Research Archive** — preserve source provenance and critical annotations.
-- **Field Notes** — record discoveries, changes in understanding and unresolved questions.
+## The learning system
+
+- **The Lair** — a focused home for current objectives, active questions and ongoing work.
+- **Echolocation** — capture a question, phenomenon or problem from any discipline.
+- **Flight Paths** — build editable routes through concepts and prerequisites without imposing a fixed curriculum.
+- **Mastery Studio** — develop explanations, test understanding and track confidence.
+- **Echo Trails** — examine relationships across disciplines, including where analogies stop being valid.
+- **Investigation Chamber** — separate hypotheses, methods, observations, interpretations and limitations.
+- **Laboratory** — explore mathematical models and inspect how parameters affect behaviour.
+- **Creation Workshop** — turn understanding into projects and original work.
+- **Research Archive** — preserve sources, provenance and critical annotations.
+- **Field Notes and Recall Practice** — retain discoveries and deliberately reconstruct important ideas.
 - **Knowledge Network** — visualise relationships represented by actual workspace records.
-- **Recall Practice** — schedule deliberate reconstruction of important concepts.
-- **Night Vision** — reduce interface noise and keep the active objective in view.
 
-The product is organised around three outcomes: **Mastery, Projects and Research**. Learners can enter through questions, phenomena, disciplines or existing work, and move freely between exploration and structured investigations.
+The three intended outcomes are **Mastery, Projects and Research**. Learners can move between them rather than being forced through a linear course.
 
-## Core engine
+## Technical architecture
 
-The browser application uses a typed TypeScript domain model and local-first workspace store.
+The production website is the React, TypeScript and Vite application in `web/`.
 
-- `core/types.ts` defines the domain records.
-- `core/store.tsx` manages workspace state, migration, persistence and JSON import/export.
-- `core/engine.ts` derives workspace signals and contextual next-step guidance.
-- `core/knowledgeGraph.ts` constructs a typed graph from saved records and their explicit relationships.
+- `web/src/core/types.ts` — typed domain model.
+- `web/src/core/store.tsx` — local-first workspace state and persistence.
+- `web/src/core/engine.ts` — deterministic workspace signals and contextual guidance.
+- `web/src/core/knowledgeGraph.ts` — graph construction from explicit saved relationships.
+- `web/src/App.tsx` — public website and workspace experience.
+- `web/src/styles.css` — visual system and responsive interface.
 
-ECHO currently runs as a deterministic, transparent local guidance engine. It reads the learner's workspace and suggests useful next steps. It is **not yet a connected generative AI service**, live research search, source verifier or remote learner model. The graph only draws relationships supported by saved records; it does not invent expert-validated links.
+TypeScript is appropriate for the current engine: its main work is domain modelling, state transitions and graph construction. Rust/WebAssembly is not warranted until profiling identifies a compute-heavy simulation workload.
 
-TypeScript is the right core language for this release: the engine is domain logic, state orchestration and graph construction, not a compute-heavy simulation runtime. A Rust/WebAssembly module should be introduced only when a measured numerical or simulation workload justifies the additional build and debugging complexity. The web experience remains React, HTML, CSS and JavaScript/TypeScript.
+## Honest capability boundary
 
-## Application routes
+The current release is local-first. Workspace records are stored in the browser; they are not synced to a server or shared across devices. ECHO is deterministic local guidance, not a connected generative AI tutor or live research agent. Source annotations are learner-entered and are not independently verified. The Knowledge Network visualises recorded relationships; it does not claim to infer authoritative scientific connections. The Laboratory currently contains a focused illustrative model, not a general-purpose simulation engine.
 
-- `/` — public product website.
-- `/workspace` — The Lair.
-- `/workspace/questions/:id` — question workbench.
-- `/workspace/connections` — Echo Trails.
-- `/workspace/knowledge` — Knowledge Network.
+These limits are explicit product boundaries, not capabilities to imply in marketing.
 
-The remaining workspace chambers are accessible through the navigation.
-
-## Development
+## Development and validation
 
 ```bash
 cd web
-npm install
-npm run dev
-```
-
-Run production checks and build:
-
-```bash
+npm ci
 npm run typecheck
 npm run build
 npm run preview
 ```
 
-## Cloudflare Pages
+## Production deployment
 
-- Root directory: `web`
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Production branch: `main`
-
-## Data, privacy and current limitations
-
-Workspace records and the active Lair objective are stored in the current browser. This release does not include accounts, cross-device cloud sync, server-side learner profiles, collaboration, billing, a live AI tutor or live research verification. Clearing browser data can erase workspace records. Exported JSON backups are not encrypted; store them carefully.
-
-Source annotations are learner-entered; Vesper does not verify publications. The Model Bench currently contains an illustrative damped-oscillator model, not a general-purpose simulation engine. Concept confidence and recall records are learner-managed signals, not certification or independent proof of mastery.
+See [DEPLOYMENT.md](./DEPLOYMENT.md). Cloudflare Pages must use root directory `web`, build command `npm run build`, and output directory `dist`.
