@@ -98,10 +98,10 @@ function Landing() {
 function Shell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [nightVision, setNightVision] = useState(() => localStorage.getItem("vesper.night-vision") === "on");
+  const [nightVision, setNightVision] = useState(() => { try { return localStorage.getItem("vesper.night-vision") === "on"; } catch { return false; } });
   const location = useLocation();
   const { data } = useWorkspace();
-  useEffect(() => { localStorage.setItem("vesper.night-vision", nightVision ? "on" : "off"); }, [nightVision]);
+  useEffect(() => { try { localStorage.setItem("vesper.night-vision", nightVision ? "on" : "off"); } catch { /* Focus mode remains usable without persistent storage. */ } }, [nightVision]);
   const filtered = nav.map(g => ({ ...g, items: g.items.filter(x => x.label.toLowerCase().includes(search.toLowerCase())) })).filter(g => g.items.length);
   const title = titles[location.pathname] || ["The Lair", "Your work, connected."];
   return <div className={"app-shell " + (nightVision ? "night-vision" : "")}>
@@ -332,7 +332,7 @@ function Knowledge() {
   const width=820, height=430;
   const positions=graph.nodes.map((node,index)=>{
     const angle=(index/Math.max(1,graph.nodes.length))*Math.PI*2-Math.PI/2;
-    const radius=graph.nodes.length<4?0:Math.min(178,105+Math.floor(index/12)*22);
+    const radius=graph.nodes.length===1?0:graph.nodes.length<5?125:Math.min(178,105+Math.floor(index/12)*22);
     return {id:node.id,x:graph.nodes.length===1?width/2:width/2+Math.cos(angle)*radius,y:graph.nodes.length===1?height/2:height/2+Math.sin(angle)*radius*.66};
   });
   const positionById=new Map(positions.map(point=>[point.id,point]));
