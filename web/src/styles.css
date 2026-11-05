@@ -246,3 +246,14 @@
 .night-vision .lair-welcome{background:linear-gradient(110deg,#1B1D22,#101114)}
 @media(max-width:1000px){.lair-welcome{grid-template-columns:1fr 250px;padding:30px}.lair-capture{grid-template-columns:22px minmax(0,1fr) 145px}.lair-capture .button{grid-column:2/-1;justify-self:start}.lair-mission-grid,.lair-lower-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.lair-welcome{grid-template-columns:1fr;padding:25px 22px}.lair-sonar{width:190px;opacity:.8;margin-top:0}.lair-welcome h1{font-size:38px}.lair-capture{grid-template-columns:20px minmax(0,1fr)}.lair-capture select,.lair-capture .button{grid-column:2}.lair-capture .button{justify-self:stretch}.lair-section-head{flex-direction:column}.outcome-grid{grid-template-columns:1fr}.outcome-card{min-height:170px}.lair-recent-list>a{grid-template-columns:80px minmax(0,1fr) 16px}.lair-recent-list>a>small{display:none}.mission-active{align-items:flex-start;flex-direction:column}.mission-actions{width:100%}.night-vision .lair-welcome{padding:20px}.night-vision .lair-welcome h1{font-size:30px}}
+
+.knowledge-map-canvas{width:100%;overflow:hidden;border:1px solid #ffffff12;background:radial-gradient(ellipse at center,#1B1D22,#101114 78%);margin:14px 0}
+.knowledge-map-canvas svg{display:block;width:100%;min-width:540px;height:auto;max-height:480px}
+.knowledge-node-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.knowledge-node-list>a{display:grid;grid-template-columns:8px 88px minmax(0,1fr) 14px;align-items:center;gap:8px;padding:9px 10px;border:1px solid #ffffff12;background:#101114;min-width:0}
+.knowledge-node-list>a>i{width:7px;height:7px;border-radius:50%}
+.knowledge-node-list>a>span{font:7px "IBM Plex Mono",monospace;color:var(--stone)}
+.knowledge-node-list>a>b{font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.knowledge-node-list>a>svg{color:var(--cave-gold)}
+.knowledge-node-list>a:hover{border-color:#C69A5477}
+@media(max-width:680px){.knowledge-node-list{grid-template-columns:1fr}.knowledge-map-canvas svg{min-width:650px}}
