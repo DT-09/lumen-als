@@ -8,11 +8,11 @@ It is not a fixed course catalogue or a conventional learning-management system.
 
 ## The experience
 
-- **The Roost** — active inquiries, learning activity, and a view of the learner's work.
+- **The Lair** — the learner's home base: active inquiries, learning activity, and a view of ongoing work.
 - **Echolocation** — begin with a question, subject, or challenge from any discipline.
 - **Flight Paths** — editable stages for framing, learning, hypothesising, investigating, adapting, and deriving.
-- **Understanding Studio** — searchable field guides, concept explanations, worked examples, misconception checks, activities, and interactive models.
-- **Learn** — inquiry-linked learning records, learner-authored concepts, and self-reported understanding.
+- **Learn** — a dedicated learning area with searchable lessons, explanations, worked examples, misconception checks, practical activities, short knowledge checks with explanatory feedback, lesson progress, and interactive models.
+- **Inquiry-linked learning** — record concepts, explanations, and self-reported understanding inside each investigation.
 - **Investigate** — prediction and observation records, plus an interactive model bench for echo ranging, waveforms, and exponential sensitivity.
 - **Research** — source annotations and a framework for evaluating authority, method, scope, inference, and corroboration.
 - **Derive** — write an answer, connect evidence to claims, record limitations, and identify the next question.
@@ -27,7 +27,7 @@ The first release uses a transparent, deterministic local rule engine. It recomm
 
 ## Content and research boundaries
 
-The initial field guide includes authored material on:
+The initial lesson library includes authored material on:
 - Echolocation and sound-based sensing
 - Deterministic chaos and sensitivity
 - Aerodynamic lift
@@ -38,7 +38,7 @@ Learners can add their own concepts, sources, observations, and explanations. So
 
 ## Data and privacy
 
-The new discovery workspace is stored locally in the browser under its own versioned storage key. Export/import backup is available in the top bar. The previous local workspace remains accessible at `/workspace`; its records are not overwritten by the new discovery workspace.
+The discovery workspace and lesson-completion progress are stored locally in the browser. Inquiry records use their own versioned storage key; lesson progress uses a separate local key. Export/import backup is available in the top bar. The previous local workspace remains accessible at `/workspace`; its records are not overwritten by the new discovery workspace.
 
 There is no account system, cloud sync, collaboration service, or server-side learner profile in this release.
 
