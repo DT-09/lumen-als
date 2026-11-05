@@ -1,6 +1,7 @@
 export type LearningModule = {
  id:string; title:string; disciplines:string; summary:string; keyIdea:string; explanation:string;
  example:string; misconception:string; activity:string; question:string;
+ checkQuestion:string; options:string[]; answer:number; feedback:string;
 };
 export const LEARNING_MODULES: LearningModule[] = [
  {
@@ -11,6 +12,8 @@ export const LEARNING_MODULES: LearningModule[] = [
   example:"If an echo returns 0.02 seconds after a pulse in air, and sound travels at roughly 343 m/s, the simple distance estimate is 343 × 0.02 ÷ 2 = 3.43 metres. The division by two matters because the sound travels to the object and back.",
   misconception:"The echo is not a tiny picture. It is a signal whose timing, frequency and structure must be interpreted. Different environments can distort or overlap echoes.",
   activity:"Change the assumed round-trip delay in the distance equation. Predict what happens to the inferred distance, then calculate several cases. State which assumptions make the estimate valid.",
+  checkQuestion:"Why is the round-trip echo time divided by two when estimating distance?",
+  options:["Because sound slows down on the return trip","Because the pulse travels to the target and back","Because the target absorbs half the sound"], answer:1, feedback:"The measured delay covers two legs: source to target, then target back to source. Dividing by two gives the one-way distance.",
   question:"What information can be extracted from an echo besides distance, and what makes that inference uncertain?"
  },
  {
@@ -21,6 +24,8 @@ export const LEARNING_MODULES: LearningModule[] = [
   example:"Imagine two weather simulations that begin with almost identical temperature and pressure measurements. As the models evolve, small differences can grow until their forecasts diverge. This limits precise long-range forecasts even when the governing equations are deterministic.",
   misconception:"Chaos does not mean 'anything can happen' or that the system has no rules. It means the long-term outcome can be highly sensitive to the starting state.",
   activity:"Write down one example of a deterministic process and one of a random process. Explain what evidence would help distinguish sensitivity to initial conditions from genuine randomness.",
+  checkQuestion:"What makes a deterministic chaotic system hard to predict far into the future?",
+  options:["It has no governing rules","Small differences in initial conditions can grow","Its behaviour changes randomly at every step"], answer:1, feedback:"The rules remain deterministic. The difficulty comes from sensitivity to initial conditions and finite measurement precision.",
   question:"How can scientists make useful forecasts when exact long-term prediction is impossible?"
  },
  {
@@ -31,6 +36,8 @@ export const LEARNING_MODULES: LearningModule[] = [
   example:"At a steady level flight condition, lift balances the aircraft's weight. If airspeed falls while other conditions remain similar, the wing may need a higher angle of attack to generate the required lift. Beyond a critical angle, flow separation can cause a stall.",
   misconception:"Air does not need to meet at the trailing edge at the same time. The equal-transit-time story is not a sound explanation of lift.",
   activity:"Sketch the forces on a wing in steady level flight. Label lift, weight, thrust and drag. Then explain which forces balance and why.",
+  checkQuestion:"Which statement best describes aerodynamic lift?",
+  options:["Air above the wing must travel farther and reunite at the trailing edge","Lift is caused only by lower pressure above the wing","The wing turns airflow and establishes a pressure distribution"], answer:2, feedback:"Lift is the aerodynamic force component perpendicular to the oncoming flow. Turning airflow and the pressure field are parts of the same physical picture.",
   question:"How do birds change wing shape and motion to control lift, drag and manoeuvrability?"
  },
  {
@@ -41,6 +48,8 @@ export const LEARNING_MODULES: LearningModule[] = [
   example:"Compare two wavelengths, 450 nm and 650 nm. The simplified wavelength factor is (650/450)^4, so the shorter wavelength is scattered much more strongly under the same idealised conditions.",
   misconception:"The sky is not blue because it reflects the ocean. Nor is the atmosphere simply a blue filter; scattering redirects light through the atmosphere.",
   activity:"Explain why the sky near the horizon can look paler and why sunsets often appear red or orange. Include the longer path sunlight travels through the atmosphere.",
+  checkQuestion:"Why does the atmosphere scatter shorter visible wavelengths more strongly in the Rayleigh regime?",
+  options:["The scattering strength has a strong inverse wavelength dependence","Blue light is reflected by the oceans","Air molecules emit blue light after absorbing sunlight"], answer:0, feedback:"For Rayleigh scattering, intensity scales approximately as 1/λ⁴. Shorter wavelengths are therefore scattered much more strongly.",
   question:"How would the appearance of the sky change on a planet with a different atmospheric composition?"
  },
  {
@@ -51,6 +60,8 @@ export const LEARNING_MODULES: LearningModule[] = [
   example:"Two instruments can play the same note with the same fundamental frequency but produce different harmonic spectra. Their waveforms differ, so listeners can distinguish them even when pitch is similar.",
   misconception:"Pitch and timbre are not the same thing. The fundamental frequency strongly influences pitch, while the spectrum and time evolution help shape timbre.",
   activity:"Draw two waveforms with the same period but different shapes. Predict how their harmonic content might differ and explain why the sounds could be distinguishable.",
+  checkQuestion:"Two instruments play the same note. Why can they still sound different?",
+  options:["Their fundamental frequencies must be different","Their harmonic spectra and time-varying waveforms can differ","One instrument produces sound and the other produces pitch"], answer:1, feedback:"The fundamental frequency is closely related to pitch, while harmonic content, phases, and time evolution contribute to timbre.",
   question:"How does the ear and brain extract pitch, loudness and timbre from a changing pressure signal?"
  }
 ];
