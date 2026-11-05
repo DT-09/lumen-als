@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Activity, ArrowLeft, ArrowRight, ArrowUpRight, Atom, BookOpen, Brain, Check, ChevronRight, Compass, Download, FlaskConical, GitBranch, Lightbulb, Menu, Network, Plus, Search, Sparkles, Target, Upload, X } from "lucide-react";
+import { Activity, ArrowLeft, ArrowRight, ArrowUpRight, Atom, BookOpen, Brain, Check, ChevronRight, Compass, Download, FlaskConical, Gauge, GitBranch, Lightbulb, Menu, Network, Plus, Search, Sparkles, Target, Upload, X } from "lucide-react";
 import LegacyApp from "./App";
 import { LEARNING_MODULES } from "./learning-library";
 import ModelBench from "./ModelBench";
