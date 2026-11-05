@@ -257,3 +257,28 @@
 .knowledge-node-list>a>svg{color:var(--cave-gold)}
 .knowledge-node-list>a:hover{border-color:#C69A5477}
 @media(max-width:680px){.knowledge-node-list{grid-template-columns:1fr}.knowledge-map-canvas svg{min-width:650px}}
+
+.triad-section{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.triad-content{min-width:0}
+.triad-heading>small,.echo-public-content>div>small{font:8px "IBM Plex Mono",monospace;letter-spacing:.15em;color:var(--cave-gold)}
+.triad-heading h2,.echo-public-content h2{font:500 clamp(32px,4vw,49px)/1.16 "Source Serif 4",Georgia,serif;margin:13px 0}
+.triad-heading h2 em,.echo-public-content h2 em{color:var(--cave-gold);font-weight:500}
+.triad-heading>p,.echo-public-content>div>p{max-width:700px;color:var(--stone);font-size:11px;line-height:1.9}
+.triad-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:32px}
+.triad-card{min-height:210px;padding:20px;border:1px solid #8FA8A133;background:linear-gradient(145deg,#1B1D22,#101114)}
+.triad-card>span{font:7px "IBM Plex Mono",monospace;letter-spacing:.14em;color:var(--stone)}
+.triad-card>svg{display:block;width:23px;height:23px;color:var(--cave-gold);margin:25px 0 8px}
+.triad-card h3{font:500 24px "Source Serif 4",Georgia,serif;margin:0 0 6px}
+.triad-card p{font-size:9px;line-height:1.8;color:var(--stone);margin:0}
+.triad-mastery{border-top:2px solid var(--echo-teal)}
+.triad-projects{border-top:2px solid var(--cave-gold)}
+.triad-research{border-top:2px solid var(--blood-red)}
+.echo-section{background:linear-gradient(110deg,#1B1D22,#101114);border-bottom:1px solid var(--line)}
+.echo-section .section-wrap{padding-top:95px;padding-bottom:95px}
+.echo-public-content{min-width:0}
+.echo-public-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#3B3E45;border:1px solid #3B3E45;margin-top:28px}
+.echo-public-grid>div{display:grid;gap:7px;padding:17px;background:#1B1D22}
+.echo-public-grid b{font:8px "IBM Plex Mono",monospace;letter-spacing:.12em;color:var(--echo-teal)}
+.echo-public-grid span{font-size:10px;color:var(--bone-ivory)}
+.echo-public-note{padding:12px 14px;border-left:2px solid var(--signal-copper);background:#C18B750d;color:var(--stone);font-size:9px;line-height:1.7;margin-top:14px}
+@media(max-width:760px){.triad-cards{grid-template-columns:1fr}.triad-card{min-height:160px}.echo-section .section-wrap{padding-top:65px;padding-bottom:65px}.echo-public-grid{grid-template-columns:1fr}}
