@@ -393,3 +393,43 @@ body{background:var(--v-bg);color:var(--v-text);font-family:var(--v-sans);text-r
  html{scroll-behavior:auto}
  .v-hero-art .v-orbit.o1,.v-hero-art .v-orbit.o2,.v-hero-art .v-orbit.o3,.v-pulse,.v-hero-art:before{animation:none!important}
 }
+
+/* Understanding Studio and Learner Model */
+.v-understanding-intro,.v-profile-hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:30px;padding:32px;border:1px solid #C8A96E40;border-radius:9px;background:radial-gradient(ellipse at 85% 40%,#7189A817,transparent 38%),linear-gradient(125deg,#182029,#11171D);margin-bottom:14px}
+.v-understanding-intro h2,.v-profile-hero h2{font:400 clamp(31px,4vw,47px)/1.08 var(--v-serif);letter-spacing:-.025em;margin:12px 0}
+.v-understanding-intro h2 em,.v-profile-hero h2 em{color:var(--v-gold)}
+.v-understanding-intro p,.v-profile-hero p{max-width:650px;color:#B0B4B3;font-size:11px;line-height:1.9}
+.v-understanding-graphic{height:210px;position:relative;display:grid;place-items:center;color:var(--v-gold);overflow:hidden}
+.v-understanding-graphic .v-mark{width:112px;height:66px;z-index:2}
+.v-understanding-graphic>span{position:absolute;bottom:5px;font:7px var(--v-mono);letter-spacing:.16em;color:#A7A99F}
+.v-echo-ring{position:absolute;border:1px solid #C8A96E45;border-radius:50%;transform:scaleY(.66) rotate(-18deg)}
+.v-echo-ring.er1{width:145px;height:145px}
+.v-echo-ring.er2{width:220px;height:220px;border-color:#7189A855}
+.v-echo-ring.er3{width:300px;height:300px;border-color:#C8A96E20}
+.v-understanding-stats,.v-profile-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0 35px}
+.v-understanding-stats>div,.v-profile-metrics>div{display:flex;flex-direction:column;gap:5px;padding:16px;border:1px solid var(--v-line);border-radius:7px;background:var(--v-panel)}
+.v-understanding-stats b,.v-profile-metrics b{font:400 27px var(--v-serif);color:var(--v-gold)}
+.v-understanding-stats span,.v-profile-metrics span{font:7px var(--v-mono);letter-spacing:.08em;color:var(--v-muted)}
+.v-model-section{margin-top:38px}
+.v-profile-hero{margin-bottom:14px}
+.v-profile-mark{width:160px;height:160px;justify-self:center;display:grid;place-items:center;border:1px solid #C8A96E66;border-radius:50%;background:radial-gradient(circle,#C8A96E12,transparent 70%);box-shadow:0 0 70px #C8A96E0D}
+.v-profile-mark .v-mark{width:100px;height:60px}
+.v-profile-metrics{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:20px}
+.v-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v-profile-panel{padding:20px;border:1px solid var(--v-line);border-radius:8px;background:linear-gradient(145deg,#171D24,#12171D);min-width:0}
+.v-profile-panel h3{font:400 22px var(--v-serif);margin:8px 0 15px}
+.v-interest,.v-profile-item{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid #ffffff12;color:var(--v-text);text-decoration:none}
+.v-interest span,.v-profile-item b{font-size:10px}
+.v-interest b{font:8px var(--v-mono);color:var(--v-gold)}
+.v-profile-item{flex-direction:column;gap:4px}
+.v-profile-item small{font-size:8px;line-height:1.6;color:var(--v-muted)}
+a.v-profile-item:hover b{color:var(--v-gold)}
+.v-profile-empty{font-size:10px;line-height:1.8;color:var(--v-muted);padding:12px 0}
+.v-profile-foot{display:flex;align-items:flex-start;gap:12px;padding:16px;margin-top:14px;border:1px solid #7189A84A;border-radius:7px;background:#7189A80D;color:#A8BBD0}
+.v-profile-foot p{margin:0;color:#B5B8B9;font-size:9px;line-height:1.8}
+.v-profile-foot b{color:#D9E1E8}
+.v-sidebar nav{overflow-y:auto;overscroll-behavior:contain;padding-bottom:10px}
+.v-sidebar nav::-webkit-scrollbar{width:3px}
+.v-sidebar nav::-webkit-scrollbar-thumb{background:#3C4650;border-radius:5px}
+@media(max-width:800px){.v-understanding-intro,.v-profile-hero{grid-template-columns:1fr;padding:23px}.v-understanding-graphic{height:155px}.v-profile-mark{width:120px;height:120px}.v-profile-mark .v-mark{width:76px}}
+@media(max-width:560px){.v-understanding-stats,.v-profile-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.v-profile-grid{grid-template-columns:1fr}.v-understanding-intro h2,.v-profile-hero h2{font-size:34px}}
