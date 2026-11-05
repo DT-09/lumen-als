@@ -31,6 +31,7 @@ export function buildKnowledgeGraph(workspace: VesperWorkspace): KnowledgeGraph 
   const nodes: KnowledgeNode[] = [];
   const edges: KnowledgeEdge[] = [];
   const nodeIds = new Set<string>();
+  const edgeIds = new Set<string>();
   const disciplineIds = new Map<string, string>();
 
   const addNode = (node: KnowledgeNode) => {
@@ -41,51 +42,94 @@ export function buildKnowledgeGraph(workspace: VesperWorkspace): KnowledgeGraph 
   const addEdge = (source: string, target: string, relation: string) => {
     if (source === target || !nodeIds.has(source) || !nodeIds.has(target)) return;
     const id = source + ">" + target + ":" + relation;
-    if (!edges.some(edge => edge.id === id)) edges.push({ id, source, target, relation });
+    if (edgeIds.has(id)) return;
+    edgeIds.add(id);
+    edges.push({ id, source, target, relation });
   };
-  const questionHref = (id?: string) => id ? "/workspace/questions/" + id : "";
 
   workspace.questions.forEach(item => addNode({
-    id: "question:" + item.id, label: item.title, kind: "question",
-    href: questionHref(item.id)
+    id: "question:" + item.id,
+    label: item.title,
+    kind: "question",
+    href: "/workspace/questions/" + item.id
   }));
-  workspace.concepts.forEach(item => {
-    const id = "concept:" + item.id;
-    addNode({ id, label: item.title, kind: "concept", href: "/workspace/studio" });
-    if (item.questionId) addEdge(id, "question:" + item.questionId, "develops");
-  });
-  workspace.paths.forEach(item => {
-    const id = "path:" + item.id;
-    addNode({ id, label: item.title, kind: "path", href: "/workspace/paths" });
-    if (item.questionId) addEdge(id, "question:" + item.questionId, "supports");
-  });
-  workspace.investigations.forEach(item => {
-    const id = "investigation:" + item.id;
-    addNode({ id, label: item.title, kind: "investigation", href: "/workspace/investigations" });
-    if (item.questionId) addEdge(id, "question:" + item.questionId, "examines");
-  });
-  workspace.projects.forEach(item => {
-    const id = "project:" + item.id;
-    addNode({ id, label: item.title, kind: "project", href: "/workspace/projects" });
-    if (item.questionId) addEdge(id, "question:" + item.questionId, "produces work for");
-  });
+
+  workspace.concepts.forEach(item => addNode({
+    id: "concept:" + item.id,
+    label: item.title,
+    kind: "concept",
+    href: "/workspace/studio"
+  }));
+
+  workspace.paths.forEach(item => addNode({
+    id: "path:" + item.id,
+    label: item.title,
+    kind: "path",
+    href: "/workspace/paths"
+  }));
+
+  workspace.investigations.forEach(item => addNode({
+    id: "investigation:" + item.id,
+    label: item.title,
+    kind: "investigation",
+    href: "/workspace/investigations"
+  }));
+
+  workspace.projects.forEach(item => addNode({
+    id: "project:" + item.id,
+    label: item.title,
+    kind: "project",
+    href: "/workspace/projects"
+  }));
+
   workspace.resources.forEach(item => addNode({
-    id: "resource:" + item.id, label: item.title, kind: "resource", href: "/workspace/library"
+    id: "resource:" + item.id,
+    label: item.title,
+    kind: "resource",
+    href: "/workspace/library"
   }));
 
   const getDiscipline = (label: string) => {
-    const key = slug(label) || "unspecified";
+    const clean = label.trim() || "Unspecified";
+    const key = slug(clean) || "unspecified";
     const existing = disciplineIds.get(key);
     if (existing) return existing;
     const id = "discipline:" + key;
     disciplineIds.set(key, id);
-    addNode({ id, label, kind: "discipline", href: "/workspace/connections" });
+    addNode({ id, label: clean, kind: "discipline", href: "/workspace/connections" });
     return id;
   };
 
+  workspace.connections.forEach(item => addNode({
+    id: "connection:" + item.id,
+    label: item.title,
+    kind: "connection",
+    href: "/workspace/connections"
+  }));
+
+  // Explicit record relationships only. The graph never invents semantic links.
+  workspace.concepts.forEach(item => {
+    if (item.questionId) addEdge("concept:" + item.id, "question:" + item.questionId, "develops");
+    if (item.pathId) addEdge("concept:" + item.id, "path:" + item.pathId, "belongs to");
+  });
+
+  workspace.paths.forEach(item => {
+    if (item.questionId) addEdge("path:" + item.id, "question:" + item.questionId, "supports");
+    item.steps.forEach((step, index) => {
+      if (step.conceptId) addEdge("path:" + item.id, "concept:" + step.conceptId, "step " + (index + 1));
+    });
+  });
+
+  workspace.investigations.forEach(item => {
+    if (item.questionId) addEdge("investigation:" + item.id, "question:" + item.questionId, "examines");
+  });
+
+  workspace.projects.forEach(item => {
+    if (item.questionId) addEdge("project:" + item.id, "question:" + item.questionId, "produces work for");
+  });
+
   workspace.connections.forEach(item => {
     const id = "connection:" + item.id;
-    addNode({ id, label: item.title, kind: "connection", href: "/workspace/connections" });
     const a = getDiscipline(item.disciplineA);
     const b = getDiscipline(item.disciplineB);
     addEdge(a, id, item.relation || "connects");
@@ -94,7 +138,10 @@ export function buildKnowledgeGraph(workspace: VesperWorkspace): KnowledgeGraph 
   });
 
   const connectedQuestionCount = new Set(
-    edges.map(edge => edge.target).filter(id => id.startsWith("question:"))
+    edges.flatMap(edge => {
+      const matches = [edge.source, edge.target].filter(id => id.startsWith("question:"));
+      return matches;
+    })
   ).size;
 
   return { nodes, edges, connectedQuestionCount };
