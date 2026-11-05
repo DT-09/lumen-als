@@ -15,8 +15,10 @@ Vesper's canonical frontend is the Vite + React + TypeScript application in `web
 
 ## Routes to verify
 
-- `/` — The Roost, the new independent-discovery home.
+- `/` — The Lair, the independent-discovery home.
 - `/discover` — question, subject, and challenge entry.
+- `/understanding` — lesson library and interactive teaching models.
+- `/growth` — self-learning pathways, goals, focus sessions, and weekly progress.
 - `/journeys` — active and synthesised inquiries.
 - `/flight/:id` — inquiry workbench: frame, learn, investigate, research, derive.
 - `/network` — concept records across inquiries.
