@@ -173,7 +173,7 @@ function Overview() {
     </section>
 
     <section className="lair-console">
-      <div className="lair-section-head"><div><small>ECHLOCATION CONSOLE / 01</small><h2>What has your attention?</h2><p>Begin with a question, phenomenon or problem. Advanced topics are welcome.</p></div><span>OPEN ENTRY</span></div>
+      <div className="lair-section-head"><div><small>ECHOLOCATION CONSOLE / 01</small><h2>What has your attention?</h2><p>Begin with a question, phenomenon or problem. Advanced topics are welcome.</p></div><span>OPEN ENTRY</span></div>
       <form className="lair-capture" onSubmit={capture}>
         <Lightbulb size={19}/>
         <input value={draft} onChange={e=>setDraft(e.target.value)} placeholder="e.g. How does quantum entanglement change our idea of locality?" aria-label="Your question" />
