@@ -27,7 +27,8 @@ const defaultRoute = (): Stage[] => [
  {id:uid(),title:"Form a hypothesis",purpose:"Propose a testable explanation and state why it might be true.",done:false},
  {id:uid(),title:"Investigate and research",purpose:"Gather observations and sources. Separate evidence from interpretation.",done:false},
  {id:uid(),title:"Revise the explanation",purpose:"Compare the evidence with the hypothesis. Adapt when it does not fit.",done:false},
- {id:uid(),title:"Derive an answer",purpose:"Write a qualified conclusion, cite supporting evidence and state remaining uncertainty.",done:false}
+ {id:uid(),title:"Derive an answer",purpose:"Write a qualified conclusion, cite supporting evidence and state remaining uncertainty.",done:false},
+ {id:uid(),title:"Create and demonstrate",purpose:"Make an artifact that applies or communicates what you have learned.",done:false}
 ];
 const starterPrompts = [
  {title:"How do bats navigate in darkness?",field:"Biology · Physics · Signal processing",tag:"BIOLOGY"},
