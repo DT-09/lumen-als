@@ -202,3 +202,28 @@
 .v-research-checklist p{font-size:8px;line-height:1.65;color:var(--v-muted);margin:0}
 .v-research-checklist b{color:var(--v-text)}
 @media(max-width:560px){.v-guide-grid,.v-research-checklist{grid-template-columns:1fr}.v-research-checklist>.v-eyebrow{grid-column:auto}}
+
+.v-model-bench{margin:0 0 17px;padding:17px;border:1px solid #8fa99b3d;border-radius:6px;background:radial-gradient(ellipse at 100% 0,#8fa99b0c,transparent 50%),#ffffff02}
+.v-model-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.v-model-head h3{font:500 20px var(--v-serif);margin:6px 0}
+.v-model-head p{max-width:600px;color:var(--v-muted);font-size:8px;line-height:1.7;margin:0}
+.v-model-tag{display:flex;align-items:center;gap:6px;color:var(--v-sage);font:7px var(--v-mono);white-space:nowrap}
+.v-model-tabs{display:flex;gap:6px;margin:15px 0 13px;flex-wrap:wrap}
+.v-model-tabs button{display:flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--v-line);border-radius:4px;background:#ffffff04;color:var(--v-muted);font:7px var(--v-mono);cursor:pointer}
+.v-model-tabs button.active{border-color:#c5a16b88;background:#c5a16b12;color:var(--v-gold)}
+.v-model-content{display:grid;grid-template-columns:.75fr 1.25fr;gap:15px;align-items:center}
+.v-model-controls{padding:5px 3px}
+.v-range{display:block;margin:12px 0}
+.v-range>span{display:flex;justify-content:space-between;gap:10px;color:var(--v-muted);font-size:8px}
+.v-range b{color:var(--v-gold);font:8px var(--v-mono)}
+.v-range input{width:100%;accent-color:var(--v-gold);margin-top:10px}
+.v-model-formula{padding:9px;border-top:1px solid var(--v-line);color:var(--v-sage);font:8px var(--v-mono);line-height:1.6}
+.v-model-result{padding:12px;border:1px solid var(--v-line);border-radius:5px;background:#101317}
+.v-model-result>span{display:block;color:var(--v-dim);font:7px var(--v-mono);letter-spacing:.12em}
+.v-model-result>b{display:block;margin-top:4px;color:var(--v-gold);font:500 23px var(--v-serif)}
+.v-model-result>b small{font:8px var(--v-mono);color:var(--v-muted)}
+.v-model-svg{margin:8px 0}
+.v-model-svg svg{width:100%;height:auto;display:block}
+.v-model-svg text{font-family:var(--v-mono)}
+.v-model-result>small{display:block;color:var(--v-dim);font-size:7px;line-height:1.65}
+@media(max-width:560px){.v-model-content{grid-template-columns:1fr}.v-model-head{flex-direction:column}.v-model-tag{display:none}}
