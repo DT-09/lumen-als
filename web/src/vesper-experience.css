@@ -761,3 +761,7 @@ a.v-profile-item:hover b{color:var(--v-gold)}
 @media(max-width:800px){.v-explore-hero{min-height:0;padding:30px 22px 48px}.v-explore-visual{min-height:300px}.v-explore-toolbar{align-items:flex-start;flex-direction:column}.v-explore-filters{width:100%}.v-saved-filter{align-self:flex-end}.v-results-line{font-size:6px}.v-subject-card{min-height:220px}}
 @media(max-width:540px){.v-explore-hero-actions{align-items:stretch;flex-direction:column}.v-explore-hero-actions .v-btn{width:100%}.v-explore-hero-meta{justify-content:space-between}.v-results-line span:last-child{max-width:55%;text-align:right;line-height:1.6}.v-subject-detail{padding:18px}.v-depth-tabs button{min-height:62px}.v-explore-steps>div{min-height:110px}}
 @media(prefers-reduced-motion:reduce){.v-explore-hero:after,.v-subject-detail,.v-depth-content,.v-explore-steps>div,.v-subject-card,.v-field-guide-cards article{animation:none!important;transition:none!important}}
+
+.v-cosmos-core{transform:translate3d(var(--px,0px),var(--py,0px),0);transition:transform .24s cubic-bezier(.2,.7,.2,1)}
+.v-cosmos-node{translate:calc(var(--px,0px)*.35) calc(var(--py,0px)*.35);transition:translate .3s ease}
+@media(hover:none),(prefers-reduced-motion:reduce){.v-cosmos-core{transform:none!important}.v-cosmos-node{translate:0 0!important}}
