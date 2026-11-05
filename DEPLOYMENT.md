@@ -1,8 +1,8 @@
 # Cloudflare Pages deployment
 
-Vesper has **one canonical application**: the Vite + React + TypeScript app in `web/`.
+Vesper's canonical frontend is the Vite + React + TypeScript application in `web/`.
 
-## Required production configuration
+## Production configuration
 
 | Setting | Value |
 |---|---|
@@ -13,18 +13,16 @@ Vesper has **one canonical application**: the Vite + React + TypeScript app in `
 | Build output directory | `dist` |
 | Node.js | 20 or newer |
 
-Cloudflare Pages dashboard: **Workers & Pages → Vesper → Settings → Builds & deployments → Build configuration**.
-
-After changing the root directory, save and create a new production deployment from the latest `main` commit. A GitHub commit alone does not prove that Cloudflare published it.
-
 ## Routes to verify
 
-- `/` — public Vesper product site.
-- `/workspace` — The Lair.
-- `/workspace/knowledge` — Knowledge Network.
-- `/workspace/investigations` — Investigation Chamber.
+- `/` — The Roost, the new independent-discovery home.
+- `/discover` — question, subject, and challenge entry.
+- `/journeys` — active and synthesised inquiries.
+- `/flight/:id` — inquiry workbench: frame, learn, investigate, research, derive.
+- `/network` — concept records across inquiries.
+- `/workspace` — preserved previous local workspace.
 
-The `web/public/_redirects` file provides SPA route fallback. `web/public/_headers` applies security headers and avoids caching the HTML shell.
+The `web/public/_redirects` file provides SPA route fallback.
 
 ## Local production check
 
@@ -36,4 +34,4 @@ npm run build
 npm run preview
 ```
 
-The deploy is complete only after the Cloudflare production deployment reports **Success** and the routes above load from the live domain.
+A deployment is complete only after the Cloudflare production deployment reports **Success** and the live routes above load correctly. A GitHub commit alone is not deployment confirmation.
