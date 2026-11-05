@@ -50,7 +50,7 @@ export default function GrowthStudio(){
  const [seconds,setSeconds]=useState(0);
  const [running,setRunning]=useState(false);
  const [sessionPath,setSessionPath]=useState("learning");
- const [active,setActive]=useState("learning");
+ const [active,setActive]=useState(()=>localStorage.getItem(PATH_KEY)||"learning");
 
  useEffect(()=>{localStorage.setItem(GOALS_KEY,JSON.stringify(goals))},[goals]);
  useEffect(()=>{localStorage.setItem(SESSIONS_KEY,JSON.stringify(sessions))},[sessions]);
