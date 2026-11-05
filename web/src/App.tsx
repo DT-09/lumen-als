@@ -211,6 +211,12 @@ function Overview() {
         </select>
         <button className="button primary" type="submit" disabled={!draft.trim()}>Capture signal <ArrowUpRight size={14}/></button>
       </form>
+      <div className="lair-entry-routes" aria-label="Other ways to begin">
+        <Link to="/workspace/questions"><Lightbulb size={14}/><span><b>Question or phenomenon</b><small>Start with curiosity</small></span><ArrowUpRight size={13}/></Link>
+        <Link to="/workspace/paths"><GitBranch size={14}/><span><b>Discipline or foundations</b><small>Choose a field to explore</small></span><ArrowUpRight size={13}/></Link>
+        <Link to="/workspace/investigations"><FlaskConical size={14}/><span><b>Research inquiry</b><small>Begin with evidence</small></span><ArrowUpRight size={13}/></Link>
+        <Link to="/workspace/projects"><FolderKanban size={14}/><span><b>Existing project</b><small>Continue making</small></span><ArrowUpRight size={13}/></Link>
+      </div>
     </section>
 
     <section className="lair-mission-grid">
