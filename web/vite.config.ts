@@ -4,6 +4,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/",
-  build: { outDir: "dist", sourcemap: true },
-  server: { port: 5173 }
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+    sourcemap: false,
+    cssCodeSplit: true
+  },
+  server: { port: 5173 },
+  preview: { port: 4173 }
 });
