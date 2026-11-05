@@ -1,6 +1,6 @@
 # VESPER
 
-**Follow curiosity. Derive understanding.**
+**Learn what is known. Investigate what is uncertain. Discover what follows.**
 
 Vesper is an adaptive environment for independent discovery and interdisciplinary learning. A learner can begin with a question, a subject, or a challenge; form a hypothesis; learn the concepts needed to reason; research sources; test predictions; revise explanations; and derive a qualified answer.
 
@@ -11,13 +11,15 @@ It is not a fixed course catalogue or a conventional learning-management system.
 - **The Roost** — active inquiries, learning activity, and a view of the learner's work.
 - **Echolocation** — begin with a question, subject, or challenge from any discipline.
 - **Flight Paths** — editable stages for framing, learning, hypothesising, investigating, adapting, and deriving.
-- **Learn** — five curated interdisciplinary field guides, plus learner-authored concepts and explanations.
+- **Understanding Studio** — searchable field guides, concept explanations, worked examples, misconception checks, activities, and interactive models.
+- **Learn** — inquiry-linked learning records, learner-authored concepts, and self-reported understanding.
 - **Investigate** — prediction and observation records, plus an interactive model bench for echo ranging, waveforms, and exponential sensitivity.
 - **Research** — source annotations and a framework for evaluating authority, method, scope, inference, and corroboration.
 - **Derive** — write an answer, connect evidence to claims, record limitations, and identify the next question.
 - **Roost Network** — review concepts and disciplines recorded across inquiries.
+- **Learner Model** — a transparent profile derived from recorded interests, concepts, evidence, inquiry history, route decisions, and creations.
 
-The learning loop is intentionally non-linear. A learner can move between stages and add their own route steps.
+The nine-stage discovery framework is Wonder → Question → Hypothesise → Research → Learn → Investigate → Adapt → Derive → Extend. It describes the logic of inquiry, not a compulsory sequence. The learning loop is intentionally non-linear. A learner can move between stages and add their own route steps.
 
 ## Adaptive behaviour
 
@@ -40,11 +42,15 @@ The new discovery workspace is stored locally in the browser under its own versi
 
 There is no account system, cloud sync, collaboration service, or server-side learner profile in this release.
 
+## Visual identity
+
+The interface uses a nocturnal editorial system: obsidian `#0B0D10`, graphite `#15191F`, slate `#202630`, warm ivory `#F0EBDD`, ash `#A7A99F`, champagne `#C8A96E`, twilight blue `#7189A8`, and sage `#829887`. Typography pairs DM Serif Display for editorial headings, Manrope for interface and reading text, and IBM Plex Mono for technical labels. The original bat emblem is a V-shaped SVG mark. Motion is restrained and respects reduced-motion preferences.
+
 ## Technical architecture
 
 - React + TypeScript + Vite
 - React Router
-- CSS design system and responsive layouts
+- CSS design system, responsive layouts, and reduced-motion support
 - Deterministic client-side inquiry and recommendation logic
 - Browser local storage for discovery records
 - Cloudflare Pages deployment
