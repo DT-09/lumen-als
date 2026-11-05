@@ -4,28 +4,44 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Activity, ArrowDownRight, ArrowRight, ArrowUpRight, Atom, BookOpen, Bookmark, BrainCircuit, Check, ChevronRight, CircleHelp, Command, Compass, FlaskConical, FolderKanban, GitBranch, GraduationCap, Home, Lightbulb, Menu, Network, Plus, Search, Settings, Sparkles, StickyNote, Target, X } from "lucide-react";
 import { useWorkspace } from "./core/store";
 import type { LearningPath, PathStep } from "./core/types";
+import { deriveEchoSignals, deriveLairPulse, readLairMission, writeLairMission, type LairMission } from "./core/engine";
 
 const nav = [
-  { group: "ORIENT", items: [{ to: "/workspace", label: "Overview", icon: Home }, { to: "/workspace/questions", label: "Questions", icon: Lightbulb }, { to: "/workspace/connections", label: "Connections", icon: Network }, { to: "/workspace/paths", label: "Learning paths", icon: GitBranch }] },
-  { group: "WORK", items: [{ to: "/workspace/studio", label: "Learning studio", icon: BookOpen }, { to: "/workspace/investigations", label: "Investigations", icon: FlaskConical }, { to: "/workspace/models", label: "Model bench", icon: Atom }, { to: "/workspace/projects", label: "Projects", icon: FolderKanban }] },
-  { group: "REFERENCE", items: [{ to: "/workspace/library", label: "Resource library", icon: Bookmark }, { to: "/workspace/journal", label: "Field journal", icon: StickyNote }, { to: "/workspace/knowledge", label: "Knowledge graph", icon: Network }, { to: "/workspace/recall", label: "Recall practice", icon: BrainCircuit }] }
+  { group: "ORIENT", items: [
+    { to: "/workspace", label: "The Lair", icon: Home },
+    { to: "/workspace/questions", label: "Echolocation", icon: Lightbulb },
+    { to: "/workspace/connections", label: "Echo Trails", icon: Network },
+    { to: "/workspace/paths", label: "Flight Paths", icon: GitBranch },
+    { to: "/workspace/knowledge", label: "Knowledge Network", icon: Compass }
+  ] },
+  { group: "OPERATE", items: [
+    { to: "/workspace/studio", label: "Mastery Studio", icon: BookOpen },
+    { to: "/workspace/investigations", label: "Investigation Chamber", icon: FlaskConical },
+    { to: "/workspace/models", label: "Laboratory", icon: Atom },
+    { to: "/workspace/projects", label: "Creation Workshop", icon: FolderKanban }
+  ] },
+  { group: "PRESERVE", items: [
+    { to: "/workspace/library", label: "Research Archive", icon: Bookmark },
+    { to: "/workspace/journal", label: "Field Notes", icon: StickyNote },
+    { to: "/workspace/recall", label: "Recall Practice", icon: BrainCircuit }
+  ] }
 ];
 const titles: Record<string, [string, string]> = {
-  "/workspace": ["Your workspace", "A place to follow questions, develop understanding and make things."],
-  "/workspace/questions": ["Questions", "Start with curiosity. Refine the question as your understanding grows."],
-  "/workspace/connections": ["Connections", "Explore useful relationships across disciplines and keep the reasoning behind each one."],
-  "/workspace/paths": ["Learning paths", "Build a route through the ideas, prerequisites and skills you need."],
-  "/workspace/studio": ["Learning studio", "Work through concepts, notes and understanding checks."],
-  "/workspace/investigations": ["Investigations", "Separate hypotheses, observations, interpretations and evidence."],
-  "/workspace/models": ["Model bench", "Explore a system by changing its parameters and observing what follows."],
-  "/workspace/projects": ["Projects", "Turn accumulated understanding into original, inspectable work."],
-  "/workspace/library": ["Resource library", "Keep source details and critical annotations connected to your work."],
-  "/workspace/journal": ["Field journal", "Record discoveries, changes in understanding and unresolved ideas."],
-  "/workspace/knowledge": ["Knowledge graph", "See how questions, concepts, sources and projects connect."],
-  "/workspace/recall": ["Recall practice", "Reconstruct important ideas before you return to the source."]
+  "/workspace": ["The Lair", "Your personal environment for focused intellectual work."],
+  "/workspace/questions": ["Echolocation", "Discover questions, phenomena and problems worth pursuing."],
+  "/workspace/connections": ["Echo Trails", "Trace meaningful relationships across disciplines."],
+  "/workspace/paths": ["Flight Paths", "Build an editable route through concepts and foundations."],
+  "/workspace/studio": ["Mastery Studio", "Develop understanding you can explain and apply."],
+  "/workspace/investigations": ["Investigation Chamber", "Examine hypotheses, observations, evidence and uncertainty."],
+  "/workspace/models": ["Laboratory", "Explore systems through mathematical models and experiments."],
+  "/workspace/projects": ["Creation Workshop", "Turn understanding into original, inspectable work."],
+  "/workspace/library": ["Research Archive", "Preserve sources, provenance and critical annotations."],
+  "/workspace/journal": ["Field Notes", "Record discoveries, doubts and changes in understanding."],
+  "/workspace/knowledge": ["Knowledge Network", "See the concepts and work that make up your intellectual map."],
+  "/workspace/recall": ["Recall Practice", "Reconstruct important ideas and identify what needs repair."]
 };
 function BatMark({ className = "" }: { className?: string }) { return <svg className={"bat-mark " + className} viewBox="0 0 100 54" role="img" aria-label="Vesper bat emblem"><path d="M3 8 C17 9 29 16 39 28 L47 12 L50 20 L53 12 L61 28 C71 16 83 9 97 8 L91 34 C83 31 77 36 70 46 L55 37 L50 51 L45 37 L30 46 C23 36 17 31 9 34 Z" fill="currentColor"/><path d="M12 16 C25 19 35 27 43 36 M88 16 C75 19 65 27 57 36" fill="none" stroke="#10110f" strokeOpacity=".55" strokeWidth="1.4" strokeLinecap="round"/></svg>; }
-function Logo() { return <Link to="/" className="brand"><span className="brand-emblem"><BatMark/></span><span><b>VESPER</b><small>STEM SELF-EDUCATION</small></span></Link>; }
+function Logo() { return <Link to="/" className="brand"><span className="brand-emblem"><BatMark/></span><span><b>VESPER</b><small>INDEPENDENT LEARNING SYSTEM</small></span></Link>; }
 function Button({ children, onClick, variant = "quiet", type = "button" }: { children: React.ReactNode; onClick?: () => void; variant?: "quiet" | "primary" | "outline"; type?: "button" | "submit" }) { return <button type={type} onClick={onClick} className={"button " + variant}>{children}</button>; }
 function Landing() {
   const [activeBridge,setActiveBridge]=useState("feedback");
@@ -40,7 +56,7 @@ function Landing() {
     <main>
       <section className="landing-hero">
         <div className="hero-grid"></div><div className="hero-contour contour-a"></div><div className="hero-contour contour-b"></div>
-        <div className="hero-copy"><div className="eyebrow">AN ENVIRONMENT FOR CONNECTED LEARNING</div><h1>Understand more.<br/><em>Connect further.</em></h1><p>Vesper is a STEM-centred self-education environment that helps you connect ideas across disciplines, build deep understanding, investigate questions, model systems and create original work.</p><div className="hero-actions"><Link className="button primary large" to="/workspace">Enter the workspace <ArrowUpRight size={16}/></Link><a className="text-link" href="#method">Explore the method <ArrowDownRight size={15}/></a></div><div className="hero-caption"><span>01 — FIRST PRINCIPLES</span><span>02 — INVESTIGATION</span><span>03 — APPLICATION</span></div></div>
+        <div className="hero-copy"><div className="eyebrow">A NOCTURNAL ENVIRONMENT FOR INDEPENDENT LEARNING</div><h1>Explore without ceilings.<br/><em>Understand the connected.</em></h1><p>A focused intellectual environment for independent learners. Follow curiosity across disciplines, develop mastery, investigate difficult questions and create original work—without grade ceilings or prescribed academic routes.</p><div className="hero-actions"><Link className="button primary large" to="/workspace">Enter the workspace <ArrowUpRight size={16}/></Link><a className="text-link" href="#method">Explore the method <ArrowDownRight size={15}/></a></div><div className="hero-caption"><span>01 — FIRST PRINCIPLES</span><span>02 — INVESTIGATION</span><span>03 — APPLICATION</span></div></div>
         <div className="hero-visual" aria-hidden="true"><div className="visual-ring ring-one"></div><div className="visual-ring ring-two"></div><div className="visual-ring ring-three"></div><div className="bat-hero-core"><BatMark/><span>VESPER / STEM</span></div><span className="orbit-label label-one">PHYSICS</span><span className="orbit-label label-two">SYSTEMS</span><span className="orbit-label label-three">MATHEMATICS</span><span className="orbit-label label-four">BIOLOGY</span><div className="signal-line signal-one"></div><div className="signal-line signal-two"></div></div>
         <div className="hero-bottom"><span>SCIENCE</span><span>TECHNOLOGY · ENGINEERING · MATHEMATICS</span><span>LEARN BY UNDERSTANDING</span></div>
       </section>
@@ -75,15 +91,36 @@ function Landing() {
       <section className="principles section-wrap" id="principles"><div className="section-index">04 / DESIGN PRINCIPLES</div><div className="principle-content"><h2>Quiet in appearance.<br/><em>Serious in purpose.</em></h2><div className="principle-list"><div><b>01</b><span>Substance over activity</span><p>Progress reflects work and understanding, not streaks or time spent.</p></div><div><b>02</b><span>Evidence over assertion</span><p>Keep observations, interpretations and limitations distinct.</p></div><div><b>03</b><span>Connection over silos</span><p>Every record can relate to the wider learning process.</p></div><div><b>04</b><span>Learner agency</span><p>Your questions, priorities and conclusions remain yours.</p></div></div></div></section>
       <section className="closing"><div className="closing-mark">v.</div><p>BUILD THE ABILITY TO LEARN INDEPENDENTLY.</p><h2>Start with the fundamentals.</h2><Link className="button primary large" to="/workspace">Enter Vesper <ArrowUpRight size={16}/></Link></section>
     </main>
-    <footer className="site-footer"><Logo/><span>AN INTEGRATED ENVIRONMENT FOR STEM SELF-EDUCATION</span><span>© VESPER</span></footer>
+    <footer className="site-footer"><Logo/><span>AN INTEGRATED ENVIRONMENT FOR INDEPENDENT LEARNING SYSTEM</span><span>© VESPER</span></footer>
   </div>;
 }
 function Shell({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false); const [search, setSearch] = useState("");
-  const location = useLocation(); const { data } = useWorkspace();
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [nightVision, setNightVision] = useState(() => localStorage.getItem("vesper.night-vision") === "on");
+  const location = useLocation();
+  const { data } = useWorkspace();
+  useEffect(() => { localStorage.setItem("vesper.night-vision", nightVision ? "on" : "off"); }, [nightVision]);
   const filtered = nav.map(g => ({ ...g, items: g.items.filter(x => x.label.toLowerCase().includes(search.toLowerCase())) })).filter(g => g.items.length);
-  const title = titles[location.pathname] || ["Workspace", "Your work, connected."];
-  return <div className="app-shell"><aside className={"app-sidebar " + (open ? "open" : "")}><div className="app-brand"><Logo/><button className="mobile-close" onClick={() => setOpen(false)}><X size={17}/></button></div><div className="workspace-switch"><div className="workspace-avatar">V</div><div><b>{data.profile.name || "My workspace"}</b><small>PERSONAL ENVIRONMENT</small></div><ChevronRight size={14}/></div><div className="side-search"><Search size={15}/><input placeholder="Find a workspace…" value={search} onChange={e => setSearch(e.target.value)}/><kbd>⌘ K</kbd></div><nav className="app-nav">{filtered.map(group=><div className="nav-group" key={group.group}><small>{group.group}</small>{group.items.map(item=><NavLink key={item.to} to={item.to} end={item.to === "/workspace"} onClick={() => setOpen(false)} className={({isActive}) => isActive ? "active" : ""}><item.icon size={16}/><span>{item.label}</span></NavLink>)}</div>)}</nav><div className="sidebar-bottom"><div className="storage-indicator"><span></span><div><b>LOCAL WORKSPACE</b><small>Your data stays in this browser</small></div></div><Link to="/workspace/settings"><Settings size={15}/> Settings & data</Link><Link to="/"><Compass size={15}/> Vesper website</Link></div></aside>{open&&<button className="side-scrim" onClick={()=>setOpen(false)} aria-label="Close navigation"/>}<main className="app-main"><header className="app-topbar"><button className="mobile-menu" onClick={()=>setOpen(true)}><Menu size={19}/></button><div className="breadcrumb">VESPER <span>/</span> {title[0].toUpperCase()}</div><div className="top-actions"><button className="top-action" onClick={()=>document.dispatchEvent(new Event("vesper:export"))}>Export <ArrowUpRight size={14}/></button><div className="avatar-mini">{(data.profile.name || "V").slice(0,1).toUpperCase()}</div></div></header><div className="app-content">{children}</div></main></div>;
+  const title = titles[location.pathname] || ["The Lair", "Your work, connected."];
+  return <div className={"app-shell " + (nightVision ? "night-vision" : "")}>
+    <aside className={"app-sidebar " + (open ? "open" : "")}>
+      <div className="app-brand"><Logo/><button className="mobile-close" onClick={() => setOpen(false)}><X size={17}/></button></div>
+      <div className="workspace-switch"><div className="workspace-avatar"><BatMark/></div><div><b>{data.profile.name || "The Lair"}</b><small>PERSONAL RESEARCH ENVIRONMENT</small></div><ChevronRight size={14}/></div>
+      <div className="side-search"><Search size={15}/><input placeholder="Find a chamber…" value={search} onChange={e => setSearch(e.target.value)}/><kbd>⌘ K</kbd></div>
+      <nav className="app-nav">{filtered.map(group=><div className="nav-group" key={group.group}><small>{group.group}</small>{group.items.map(item=><NavLink key={item.to} to={item.to} end={item.to === "/workspace"} onClick={() => setOpen(false)} className={({isActive}) => isActive ? "active" : ""}><item.icon size={16}/><span>{item.label}</span></NavLink>)}</div>)}</nav>
+      <div className="sidebar-bottom"><div className="storage-indicator"><span></span><div><b>LOCAL-FIRST ENGINE</b><small>Saved in this browser</small></div></div><Link to="/workspace/settings"><Settings size={15}/> Settings & data</Link><Link to="/"><Compass size={15}/> Vesper website</Link></div>
+    </aside>
+    {open&&<button className="side-scrim" onClick={()=>setOpen(false)} aria-label="Close navigation"/>}
+    <main className="app-main">
+      <header className="app-topbar">
+        <button className="mobile-menu" onClick={()=>setOpen(true)}><Menu size={19}/></button>
+        <div className="breadcrumb">VESPER <span>/</span> {title[0].toUpperCase()}</div>
+        <div className="top-actions"><button className={"top-action night-toggle "+(nightVision?"enabled":"")} onClick={()=>setNightVision(v=>!v)}><span className="night-indicator"/>{nightVision?"Night vision on":"Night vision"} <ArrowUpRight size={13}/></button><button className="top-action" onClick={()=>document.dispatchEvent(new Event("vesper:export"))}>Export <ArrowUpRight size={14}/></button><div className="avatar-mini">{(data.profile.name || "V").slice(0,1).toUpperCase()}</div></div>
+      </header>
+      <div className="app-content">{children}</div>
+    </main>
+  </div>;
 }
 function PageHead({ eyebrow, title, desc, action }: { eyebrow: string; title: string; desc: string; action?: React.ReactNode }) { return <div className="page-heading"><div><div className="eyebrow">{eyebrow}</div><h1>{title}</h1><p>{desc}</p></div>{action}</div>; }
 function Empty({ title, desc, action }: { title: string; desc: string; action?: React.ReactNode }) { return <div className="empty-state"><div className="empty-symbol"><Sparkles size={20}/></div><h3>{title}</h3><p>{desc}</p>{action}</div>; }
@@ -99,9 +136,95 @@ function RecordList({ rows, icon, emptyTitle, emptyDesc }: { rows: {id:string;ti
   return <div className="record-list">{rows.map(row=><div className="record-row" key={row.id}><div className="record-icon">{icon}</div><div className="record-copy"><b>{row.title}</b><small>{row.meta}</small>{row.detail&&<p>{row.detail}</p>}</div><ChevronRight size={16}/></div>)}</div>;
 }
 function Overview() {
-  const {data}=useWorkspace(); const total=data.questions.length+data.paths.length+data.investigations.length+data.projects.length;
-  const recent=[...data.questions.map(x=>({id:x.id,title:x.title,meta:"QUESTION · "+new Date(x.createdAt).toLocaleDateString()})),...data.projects.map(x=>({id:x.id,title:x.title,meta:"PROJECT · "+new Date(x.createdAt).toLocaleDateString()}))].slice(-4).reverse();
-  return <><PageHead eyebrow="YOUR ENVIRONMENT" title="Make room for the work." desc="Follow the questions that matter. Build understanding that travels beyond the page." action={<Link className="button primary" to="/workspace/questions"><Plus size={15}/> New question</Link>}/><div className="overview-hero"><div className="overview-hero-copy"><small>THE VESPER PRACTICE</small><h2>Curiosity is a beginning.<br/><em>Understanding is built.</em></h2><p>Bring a question into focus. Map what you need to know. Investigate, model and create until the idea becomes your own.</p><Link to="/workspace/questions" className="text-link">Start with a question <ArrowUpRight size={15}/></Link></div><div className="overview-graphic"><div className="graphic-orbit one"/><div className="graphic-orbit two"/><div className="graphic-orbit three"/><div className="graphic-core"><BatMark/></div><span className="graphic-node n1">ASK</span><span className="graphic-node n2">MAP</span><span className="graphic-node n3">MAKE</span></div></div><div className="overview-stats"><div><small>QUESTIONS</small><b>{data.questions.length.toString().padStart(2,"0")}</b></div><div><small>LEARNING PATHS</small><b>{data.paths.length.toString().padStart(2,"0")}</b></div><div><small>INVESTIGATIONS</small><b>{data.investigations.length.toString().padStart(2,"0")}</b></div><div><small>PROJECTS</small><b>{data.projects.length.toString().padStart(2,"0")}</b></div></div><div className="section-line"><div><small>CONTINUE YOUR THINKING</small><h2>Recent work</h2></div><span>{total} RECORDS IN YOUR WORKSPACE</span></div><RecordList rows={recent} icon={<Lightbulb size={16}/>} emptyTitle="Your workspace is ready." emptyDesc="Capture a question, then let it lead to concepts, evidence and original work."/><div className="quick-grid"><Link to="/workspace/studio"><BookOpen/><b>Open the studio</b><span>Understand a concept</span></Link><Link to="/workspace/investigations"><FlaskConical/><b>Start an investigation</b><span>Test an idea</span></Link><Link to="/workspace/models"><Atom/><b>Explore a model</b><span>Change a system</span></Link><Link to="/workspace/projects"><FolderKanban/><b>Make something</b><span>Build an original output</span></Link></div></>;
+  const { data, addQuestion } = useWorkspace();
+  const navigate = useNavigate();
+  const pulse = deriveLairPulse(data);
+  const signals = deriveEchoSignals(data);
+  const [draft, setDraft] = useState("");
+  const [field, setField] = useState("Open inquiry");
+  const [mission, setMission] = useState<LairMission | null>(() => readLairMission());
+  useEffect(() => { writeLairMission(mission); }, [mission]);
+  const capture = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!draft.trim()) return;
+    addQuestion({ title: draft.trim(), motivation: "Captured from the Lair echolocation console.", field, known: "", scope: "", status: "active" });
+    setDraft("");
+    navigate("/workspace/questions");
+  };
+  const recent = [
+    ...data.questions.map(x => ({ id:x.id, title:x.title, kind:"QUESTION", date:x.updatedAt, href:"/workspace/questions/"+x.id })),
+    ...data.projects.map(x => ({ id:x.id, title:x.title, kind:"PROJECT", date:x.updatedAt, href:"/workspace/projects" })),
+    ...data.investigations.map(x => ({ id:x.id, title:x.title, kind:"INVESTIGATION", date:x.updatedAt, href:"/workspace/investigations" }))
+  ].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
+  return <>
+    <section className="lair-welcome">
+      <div className="lair-welcome-copy">
+        <div className="lair-kicker"><span className="lair-pulse-dot"/> VESPER / THE LAIR <span>PERSONAL RESEARCH ENVIRONMENT</span></div>
+        <h1>Enter the unknown.<br/><em>Understand the connected.</em></h1>
+        <p>A focused environment for independent learning, investigation and original work. No grade ceilings. No disciplinary walls. Your next step is yours to choose.</p>
+        <div className="lair-principles"><span>01 / CURIOSITY</span><span>02 / EVIDENCE</span><span>03 / CREATION</span></div>
+      </div>
+      <div className="lair-sonar" aria-hidden="true">
+        <div className="sonar-ring sonar-a"/><div className="sonar-ring sonar-b"/><div className="sonar-ring sonar-c"/>
+        <div className="sonar-center"><BatMark/><small>ECHO / ACTIVE</small></div>
+        <i className="sonar-point point-a"/><i className="sonar-point point-b"/><i className="sonar-point point-c"/>
+        <span className="sonar-label sonar-label-a">DISCOVER</span><span className="sonar-label sonar-label-b">CONNECT</span><span className="sonar-label sonar-label-c">CREATE</span>
+      </div>
+    </section>
+
+    <section className="lair-console">
+      <div className="lair-section-head"><div><small>ECHLOCATION CONSOLE / 01</small><h2>What has your attention?</h2><p>Begin with a question, phenomenon or problem. Advanced topics are welcome.</p></div><span>OPEN ENTRY</span></div>
+      <form className="lair-capture" onSubmit={capture}>
+        <Lightbulb size={19}/>
+        <input value={draft} onChange={e=>setDraft(e.target.value)} placeholder="e.g. How does quantum entanglement change our idea of locality?" aria-label="Your question" />
+        <select value={field} onChange={e=>setField(e.target.value)} aria-label="Discipline">
+          {["Open inquiry","Physics","Mathematics","Biology","Computer science","Engineering","Chemistry","Earth science","Philosophy","Interdisciplinary"].map(x=><option key={x}>{x}</option>)}
+        </select>
+        <button className="button primary" type="submit" disabled={!draft.trim()}>Capture signal <ArrowUpRight size={14}/></button>
+      </form>
+    </section>
+
+    <section className="lair-mission-grid">
+      <article className="mission-panel">
+        <div className="lair-section-head compact"><div><small>FLIGHT PLAN / ACTIVE OBJECTIVE</small><h2>Give this session a purpose.</h2></div><Target size={19}/></div>
+        {mission ? <div className="mission-active">
+          <div><span className="mission-status">{mission.completed?"OBJECTIVE COMPLETED":"CURRENT OBJECTIVE"}</span><h3>{mission.title}</h3><small>LAST UPDATED · {new Date(mission.updatedAt).toLocaleString()}</small></div>
+          <div className="mission-actions"><button className="button outline" onClick={()=>setMission({...mission,completed:!mission.completed,updatedAt:new Date().toISOString()})}>{mission.completed?"Reopen":"Mark complete"}</button><button className="icon-btn" aria-label="Clear objective" onClick={()=>setMission(null)}><X size={15}/></button></div>
+        </div> : <form className="mission-form" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const input=new FormData(form).get("objective");if(typeof input==="string"&&input.trim())setMission({title:input.trim(),updatedAt:new Date().toISOString(),completed:false});form.reset();}}>
+          <input name="objective" placeholder="e.g. Derive the time-independent Schrödinger equation" aria-label="Session objective" required/>
+          <button className="button outline" type="submit">Set objective <ArrowRight size={14}/></button>
+        </form>}
+        <p className="mission-footnote">A useful objective protects attention. It does not restrict a worthwhile discovery.</p>
+      </article>
+      <article className="echo-panel">
+        <div className="echo-panel-head"><span className="echo-orb"><Sparkles size={15}/></span><div><small>ECHO / CONTEXTUAL INTELLIGENCE</small><b>Signals from your workspace</b></div><span className="local-tag">LOCAL ENGINE</span></div>
+        {signals.slice(0,2).map(signal=><div className="echo-signal" key={signal.id}><div><small>{signal.mode.toUpperCase()} · SUGGESTED NEXT STEP</small><b>{signal.title}</b><p>{signal.detail}</p></div><Link to={signal.href} aria-label={signal.action}><ArrowUpRight size={16}/></Link></div>)}
+        <p className="echo-disclosure">ECHO currently uses transparent, rule-based local guidance. It does not yet call a live AI model or verify external sources.</p>
+      </article>
+    </section>
+
+    <section className="lair-outcomes">
+      <div className="lair-section-head"><div><small>THE VESPER TRIAD / 02</small><h2>Three forms of intellectual growth.</h2><p>Learn deeply. Make something. Investigate what is not yet understood.</p></div><span>MASTERY · PROJECTS · RESEARCH</span></div>
+      <div className="outcome-grid">
+        <Link to="/workspace/studio" className="outcome-card mastery"><span className="outcome-number">01</span><BookOpen/><small>UNDERSTAND</small><h3>Mastery</h3><p>Develop concepts, reasoning and the ability to explain and apply what you know.</p><b>{pulse.concepts} concepts <ArrowUpRight size={13}/></b></Link>
+        <Link to="/workspace/projects" className="outcome-card projects"><span className="outcome-number">02</span><FolderKanban/><small>BUILD</small><h3>Projects</h3><p>Turn ideas into models, software, experiments, designs and original artefacts.</p><b>{pulse.projects} projects <ArrowUpRight size={13}/></b></Link>
+        <Link to="/workspace/investigations" className="outcome-card research"><span className="outcome-number">03</span><FlaskConical/><small>DISCOVER</small><h3>Research</h3><p>Develop questions, evaluate sources, examine evidence and record uncertainty.</p><b>{pulse.investigations} investigations · {pulse.resources} sources <ArrowUpRight size={13}/></b></Link>
+      </div>
+    </section>
+
+    <section className="lair-lower-grid">
+      <div className="lair-recent">
+        <div className="lair-section-head compact"><div><small>ECHO TRAILS / RECENT ACTIVITY</small><h2>Return to your work.</h2></div><Link to="/workspace/journal">Field notes <ArrowUpRight size={13}/></Link></div>
+        {recent.length ? <div className="lair-recent-list">{recent.map(item=><Link to={item.href} key={item.kind+item.id}><span>{item.kind}</span><b>{item.title}</b><small>{new Date(item.date).toLocaleDateString()}</small><ArrowUpRight size={14}/></Link>)}</div> : <div className="lair-empty">Your trail begins with the first question you capture.</div>}
+      </div>
+      <div className="lair-readout">
+        <div className="lair-section-head compact"><div><small>BATCAVE READOUT / 03</small><h2>Workspace signals.</h2></div><Activity size={18}/></div>
+        <div className="readout-stats"><div><b>{pulse.questions}</b><span>QUESTIONS</span></div><div><b>{pulse.connections}</b><span>CONNECTIONS</span></div><div><b>{pulse.totalRecords}</b><span>RECORDS</span></div></div>
+        <div className="readout-note"><span>MASTERY EVIDENCE</span><b>{pulse.masteryEvidence} concepts marked understood</b><small>This is a learner-recorded signal, not a certification or independent assessment.</small></div>
+        <Link className="text-link" to="/workspace/knowledge">Open Knowledge Network <ArrowUpRight size={14}/></Link>
+      </div>
+    </section>
+  </>;
 }
 function Questions() {
   const {data,addQuestion}=useWorkspace(); const form=useModalForm("Capture a question",f=>addQuestion({title:String(f.get("title")),motivation:String(f.get("motivation")||""),field:String(f.get("field")||""),known:String(f.get("known")||""),scope:String(f.get("scope")||""),status:"active"}),<><Field name="title" label="The question" placeholder="What are you trying to understand?" required area/><Field name="motivation" label="Why it matters" placeholder="What sparked your curiosity?" area/><Field name="field" label="Field or subject" placeholder="Physics, mathematics, biology…"/><Field name="known" label="What you know so far" placeholder="Starting ideas, assumptions or prior knowledge" area/><Field name="scope" label="What a useful answer might contain" placeholder="An explanation, proof, model, investigation…" area/></>);
