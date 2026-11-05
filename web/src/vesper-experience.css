@@ -711,7 +711,7 @@ a.v-profile-item:hover b{color:var(--v-gold)}
 .v-cosmos-node{width:7px;height:7px;background:#a7c9c2;box-shadow:0 0 16px #9bc9c5;animation:v-node-pulse 4.5s ease-in-out infinite}
 .v-cosmos-node:nth-of-type(3n){background:#d0ae7c;box-shadow:0 0 16px #d0ae7c}
 .v-cosmos-node:nth-of-type(2n){animation-delay:-1.7s}
-.v-cosmos-node.n0{transform:translate(0,-190px)}.v-cosmos-node.n1{transform:translate(150px,-110px)}.v-cosmos-node.n2{transform:translate(190px,30px)}.v-cosmos-node.n3{transform:translate(105px,155px)}.v-cosmos-node.n4{transform:translate(-65px,180px)}.v-cosmos-node.n5{transform:translate(-175px,85px)}.v-cosmos-node.n6{transform:translate(-160px,-85px)}.v-cosmos-node.n7{transform:translate(-85px,-155px)}.v-cosmos-node.n8{transform:translate(78px,-90px)}.v-cosmos-node.n9{transform:translate(120px,85px)}.v-cosmos-node.n10{transform:translate(-100px,95px)}.v-cosmos-node.n11{transform:translate(5px,125px)}
+
 .v-explore-hero-bottom{color:#91a0b6;border-color:#a5b8d52a}
 .v-explore-manifesto{padding:clamp(55px,8vw,105px) 0}
 .v-explore-manifesto h2,.v-field-guides h2,.v-explore-end h2{font-size:clamp(39px,5.3vw,67px);line-height:1.04;letter-spacing:-.04em}
