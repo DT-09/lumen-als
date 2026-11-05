@@ -1,33 +1,49 @@
 # VESPER
 
-**A STEM-centred environment for interdisciplinary learning.**
+**Explore without ceilings. Understand the connected. Build independently.**
 
-Vesper helps learners connect STEM concepts with useful ideas from wider disciplines, then turn those connections into understanding, investigation, modelling and original work.
+Vesper is a nocturnal intellectual environment for independent learners. It helps people pursue questions across disciplines, build deep understanding, investigate evidence and create original work without grade-level or curriculum gates.
 
-## Product architecture
+## Product experience
 
-- **Questions** — capture and refine the questions that drive learning; each question has a workbench aggregating linked paths, concepts, connections, investigations and projects.
-- **Connections** — record meaningful relationships across disciplines, with relationship types, rationale and follow-up questions.
-- **Learning paths** — map concepts, prerequisites and milestones.
-- **Learning studio** — build explanations, notes and understanding checks.
-- **Investigations** — separate hypotheses, observations, interpretations and limitations.
-- **Model bench** — explore a live mathematical model through parameter controls.
-- **Projects** — turn understanding into original work.
-- **Resource library** — preserve source provenance and critical annotations.
-- **Field journal** — record discoveries and changes in understanding.
-- **Knowledge graph** — view the records that make up the learner's knowledge system.
-- **Recall practice** — schedule deliberate reconstruction of important concepts.
+- **The Lair** — a persistent Batcave-inspired workspace designed around purposeful work, continuity and focus.
+- **Echolocation** — capture a question, phenomenon or problem from any discipline or level.
+- **Echo Trails** — record meaningful relationships across disciplines, with rationale and limits.
+- **Flight Paths** — map concepts and prerequisites as editable routes, never compulsory curricula.
+- **Mastery Studio** — build explanations, concepts and understanding checks.
+- **Investigation Chamber** — separate hypotheses, observations, interpretations and limitations.
+- **Laboratory** — explore mathematical models through interactive parameters.
+- **Creation Workshop** — turn understanding into original work.
+- **Research Archive** — preserve source provenance and critical annotations.
+- **Field Notes** — record discoveries, changes in understanding and unresolved questions.
+- **Knowledge Network** — visualise relationships represented by actual workspace records.
+- **Recall Practice** — schedule deliberate reconstruction of important concepts.
+- **Night Vision** — reduce interface noise and keep the active objective in view.
 
-The website and learner application are separate experiences in one React application: `/` is the public product website and `/workspace` is the learner environment. Each question can be opened at `/workspace/questions/:id` to inspect its linked learning and inquiry work.
+The product is organised around three outcomes: **Mastery, Projects and Research**. Learners can enter through questions, phenomena, disciplines or existing work, and move freely between exploration and structured investigations.
 
-## Technology
+## Core engine
 
-- React 18 + TypeScript
-- Vite build system
-- React Router
-- Framer Motion for restrained interface transitions
-- A typed TypeScript domain model and workspace store
-- Browser-local persistence with import/export
+The browser application uses a typed TypeScript domain model and local-first workspace store.
+
+- `core/types.ts` defines the domain records.
+- `core/store.tsx` manages workspace state, migration, persistence and JSON import/export.
+- `core/engine.ts` derives workspace signals and contextual next-step guidance.
+- `core/knowledgeGraph.ts` constructs a typed graph from saved records and their explicit relationships.
+
+ECHO currently runs as a deterministic, transparent local guidance engine. It reads the learner's workspace and suggests useful next steps. It is **not yet a connected generative AI service**, live research search, source verifier or remote learner model. The graph only draws relationships supported by saved records; it does not invent expert-validated links.
+
+TypeScript is the right core language for this release: the engine is domain logic, state orchestration and graph construction, not a compute-heavy simulation runtime. A Rust/WebAssembly module should be introduced only when a measured numerical or simulation workload justifies the additional build and debugging complexity. The web experience remains React, HTML, CSS and JavaScript/TypeScript.
+
+## Application routes
+
+- `/` — public product website.
+- `/workspace` — The Lair.
+- `/workspace/questions/:id` — question workbench.
+- `/workspace/connections` — Echo Trails.
+- `/workspace/knowledge` — Knowledge Network.
+
+The remaining workspace chambers are accessible through the navigation.
 
 ## Development
 
@@ -52,8 +68,8 @@ npm run preview
 - Build output directory: `dist`
 - Production branch: `main`
 
-## Data and product boundaries
+## Data, privacy and current limitations
 
-Workspace records are stored in the current browser. There is no account service, cross-device cloud sync, server-side learner profile, AI tutor, live research verification, collaboration or billing in this release. Exported JSON backups are not encrypted. Clearing browser data can erase the workspace.
+Workspace records and the active Lair objective are stored in the current browser. This release does not include accounts, cross-device cloud sync, server-side learner profiles, collaboration, billing, a live AI tutor or live research verification. Clearing browser data can erase workspace records. Exported JSON backups are not encrypted; store them carefully.
 
-Connections and learning routes are learner-authored records, not expert-validated curricula. Source annotations are user-entered; Vesper does not verify publications. Model Bench currently contains an illustrative damped-oscillator model, not a general-purpose simulation engine. Recall records support learner-managed practice and do not certify mastery.
+Source annotations are learner-entered; Vesper does not verify publications. The Model Bench currently contains an illustrative damped-oscillator model, not a general-purpose simulation engine. Concept confidence and recall records are learner-managed signals, not certification or independent proof of mastery.
