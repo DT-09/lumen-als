@@ -50,7 +50,7 @@ function Dashboard(){
   {n:"04",name:"Connect",desc:"Trace the idea into another discipline or domain.",to:"/workspace/connections",meta:"ECHO TRAILS",Icon:Compass},
   {n:"05",name:"Create",desc:"Make something that gives your understanding form.",to:"/workspace/projects",meta:"WORKSHOP",Icon:FolderKanban}
  ];
- const stats=[["Questions",data.questions.length,Lightbulb,"/workspace/questions"],["Concepts",data.concepts.length,Brain,"/workspace/studio"],["Paths",data.paths.length,GitBranch,"/workspace/paths"],["Projects",data.projects.length,FolderKanban,"/workspace/projects"]];
+ const stats=[{label:"Questions",value:data.questions.length,Icon:Lightbulb,to:"/workspace/questions"},{label:"Concepts",value:data.concepts.length,Icon:Brain,to:"/workspace/studio"},{label:"Paths",value:data.paths.length,Icon:GitBranch,to:"/workspace/paths"},{label:"Projects",value:data.projects.length,Icon:FolderKanban,to:"/workspace/projects"}];
  return <div className="lair-dashboard">
   <section className="lair-hero">
    <div className="hero-gridlines" aria-hidden="true"/><div className="hero-copy">
@@ -67,7 +67,7 @@ function Dashboard(){
    </div>
    <div className="hero-footline"><span>THE LAIR / PERSONAL WORKSPACE</span><span>{total} RECORDS IN YOUR ENVIRONMENT</span></div>
   </section>
-  <section className="stat-grid lair-stat-grid">{stats.map(([label,value,Icon,to])=><Link to={to} className="stat-card" key={label}><div className="stat-icon"><Icon size={17}/></div><div><b>{value}</b><span>{label.toUpperCase()}</span></div><ArrowUpRight size={15} className="stat-arrow"/></Link>)}</section>
+  <section className="stat-grid lair-stat-grid">{stats.map(({label,value,Icon,to})=><Link to={to} className="stat-card" key={label}><div className="stat-icon"><Icon size={17}/></div><div><b>{value}</b><span>{label.toUpperCase()}</span></div><ArrowUpRight size={15} className="stat-arrow"/></Link>)}</section>
   <section className="journey-section">
    <div className="section-intro"><div><div className="eyebrow">A LEARNING LOOP, NOT A COURSE</div><h2>Choose your next move.</h2></div><p>There is no required order. Start where your curiosity is strongest, then let the work lead you elsewhere.</p></div>
    <div className="mode-grid">{modes.map(({n,name,desc,to,meta,Icon})=><Link to={to} className="mode-card" key={n}><div className="mode-card-top"><span>{n} / {meta}</span><ArrowUpRight size={16}/></div><div className="mode-icon"><Icon size={21}/></div><h3>{name}</h3><p>{desc}</p><span className="mode-enter">ENTER CHAMBER <ArrowRight size={13}/></span></Link>)}</div>
